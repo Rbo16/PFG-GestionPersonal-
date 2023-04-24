@@ -1,0 +1,67 @@
+﻿<Window x:Class="GestionPersonal.Menu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GestionPersonal"
+        mc:Ignorable="d"
+        Title="Menu" Height="430" Width="620"
+        FontFamily="Cambria" FontWeight="Bold">
+    <Grid Background="#FF949494">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="MENÚ PRINCIPAL" FontSize="40" Margin="126,20,126,10"
+                   Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" />
+        <Button Name="btnEmpleados" Content="Empleados" FontSize="22"  Width="150" Height="70" 
+                Margin="20,30,20,20" Grid.Column="1" Grid.Row="2" Click="btnEmpleados_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnContratos" Content="Contratos" FontSize="22"  Width="150" Height="70" 
+                Margin="20,30,20,20" Grid.Column="2" Grid.Row="2">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnAusencias" Content="Ausencias" FontSize="22"  Width="150" Height="70" 
+                Margin="20,30,20,20" Grid.Column="3" Grid.Row="2" Click="btnAusencias_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnProyectos" Content="Proyectos" FontSize="22"  Width="150" Height="70" 
+                Margin="20,30,20,20" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Click="btnProyectos_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnDepartamentos" Content="Departamentos" FontSize="20"  Width="150" Height="70" 
+                Margin="20,30,20,20" Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="3" Click="btnDepartamentos_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <TextBlock Text="Usuario" Name="txtUsuario" Grid.Column="1" Grid.Row="4"
+                   VerticalAlignment="Bottom" FontSize="20" Margin="30,0,0,0"/>
+        <Button Name="btnCambioContra" Content="Cambiar Contraseña" FontSize="18"  Width="180" Height="35" 
+                 Grid.Column="3" Grid.Row="4" Click="btnCambioContra_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+    </Grid>
+</Window>
