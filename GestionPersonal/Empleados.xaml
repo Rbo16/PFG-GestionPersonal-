@@ -1,0 +1,94 @@
+﻿<Window x:Class="GestionPersonal.Empleados"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GestionPersonal"
+        mc:Ignorable="d"
+        Title="Empleados" Height="550" Width="800" 
+        FontFamily="Cambria" FontWeight="Bold">
+    <Grid Background="#FF949494">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="57.003"/>
+            <RowDefinition Height="50.015"/>
+            <RowDefinition Height="280"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="EMPLEADOS" FontSize="40" 
+                   Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <Button Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"
+                Click="btnMenu_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <StackPanel Grid.Column="1" Grid.Row="2" Width="230"
+                    Grid.RowSpan="2">
+            <TextBlock Text="Nombre" FontSize="20" Margin="10,5"/>
+            <TextBox Name="txbNombreE" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="Apellido" FontSize="20" Margin="5"/>
+            <TextBox Name="txbApellido" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="DNI" FontSize="20" Margin="10,5"/>
+            <TextBox Name="txbDNI" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="N. Seguridad Social" FontSize="20" Margin="10,5"/>
+            <TextBox Name="txbNumSS" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="Teléfono" FontSize="20" Margin="10,5"/>
+            <TextBox Name="txbTlf" FontSize="20" Margin="10,0" Height="30"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2" Grid.Row="2" Width="230" Grid.RowSpan="2">
+            <TextBlock Text="Usuario" FontSize="20" Margin="10,5"/>
+            <TextBox Name="txbUsuario" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="Estado" FontSize="20" Margin="10,5"/>
+            <ComboBox Name="cmbEstadoE" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="Rol" FontSize="20" Margin="10,5"/>
+            <ComboBox Name="cmbRol" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="Departamento" FontSize="20" Margin="10,5"/>
+            <ComboBox Name="cmbDepartamentosE" FontSize="20" Margin="10,0" Height="30"/>
+            <TextBlock Text="Correo Electrónico" FontSize="20" Margin="10,5"/>
+            <TextBox Name="txbCorreoE" FontSize="20" Margin="10,0" Height="30"/>
+        </StackPanel>
+        <Button Name="btnFiltrarE" Grid.Column="3" Grid.Row="2" Width="40" Height="40" 
+                 Margin="5">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3"
+                  Grid.RowSpan="3"/>
+        <Button Name="btnCrear" Grid.Column="1" Grid.Row="5" Width="70"
+                Height="70" HorizontalAlignment="Left">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="5" Width="70"
+                Height="70" HorizontalAlignment="Center">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnBorrar" Grid.Column="1" Grid.Row="5" Width="70"
+                Height="70" HorizontalAlignment="Right">
+            <StackPanel>
+             
+            </StackPanel>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+    </Grid>
+</Window>
