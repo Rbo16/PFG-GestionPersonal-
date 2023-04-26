@@ -48,7 +48,8 @@ namespace GestionPersonal
 
         private void btnDepartamentos_Click(object sender, RoutedEventArgs e)
         {
-
+            Departamentos menuDepartamentos = new Departamentos();
+            menuDepartamentos.Show();
         }
     }
 }

@@ -86,6 +86,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
+        <TextBlock Text="Listado de ausencias" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30"/>
         <Button Name="btnFiltrarAus" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Button.Effect>
