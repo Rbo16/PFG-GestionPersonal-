@@ -1,0 +1,97 @@
+﻿<Window x:Class="GestionPersonal.Ausencias"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GestionPersonal"
+        mc:Ignorable="d"
+        Title="Ausencias" Height="550" Width="900"
+        FontFamily="Cambria" FontWeight="Bold" WindowStartupLocation="CenterScreen"
+        FontSize="20">
+    <Grid Background="#FF949494">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="AUSENCIAS" FontSize="40" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"
+                   Grid.ColumnSpan="4" Margin="0,0,0,10"/>
+        <Button Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"
+                Click="btnMenu_Click">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <StackPanel Grid.Column="1" Grid.Row="2" Width="250">
+            <TextBlock Text="Motivo de la ausencia" Margin="0,5,10,5"/>
+            <TextBox x:Name="txbMotivoAus" Height="30" Margin="0,0,10,0"/>
+            <Grid Margin="0,5,10,5">
+                <StackPanel Width="115" HorizontalAlignment="Left">
+                    <TextBlock Text="Fecha Inicio" Margin="0,0,5,5"/>
+                    <TextBox x:Name="txbfechaInic" Height="30" Margin="0,0,5,0"/>
+                </StackPanel>
+                <StackPanel Width="115" HorizontalAlignment="Right">
+                    <TextBlock Text="Fecha Fin" Margin="0,0,0,5"/>
+                    <TextBox x:Name="txbFechaFin" Height="30"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+        <StackPanel Width="250" Grid.Column="2" Grid.Row="2">
+            <TextBlock Text="Estado" Margin="0,5,10,5"/>
+            <ComboBox Name="cmbEstadoAus" Height="30" Margin="0,0,10,0"/>
+            <TextBlock Text="Solicitante" Margin="10,5"/>
+            <TextBox Name="txbSolicitante" Height="30" IsReadOnly="True" Margin="0,0,10,0"/>
+        </StackPanel>
+        <TextBlock Text="Descripción" Margin="0,5,10,5" Grid.Column="1" Grid.Row="3"/>
+        <TextBox x:Name="txbDescripcion" Height="80" Grid.Column="1" Grid.Row="4"
+                 Grid.ColumnSpan="2" Margin="0,0,10,0"/>
+        <StackPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2">
+            <TextBlock Text="Adjuntar justificante" Margin="0,5,10,5"/>
+            <TextBox x:Name="txbJustificante" Margin="0,0,10,0" Width="435" Height="30"
+                     HorizontalAlignment="Left" IsReadOnly="True"/>
+        </StackPanel>
+        <Button x:Name="btnJustificante" Content="..." Grid.Column="2" Grid.Row="5" HorizontalAlignment="Right"
+                VerticalAlignment="Bottom" Height="30" Width="40" Margin="0,0,10,0"/>
+        <Button Name="btnSolicitar" Grid.Column="1" Grid.Row="6" Width="70"
+                Height="70" HorizontalAlignment="Left">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="6" Width="70"
+                Height="70" HorizontalAlignment="Center">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnBorrar" Grid.Column="1" Grid.Row="6" Width="70"
+                Height="70" HorizontalAlignment="Right">
+            <StackPanel>
+
+            </StackPanel>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnFiltrarAus" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
+                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <DataGrid Name="dtgListaAus" Grid.Row="2" Grid.Column="3"  Grid.RowSpan="5" Margin="0,55,0,0"/>
+    </Grid>
+</Window>
