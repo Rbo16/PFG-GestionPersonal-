@@ -43,7 +43,8 @@ namespace GestionPersonal
 
         private void btnProyectos_Click(object sender, RoutedEventArgs e)
         {
-
+            Proyectos menuProyectos = new Proyectos();
+            menuProyectos.Show();
         }
 
         private void btnDepartamentos_Click(object sender, RoutedEventArgs e)

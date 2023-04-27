@@ -15,18 +15,13 @@ using System.Windows.Shapes;
 namespace GestionPersonal
 {
     /// <summary>
-    /// Lógica de interacción para Departamentos.xaml
+    /// Lógica de interacción para Proyectos.xaml
     /// </summary>
-    public partial class Departamentos : Window
+    public partial class Proyectos : Window
     {
-        public Departamentos()
+        public Proyectos()
         {
             InitializeComponent();
-        }
-
-        private void btnCrear_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

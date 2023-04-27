@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPersonal"
         mc:Ignorable="d"
-        Title="Empleados" Height="550" Width="900" 
+        Title="Empleados" Height="600" Width="900" 
         FontFamily="Cambria" FontWeight="Bold"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
         Closing="Window_Closing" FontSize="20">
@@ -37,7 +37,7 @@
             </Button.Effect>
         </Button>
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250"
-                    Grid.RowSpan="2">
+                    Grid.RowSpan="2" Margin="0,20,0,0">
             <TextBlock Text="Nombre" Margin="0,5,10,5"/>
             <TextBox Name="txbNombreE" Margin="0,0,10,0" Height="30"/>
             <TextBlock Text="Apellido" Margin="0,5,10,5"/>
@@ -49,7 +49,8 @@
             <TextBlock Text="Teléfono" Margin="0,5,10,5"/>
             <TextBox Name="txbTlf" Margin="0,0,10,0" Height="30"/>
         </StackPanel>
-        <StackPanel Grid.Column="2" Grid.Row="2" Width="250" Grid.RowSpan="2">
+        <StackPanel Grid.Column="2" Grid.Row="2" Width="250" Grid.RowSpan="2"
+                    Margin="0,20,0,0">
             <TextBlock Text="Usuario" Margin="0,5,10,5"/>
             <TextBox Name="txbUsuario" Margin="0,0,10,0" Height="30"/>
             <TextBlock Text="Estado" Margin="0,5,10,5"/>
@@ -70,20 +71,20 @@
         </Button>
         <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3"
                   Grid.RowSpan="3"/>
-        <Button Name="btnCrear" Grid.Column="1" Grid.Row="5" Width="70"
-                Height="70" HorizontalAlignment="Left">
+        <Button Name="btnCrear" Grid.Column="1" Grid.Row="5" Width="65"
+                Height="65" HorizontalAlignment="Left">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="5" Width="70"
-                Height="70" HorizontalAlignment="Center">
+        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="5" Width="65"
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button Name="btnBorrar" Grid.Column="1" Grid.Row="5" Width="70"
-                Height="70" HorizontalAlignment="Right">
+        <Button Name="btnBorrar" Grid.Column="1" Grid.Row="5" Width="65"
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0">
             <StackPanel>
 
             </StackPanel>

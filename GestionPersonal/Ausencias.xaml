@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPersonal"
         mc:Ignorable="d"
-        Title="Ausencias" Height="550" Width="900"
+        Title="Ausencias" Height="600" Width="900"
         FontFamily="Cambria" FontWeight="Bold" WindowStartupLocation="CenterScreen"
-        FontSize="20">
+        FontSize="20" ResizeMode="CanMinimize">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -35,7 +35,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <StackPanel Grid.Column="1" Grid.Row="2" Width="250">
+        <StackPanel Grid.Column="1" Grid.Row="2" Width="250" Margin="0,20,0,0">
             <TextBlock Text="Motivo de la ausencia" Margin="0,5,10,5"/>
             <TextBox x:Name="txbMotivoAus" Height="30" Margin="0,0,10,0"/>
             <Grid Margin="0,5,10,5">
@@ -49,7 +49,7 @@
                 </StackPanel>
             </Grid>
         </StackPanel>
-        <StackPanel Width="250" Grid.Column="2" Grid.Row="2">
+        <StackPanel Width="250" Grid.Column="2" Grid.Row="2" Margin="0,20,0,0">
             <TextBlock Text="Estado" Margin="0,5,10,5"/>
             <ComboBox Name="cmbEstadoAus" Height="30" Margin="0,0,10,0"/>
             <TextBlock Text="Solicitante" Margin="10,5"/>
@@ -57,7 +57,8 @@
         </StackPanel>
         <TextBlock Text="Descripción" Margin="0,5,10,5" Grid.Column="1" Grid.Row="3"/>
         <TextBox x:Name="txbDescripcion" Height="80" Grid.Column="1" Grid.Row="4"
-                 Grid.ColumnSpan="2" Margin="0,0,10,0"/>
+                 Grid.ColumnSpan="2" Margin="0,0,10,0" TextWrapping="Wrap" MaxLength="50"
+                 FontWeight="Normal"/>
         <StackPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2">
             <TextBlock Text="Adjuntar justificante" Margin="0,5,10,5"/>
             <TextBox x:Name="txbJustificante" Margin="0,0,10,0" Width="435" Height="30"
@@ -65,20 +66,20 @@
         </StackPanel>
         <Button x:Name="btnJustificante" Content="..." Grid.Column="2" Grid.Row="5" HorizontalAlignment="Right"
                 VerticalAlignment="Bottom" Height="30" Width="40" Margin="0,0,10,0"/>
-        <Button Name="btnSolicitar" Grid.Column="1" Grid.Row="6" Width="70"
-                Height="70" HorizontalAlignment="Left">
+        <Button Name="btnSolicitar" Grid.Column="1" Grid.Row="6" Width="65"
+                Height="65" HorizontalAlignment="Left">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="6" Width="70"
-                Height="70" HorizontalAlignment="Center">
+        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="6" Width="65"
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button Name="btnBorrar" Grid.Column="1" Grid.Row="6" Width="70"
-                Height="70" HorizontalAlignment="Right">
+        <Button Name="btnBorrar" Grid.Column="1" Grid.Row="6" Width="65"
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0">
             <StackPanel>
 
             </StackPanel>
