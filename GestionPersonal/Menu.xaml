@@ -33,7 +33,7 @@
             </Button.Effect>
         </Button>
         <Button Name="btnContratos" Content="Contratos" FontSize="22"  Width="150" Height="70" 
-                Margin="20,30,20,20" Grid.Column="2" Grid.Row="2">
+                Margin="20,30,20,20" Grid.Column="2" Grid.Row="2" Click="btnContratos_Click">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

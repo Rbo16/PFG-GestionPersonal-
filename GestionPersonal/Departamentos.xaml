@@ -33,32 +33,34 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,0,0">
-            <TextBlock Text="Nombre" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbNombreDep"  Margin="0,0,10,0"/>
-            <TextBlock Text="Descripción" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbDescripcionD" FontSize="16" MaxLength="50" TextWrapping="Wrap" Height="60" Margin="0,0,10,0"/>
-            <TextBlock Text="Jefe de Departamento" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbJefe" Margin="0,0,10,0"/>
-            <TextBlock Text="DNI" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbDNIjefe"  Margin="0,0,10,0"/>
-            <TextBlock Text="Correo electrónico" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbCorreoJefe"  Margin="0,0,10,0"/>
+        <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,10,0">
+            <TextBlock Text="Nombre" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbNombreDep"  />
+            <TextBlock Text="Descripción" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbDescripcionD" FontSize="16" MaxLength="50" TextWrapping="Wrap" Height="60"/>
+            <TextBlock Text="Jefe de Departamento" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbJefe" />
+            <TextBlock Text="DNI" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbDNIjefe"/>
+            <TextBlock Text="Correo electrónico" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbCorreoJefe"/>
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="70"
-                Height="65" HorizontalAlignment="Left">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0">
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0"
+                VerticalAlignment="Bottom">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0">
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0"
+                VerticalAlignment="Bottom">
             <StackPanel>
 
             </StackPanel>

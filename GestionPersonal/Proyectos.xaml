@@ -33,11 +33,11 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,0,0">
-            <TextBlock Text="Nombre" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbNombreP"  Margin="0,0,10,0"/>
-            <TextBlock Text="Cliente" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbCliente" Margin="0,0,10,0"/>
+        <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,10,0">
+            <TextBlock Text="Nombre" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbNombreP"  />
+            <TextBlock Text="Cliente" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbCliente" />
             <Grid>
                 <StackPanel Width="125" HorizontalAlignment="Left">
                     <TextBlock Text="Fecha Inicio" Margin="0,5,10,5"/>
@@ -47,31 +47,32 @@
                 </StackPanel>
                 <StackPanel Width="125" HorizontalAlignment="Right">
                     <TextBlock Text="Fecha Fin" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbFechaFin" Margin="0,0,10,0"/>
+                    <TextBox x:Name="txbFechaFin" />
                     <TextBlock Text="Presupesto" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbpresupuesto" Margin="0,0,10,0"/>
+                    <TextBox x:Name="txbpresupuesto" />
                 </StackPanel>
             </Grid>
-            <TextBlock Text="Prioridad" Margin="0,5,10,5"/>
-            <ComboBox x:Name="cmbPrioridad" Margin="0,0,10,0"/>
-            <TextBlock Text="Descripción" Margin="0,5,10,5"/>
+            <TextBlock Text="Prioridad" Margin="0,5,0,5"/>
+            <ComboBox x:Name="cmbPrioridad" />
+            <TextBlock Text="Descripción" Margin="0,5,0,5"/>
             <TextBox x:Name="txbDescripcionP" Height="40" FontSize="16" FontWeight="Normal" TextWrapping="Wrap"
-                     MaxLength="50" Margin="0,0,10,0"/>
+                     MaxLength="50"/>
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Left">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Left" Margin="87,15,0,15">
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0">
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0"
+                VerticalAlignment="Bottom">
             <StackPanel>
 
             </StackPanel>

@@ -72,19 +72,19 @@
         <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3"
                   Grid.RowSpan="3"/>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="5" Width="65"
-                Height="65" HorizontalAlignment="Left">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="5" Width="65"
-                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0">
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="5" Width="65"
-                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0">
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom">
             <StackPanel>
 
             </StackPanel>

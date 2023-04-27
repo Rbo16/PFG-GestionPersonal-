@@ -52,5 +52,11 @@ namespace GestionPersonal
             Departamentos menuDepartamentos = new Departamentos();
             menuDepartamentos.Show();
         }
+
+        private void btnContratos_Click(object sender, RoutedEventArgs e)
+        {
+            Contratos menuContratos = new Contratos();
+            menuContratos.Show();
+        }
     }
 }
