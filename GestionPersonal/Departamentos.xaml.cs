@@ -15,23 +15,18 @@ using System.Windows.Shapes;
 namespace GestionPersonal
 {
     /// <summary>
-    /// Lógica de interacción para Empleados.xaml
+    /// Lógica de interacción para Departamentos.xaml
     /// </summary>
-    public partial class Empleados : Window
+    public partial class Departamentos : Window
     {
-        public Empleados()
+        public Departamentos()
         {
             InitializeComponent();
         }
 
-        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            MessageBox.Show("Dale pibe");
         }
     }
 }

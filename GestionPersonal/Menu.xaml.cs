@@ -31,24 +31,32 @@ namespace GestionPersonal
 
         private void btnEmpleados_Click(object sender, RoutedEventArgs e)
         {
-            this.Visibility = Visibility.Hidden;
             Empleados menuEmpleados = new Empleados();
             menuEmpleados.Show();
         }
 
         private void btnAusencias_Click(object sender, RoutedEventArgs e)
         {
-
+            Ausencias menuAusencias= new Ausencias();
+            menuAusencias.Show();
         }
 
         private void btnProyectos_Click(object sender, RoutedEventArgs e)
         {
-
+            Proyectos menuProyectos = new Proyectos();
+            menuProyectos.Show();
         }
 
         private void btnDepartamentos_Click(object sender, RoutedEventArgs e)
         {
+            Departamentos menuDepartamentos = new Departamentos();
+            menuDepartamentos.Show();
+        }
 
+        private void btnContratos_Click(object sender, RoutedEventArgs e)
+        {
+            Contratos menuContratos = new Contratos();
+            menuContratos.Show();
         }
     }
 }
