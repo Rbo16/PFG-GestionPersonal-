@@ -8,7 +8,7 @@
         Title="Empleados" Height="600" Width="900" 
         FontFamily="Cambria" FontWeight="Bold"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
-        Closing="Window_Closing" FontSize="20">
+        Closing="Window_Closing" FontSize="20" >
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -32,6 +32,7 @@
         <Button Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"
                 Click="btnMenu_Click">
+            <Image Source="/Imagenes/Home.png" Width="40"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -65,6 +66,7 @@
         <TextBlock Text="Listado de empleados" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
         <Button Name="btnFiltrarE" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right">
+            <Image Source="/Imagenes/Filtro.png" Width="20"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -73,12 +75,20 @@
                   Grid.RowSpan="3"/>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="5" Width="65"
                 Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <StackPanel>
+                <Image Source="/Imagenes/Agregar.png" Height="40"/>
+                <TextBlock Text="Crear" FontSize="15"/>
+            </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="5" Width="65"
                 Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
+            <StackPanel>
+                <Image Source="/Imagenes/Guardar.png" Height="40"/>
+                <TextBlock Text="Guardar" FontSize="15"/>
+            </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -86,7 +96,8 @@
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="5" Width="65"
                 Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom">
             <StackPanel>
-
+                <Image Source="/Imagenes/Eliminar.png" Height="40"/>
+                <TextBlock Text="Eliminar" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>

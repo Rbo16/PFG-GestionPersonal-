@@ -29,6 +29,7 @@
                    HorizontalAlignment="Center" />
         <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Width="40" Height="40">
+            <Image Source="Imagenes/Home.png" Width="40"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -60,12 +61,20 @@
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <StackPanel>
+                <Image Source="/Imagenes/Agregar.png" Height="40"/>
+                <TextBlock Text="Crear" FontSize="15"/>
+            </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
+            <StackPanel>
+                <Image Source="/Imagenes/Guardar.png" Height="40"/>
+                <TextBlock Text="Guardar" FontSize="15"/>
+            </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -74,7 +83,8 @@
                 Height="65" HorizontalAlignment="Right" Margin="0,0,10,0"
                 VerticalAlignment="Bottom">
             <StackPanel>
-
+                <Image Source="/Imagenes/Eliminar.png" Height="40"/>
+                <TextBlock Text="Eliminar" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -82,9 +92,10 @@
         </Button>
         <TextBlock Text="Listado de proyectos" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
                    VerticalAlignment="Bottom"/>
-        <DataGrid x:Name="dtgPro" Width="270" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,13"/>
+        <DataGrid x:Name="dtgPro" Width="270" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0"/>
         <Button Name="btnFiltrarPro" Grid.Column="2" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Image Source="/Imagenes/Filtro.png" Width="20"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -94,6 +105,7 @@
         <DataGrid x:Name="dtgEmpleadosPro" Grid.ColumnSpan="2" Grid.Column="3" Grid.Row="3" Margin="20,0,0,0"/>
         <Button Name="btnFiltrarEPro" Grid.Column="4" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Image Source="/Imagenes/Filtro.png" Width="20"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
