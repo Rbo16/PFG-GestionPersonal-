@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPersonal"
         mc:Ignorable="d"
-        Title="Empleados" Height="600" Width="900" 
-        FontFamily="Cambria" FontWeight="Bold"
+        Title="Empleados" Height="720" Width="1280" 
+        FontFamily="Cambria" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
         Closing="Window_Closing" FontSize="20" >
     <Grid Background="#FF949494">
@@ -26,7 +26,7 @@
             <RowDefinition Height="97*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="EMPLEADOS" FontSize="40" 
+        <TextBlock Text="EMPLEADOS" FontWeight="Bold" FontSize="40" 
                    Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="1" 
                    HorizontalAlignment="Center" Margin="0,0,0,10"/>
         <Button Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
@@ -39,31 +39,31 @@
         </Button>
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250"
                     Grid.RowSpan="2" Margin="0,20,0,0">
-            <TextBlock Text="Nombre" Margin="0,5,10,5"/>
+            <TextBlock Text="Nombre" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbNombreE" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="Apellido" Margin="0,5,10,5"/>
+            <TextBlock Text="Apellido" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbApellido" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="DNI" Margin="0,5,10,5"/>
+            <TextBlock Text="DNI" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbDNI" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="N. Seguridad Social" Margin="0,5,10,5"/>
+            <TextBlock Text="N. Seguridad Social" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbNumSS" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="Teléfono" Margin="0,5,10,5"/>
+            <TextBlock Text="Teléfono" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbTlf" Margin="0,0,10,0" Height="30"/>
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="2" Width="250" Grid.RowSpan="2"
                     Margin="0,20,0,0">
-            <TextBlock Text="Usuario" Margin="0,5,10,5"/>
+            <TextBlock Text="Usuario" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbUsuario" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="Estado" Margin="0,5,10,5"/>
+            <TextBlock Text="Estado" FontWeight="Bold" Margin="0,5,10,5"/>
             <ComboBox Name="cmbEstadoE" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="Rol" Margin="0,5,10,5"/>
-            <ComboBox Name="cmbRol" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="Departamento" Margin="0,5,10,5"/>
+            <TextBlock Text="Rol" FontWeight="Bold" Margin="0,5,10,5"/>
+            <ComboBox Name="cmbRol"  Margin="0,0,10,0" Height="30"/>
+            <TextBlock Text="Departamento" FontWeight="Bold" Margin="0,5,10,5"/>
             <ComboBox Name="cmbDepartamentosE" Margin="0,0,10,0" Height="30"/>
-            <TextBlock Text="Correo Electrónico" Margin="0,5,10,5"/>
+            <TextBlock Text="Correo Electrónico" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbCorreoE" Margin="0,0,10,0" Height="30"/>
         </StackPanel>
-        <TextBlock Text="Listado de empleados" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
+        <TextBlock Text="Listado de empleados" FontWeight="Bold" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
         <Button Name="btnFiltrarE" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
@@ -73,11 +73,11 @@
         </Button>
         <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3"
                   Grid.RowSpan="3"/>
-        <Button Name="btnCrear" Grid.Column="1" Grid.Row="5" Width="65"
-                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+        <Button Name="btnCrear" Grid.Column="1" Grid.Row="5"
+                Height="65" VerticalAlignment="Bottom" Margin="0,0,185,0" Click="btnCrear_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Agregar.png" Height="40"/>
-                <TextBlock Text="Crear" FontSize="15"/>
+                <TextBlock Text="Crear" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -87,7 +87,7 @@
                 Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
-                <TextBlock Text="Guardar" FontSize="15"/>
+                <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -97,7 +97,7 @@
                 Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
-                <TextBlock Text="Eliminar" FontSize="15"/>
+                <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>

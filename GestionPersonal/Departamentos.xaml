@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GestionPersonal"
         mc:Ignorable="d"
-        Title="Departamentos" Height="600" Width="900"
-        FontFamily="Cambria" FontWeight="Bold" WindowStartupLocation="CenterScreen"
+        Title="Departamentos" Height="720" Width="1280"
+        FontFamily="Cambria"  WindowStartupLocation="CenterScreen"
         FontSize="20" ResizeMode="CanMinimize">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
@@ -14,7 +14,7 @@
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition/>
             <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -25,7 +25,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="DEPARTAMENTOS" FontSize="40" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4"
+        <TextBlock Text="DEPARTAMENTOS" FontSize="40" FontWeight="Bold" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4"
                    HorizontalAlignment="Center" />
         <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Width="40" Height="40">
@@ -35,22 +35,22 @@
             </Button.Effect>
         </Button>
         <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,10,0">
-            <TextBlock Text="Nombre" Margin="0,5,0,5"/>
+            <TextBlock Text="Nombre" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbNombreDep"  />
-            <TextBlock Text="Descripción" Margin="0,5,0,5"/>
+            <TextBlock Text="Descripción" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbDescripcionD" FontSize="16" MaxLength="50" TextWrapping="Wrap" Height="60"/>
-            <TextBlock Text="Jefe de Departamento" Margin="0,5,0,5"/>
+            <TextBlock Text="Jefe de Departamento" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbJefe" />
-            <TextBlock Text="DNI" Margin="0,5,0,5"/>
+            <TextBlock Text="DNI" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbDNIjefe"/>
-            <TextBlock Text="Correo electrónico" Margin="0,5,0,5"/>
+            <TextBlock Text="Correo electrónico" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbCorreoJefe"/>
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="70"
                 Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <StackPanel>
                 <Image Source="/Imagenes/Agregar.png" Height="40"/>
-                <TextBlock Text="Crear" FontSize="15"/>
+                <TextBlock Text="Crear" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -61,7 +61,7 @@
                 VerticalAlignment="Bottom">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
-                <TextBlock Text="Guardar" FontSize="15"/>
+                <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -72,15 +72,15 @@
                 VerticalAlignment="Bottom">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
-                <TextBlock Text="Eliminar" FontSize="15"/>
+                <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <TextBlock Text="Listado Departamentos" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
+        <TextBlock Text="Listado Departamentos" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
                    VerticalAlignment="Bottom"/>
-        <DataGrid x:Name="dtgDep" Width="270" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0"/>
+        <DataGrid x:Name="dtgDep" Width="425" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0"/>
         <Button Name="btnFiltrarDep" Grid.Column="2" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
@@ -88,9 +88,10 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <TextBlock Text="Integrantes" Grid.Column="3" Grid.Row="2" Margin="20,0,0,5"
+        <TextBlock Text="Integrantes" FontWeight="Bold" Grid.Column="3" Grid.Row="2" Margin="20,0,0,5"
                    VerticalAlignment="Bottom"/>
-        <DataGrid x:Name="dtgEmpleadosDep" Grid.ColumnSpan="2" Grid.Column="3" Grid.Row="3" Margin="20,0,0,0"/>
+        <DataGrid x:Name="dtgEmpleadosDep" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Column="3" Grid.Row="3"
+                  Height="440" Margin="20,0,0,0" VerticalAlignment="Top"/>
         <Button Name="btnFiltrarEDep" Grid.Column="4" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
@@ -98,12 +99,12 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,10,0,0">
+        <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,160,0,0">
             <StackPanel.Effect>
                 <DropShadowEffect/>
             </StackPanel.Effect>
-            <Button x:Name="btnJefe" Content="Asignar como jefe" IsEnabled="False"/>
-            <Button x:Name="btnAddE" Content="Añadir nuevo empleado" Margin="0,10,0,0"/>
+            <Button x:Name="btnJefe" FontWeight="Bold" Content="Asignar como jefe" IsEnabled="False"/>
+            <Button x:Name="btnAddE" FontWeight="Bold" Content="Añadir nuevo empleado" Margin="0,10,0,0"/>
         </StackPanel>
     </Grid>
 </Window>

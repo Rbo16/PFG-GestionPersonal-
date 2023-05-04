@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,19 @@ namespace GestionPersonal
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MessageBox.Show("Dale pibe");
+            
+        }
+
+        private void btnCrear_Click(object sender, RoutedEventArgs e)
+        {
+            InteraccionBBDD miBBDD = new InteraccionBBDD();
+            DataTable dtEmpleados = miBBDD.consultaSelect("SELECT * FROM Empleado");
+            dtgEmpleados.ItemsSource = dtEmpleados.DefaultView;
         }
     }
 }
