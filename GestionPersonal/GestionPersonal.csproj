@@ -56,15 +56,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Ausencia.cs" />
+    <Compile Include="AusenciaControl.cs" />
+    <Compile Include="Contrato.cs" />
+    <Compile Include="ContratoControl.cs" />
     <Compile Include="Contratos.xaml.cs">
       <DependentUpon>Contratos.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Departamento.cs" />
+    <Compile Include="DepartamentoControl.cs" />
+    <Compile Include="Empleado.cs" />
+    <Compile Include="EmpleadoControl.cs" />
     <Compile Include="InteraccionBBDD.cs" />
     <Compile Include="masterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>masterDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Proyecto.cs" />
+    <Compile Include="ProyectoControl.cs" />
     <Compile Include="Proyectos.xaml.cs">
       <DependentUpon>Proyectos.xaml</DependentUpon>
     </Compile>
