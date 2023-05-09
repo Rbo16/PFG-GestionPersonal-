@@ -20,9 +20,19 @@ namespace GestionPersonal
     /// </summary>
     public partial class Empleados : Window
     {
+        EmpleadoControl ControladorE = new EmpleadoControl();
+        DataTable dtEmpleados = new DataTable();
+
         public Empleados()
         {
             InitializeComponent();
+            cargarDTG();
+        }
+
+        private void cargarDTG()
+        {
+            dtEmpleados = ControladorE.listarEmpleados();
+            dtgEmpleados.ItemsSource = dtEmpleados.DefaultView;
         }
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
