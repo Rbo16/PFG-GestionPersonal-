@@ -65,16 +65,19 @@ namespace GestionPersonal
             dtEmpleados = miBBDD.consultaSelect(consulta);
 
             return dtEmpleados;
+            
         }
+
     }
 
     enum TipoEmpleado
     {
-        Basico, Gestor, Administrador
+        Basico = 1, Gestor = 2, Administrador = 3
     }
 
     enum EstadoEmpleado
     {
-        NoAutorizado, Pendiente, Autorizado, Retirado
+        Autorizado = 1, Pendiente = 2, NoAutorizado = 3, Retirado = 4
     }
+
 }
