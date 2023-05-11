@@ -54,7 +54,9 @@ namespace GestionPersonal
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-
+            ControladorE.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
+                txbNumSS.Text, txbTlf.Text, txbCorreoE.Text, txbDepartamento.Text);
+            cargarDTG();
         }
 
         private void dtgEmpleados_MouseDoubleClick(object sender, MouseButtonEventArgs e)

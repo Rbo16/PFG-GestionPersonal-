@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GestionPersonal
 {
@@ -23,32 +24,33 @@ namespace GestionPersonal
         private int IdDepartamento { get; set; }
 
         InteraccionBBDD miBBDD = new InteraccionBBDD();
-        public Empleado(){
+        public Empleado()
+        {
             this.IdEmpleado = -1;
-            this.NombreE= string.Empty;
-            this.Apellido= string.Empty;
-            this.Usuario= string.Empty;
-            this.Contrasenia= string.Empty;
+            this.NombreE = string.Empty;
+            this.Apellido = string.Empty;
+            this.Usuario = string.Empty;
+            this.Contrasenia = string.Empty;
             this.rol = TipoEmpleado.Basico;
             this.EstadoE = EstadoEmpleado.Autorizado;
-            this.DNI= string.Empty;
-            this.NumSS= string.Empty;
-            this.Tlf= string.Empty;
-            this.CorreoE= string.Empty;
+            this.DNI = string.Empty;
+            this.NumSS = string.Empty;
+            this.Tlf = string.Empty;
+            this.CorreoE = string.Empty;
             this.IdDepartamento = -1; //Porque no está en niguno
-            }
+        }
 
         //Constructor de un empleado concreto. No recibe contraseña por temas de seguridad
-        public Empleado(int IdEmpleado, string NombreE,string Apellido, string Usuario, TipoEmpleado Rol, EstadoEmpleado
-            EstadoE, string DNI, string NumSS, string Tlf, string CorreoE, int IdDepartamento)
+        public Empleado(int IdEmpleado, string NombreE, string Apellido, string Usuario,
+            string DNI, string NumSS, string Tlf, string CorreoE, int IdDepartamento)
         {
             this.IdEmpleado = IdEmpleado;
             this.NombreE = NombreE;
             this.Apellido = Apellido;
             this.Usuario = Usuario;
             this.Contrasenia = "DEFAULT????";
-            this.rol = Rol;
-            this.EstadoE = EstadoE;
+            this.rol = TipoEmpleado.Basico;//Defaul basico, será un admin quien lo tenga que cambiar
+            this.EstadoE = EstadoEmpleado.Pendiente; //Ya que cuando se crea, no está autorizado. Se autoriza modificando el combobox
             this.DNI = DNI;
             this.NumSS = NumSS;
             this.Tlf = Tlf;
@@ -65,9 +67,28 @@ namespace GestionPersonal
             dtEmpleados = miBBDD.consultaSelect(consulta);
 
             return dtEmpleados;
-            
-        }
 
+        }
+        public void insertEmpleado()
+        {
+            string consulta = "INSERT INTO Empleado (NombreE, Apellido, Usuario, Contrasenia, Rol, EstadoE, DNI, NumSS, Tlf, CorreoE, IdDepartamento, FechaUltModif) ";
+            string valores = "VALUES ('" + this.NombreE + "', '" +
+                this.Apellido + "', '" +
+                this.Usuario + "', '" +
+                this.Contrasenia + "', '" +
+                this.rol.GetHashCode() + "', '" +
+                this.EstadoE.GetHashCode() + "', '" +
+                this.DNI + "', '" +
+                this.NumSS + "', '" +
+                this.Tlf + "', '" +
+                this.CorreoE + "', " +
+                "NULL, '" +
+                DateTime.Now.ToString() + "')"; //DE MOMENTO SERÁ NULL PORQUE NO HAY DEPAS
+
+            consulta += valores;
+
+            miBBDD.ejecutarConsulta(consulta);
+        }
     }
 
     enum TipoEmpleado

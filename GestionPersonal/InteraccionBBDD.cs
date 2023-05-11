@@ -30,7 +30,7 @@ namespace GestionPersonal
             catch (Exception e) { MessageBox.Show(e.Message); return false; }
         }
 
-        public string insertarRegistro(string consulta)
+        public void ejecutarConsulta(string consulta)
         {
 
             SqlCommand miSqlComand = new SqlCommand(consulta, miConexionSql);
@@ -41,13 +41,13 @@ namespace GestionPersonal
                 miSqlComand.ExecuteNonQuery();
                 miConexionSql.Close(); //Cerrar explicitamente o usar el using
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
-                return "OK";
+                MessageBox.Show("OK");
             }
             catch (Exception e)
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
                 miConexionSql.Close(); //Cerrar explicitamente o usar el using
-                return "ERROR: " + e.Message;
+                MessageBox.Show("ERROR: " + e.Message);
             }
         }
 
