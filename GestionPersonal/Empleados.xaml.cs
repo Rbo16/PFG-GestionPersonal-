@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -86,6 +87,24 @@ namespace GestionPersonal
 
             cmbRol.SelectedIndex = Convert.ToInt32(dtEmpleados.Rows[posicion]["Rol"]) - 1;
             cmbEstadoE.SelectedIndex = Convert.ToInt32(dtEmpleados.Rows[posicion]["EstadoE"]) - 1;
+        }
+
+        private void btnBorrar_Click(object sender, RoutedEventArgs e)
+        {
+            if(dtgEmpleados.SelectedItem != null)
+            {
+                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar el usuario " + dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString() + "?", "Eliminar empleado",
+                    MessageBoxButtons.YesNo);
+                
+                if(dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    ControladorE.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString());
+                    cargarDTG();
+                }
+                else
+                    return;
+                
+            }
         }
     }
 }

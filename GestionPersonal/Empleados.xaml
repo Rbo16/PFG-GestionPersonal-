@@ -94,7 +94,7 @@
             </Button.Effect>
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="5" Width="65"
-                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" Click="btnBorrar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
                 <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>

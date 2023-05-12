@@ -89,6 +89,16 @@ namespace GestionPersonal
 
             miBBDD.ejecutarConsulta(consulta);
         }
+
+        public void deleteEmpleado(string IdBorrado)
+        {
+            //Realmente solo ponemos el campo borrado a TRUE
+            string consultaDelete = "UPDATE Empleado SET Borrado = 1 WHERE IdEmpleado = " + IdBorrado;
+            miBBDD.ejecutarConsulta(consultaDelete);
+
+            //AÑADIR TAMBIEN RESPONSABLE DEL CAMBIO
+            //!!LUEGO HAY QUE ELIMINARLO DEL DEPARTAMENTO, PROYECTOS, SUS CONTRATOS, AUSENCIAS 
+        }
     }
 
     enum TipoEmpleado

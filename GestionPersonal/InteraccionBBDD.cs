@@ -41,7 +41,6 @@ namespace GestionPersonal
                 miSqlComand.ExecuteNonQuery();
                 miConexionSql.Close(); //Cerrar explicitamente o usar el using
                 System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("es-ES");
-                MessageBox.Show("OK");
             }
             catch (Exception e)
             {

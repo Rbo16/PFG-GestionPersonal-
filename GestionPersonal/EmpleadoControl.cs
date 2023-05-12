@@ -10,14 +10,14 @@ namespace GestionPersonal
 {
     internal class EmpleadoControl
     {
-        Empleado Empleado = new Empleado();
+        Empleado empleado = new Empleado();
         DataTable dtEmpleadosCif = new DataTable();
         public EmpleadoControl() { }
         
         public DataTable listarEmpleados()
         {
             //Mostramos una tabla en la que no se muestren las contaseñas
-            dtEmpleadosCif = Empleado.listadoEmpleados(string.Empty);
+            dtEmpleadosCif = empleado.listadoEmpleados(string.Empty);
             dtEmpleadosCif.Columns.Remove("Contrasenia");
 
             return dtEmpleadosCif;
@@ -63,6 +63,7 @@ namespace GestionPersonal
                 Empleado nuevoEmpleado = new Empleado(-1, NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa);
                 //Id = -1 porque no se usará al insertarlo
                 nuevoEmpleado.insertEmpleado();
+                MessageBox.Show("Empleado creado correctamente");
             }
             else
             {
@@ -81,6 +82,12 @@ namespace GestionPersonal
             }
 
             return vacio;
+        }
+
+        public void eliminarEmpleado(string IdBorrado)
+        {
+            empleado.deleteEmpleado(IdBorrado);
+            MessageBox.Show("Empleado eliminado correctamente");
         }
     }
 }
