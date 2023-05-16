@@ -40,28 +40,28 @@
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250"
                     Grid.RowSpan="2" Margin="0,20,0,0">
             <TextBlock Text="Nombre" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbNombreE" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbNombreE" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
             <TextBlock Text="Apellido" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbApellido" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbApellido" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
             <TextBlock Text="DNI" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbDNI" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbDNI" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
             <TextBlock Text="N. Seguridad Social" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbNumSS" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbNumSS" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
             <TextBlock Text="Teléfono" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbTlf" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbTlf" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="2" Width="250" Grid.RowSpan="2"
                     Margin="0,20,0,0">
             <TextBlock Text="Usuario" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbUsuario" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbUsuario" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
             <TextBlock Text="Estado" FontWeight="Bold" Margin="0,5,10,5"/>
             <ComboBox Name="cmbEstadoE" Margin="0,0,10,0" Height="30"/>
             <TextBlock Text="Rol" FontWeight="Bold" Margin="0,5,10,5"/>
-            <ComboBox Name="cmbRol"  Margin="0,0,10,0" Height="30"/>
+            <ComboBox Name="cmbRol"  Margin="0,0,10,0" Height="30" />
             <TextBlock Text="Departamento" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbDepartamento" Margin="0,0,10,0" Height="30"/>
             <TextBlock Text="Correo Electrónico" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbCorreoE" Margin="0,0,10,0" Height="30"/>
+            <TextBox Name="txbCorreoE" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
         </StackPanel>
         <TextBlock Text="Listado de empleados" FontWeight="Bold" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
         <Button Name="btnFiltrarE" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
@@ -84,7 +84,7 @@
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="5" Width="65"
-                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom" Click="btnGuardar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
                 <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>

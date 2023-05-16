@@ -33,7 +33,7 @@ namespace GestionPersonal
             return array;
         }
         public void crearEmpleado(string NombreE, string Apellido, string Usuario, string DNI, 
-            string NumSS, string Tlf, string CorreoE, string IdDepartamento)
+            string NumSS, string Tlf, string CorreoE, string IdDepartamento)//IdModif
         {
             List<string> listaCampos = new List<string>();
             //Guardamos los campos para comprobar que no estén vacíos
@@ -84,10 +84,17 @@ namespace GestionPersonal
             return vacio;
         }
 
-        public void eliminarEmpleado(string IdBorrado)
+        public void eliminarEmpleado(string IdBorrado)//IdModif
         {
             empleado.deleteEmpleado(IdBorrado);
             MessageBox.Show("Empleado eliminado correctamente");
+        }
+
+        public void modificarEmpleado(DataRow empleadoModif)//IdModif
+        {
+            empleado.updateEmpleado(empleadoModif);
+            MessageBox.Show("Cambios guardados correctamente.");
+            
         }
     }
 }

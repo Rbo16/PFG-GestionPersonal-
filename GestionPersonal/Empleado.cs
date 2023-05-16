@@ -93,11 +93,40 @@ namespace GestionPersonal
         public void deleteEmpleado(string IdBorrado)
         {
             //Realmente solo ponemos el campo borrado a TRUE
-            string consultaDelete = "UPDATE Empleado SET Borrado = 1 WHERE IdEmpleado = " + IdBorrado;
+            string consultaDelete = "UPDATE Empleado SET Borrado = 1, FechaUltModif = GETDATE() WHERE IdEmpleado = " + IdBorrado;
             miBBDD.ejecutarConsulta(consultaDelete);
 
             //AÑADIR TAMBIEN RESPONSABLE DEL CAMBIO
             //!!LUEGO HAY QUE ELIMINARLO DEL DEPARTAMENTO, PROYECTOS, SUS CONTRATOS, AUSENCIAS 
+        }
+        public void updateEmpleado(DataRow empleadoModif)//IdModif
+        {
+            //IdModif e IdDepartamento quedan vacios, pero se genera la consulta correctamente
+            string consulta = "UPDATE Empleado SET ";
+
+            for (int i = 1; i < empleadoModif.Table.Columns.Count - 1; i++)// Empieza en 1 porque no actualizamos el Id. El último no para que no acabe en , 
+            {
+                consulta += empleadoModif.Table.Columns[i].ColumnName;
+                consulta += " = ";
+
+                if (empleadoModif.Table.Columns[i].DataType == typeof(String)) //Sii es string, le añadimos las comillas
+                    consulta += "'";
+
+                consulta += empleadoModif[i].ToString();
+
+                if (empleadoModif.Table.Columns[i].DataType == typeof(String))
+                    consulta += "'";
+
+                consulta += ", ";
+            }
+
+            consulta += empleadoModif.Table.Columns["Borrado"].ColumnName;//Lo último en nuestro caso siempre será el borrado
+            consulta += " = ";
+            consulta += empleadoModif["Borrado"].ToString();
+
+            consulta += " WHERE IdEmpleado = '" + empleadoModif["IdEmpleado"].ToString() + "'";
+
+            miBBDD.ejecutarConsulta(consulta);
         }
     }
 
