@@ -33,7 +33,7 @@ namespace GestionPersonal
             return array;
         }
         public void crearEmpleado(string NombreE, string Apellido, string Usuario, string DNI, 
-            string NumSS, string Tlf, string CorreoE, string IdDepartamento)//IdModif
+            string NumSS, string Tlf, string CorreoE, string IdDepartamento, string IdModif)
         {
             List<string> listaCampos = new List<string>();
             //Guardamos los campos para comprobar que no estén vacíos
@@ -62,7 +62,7 @@ namespace GestionPersonal
 
                 Empleado nuevoEmpleado = new Empleado(-1, NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa);
                 //Id = -1 porque no se usará al insertarlo
-                nuevoEmpleado.insertEmpleado();
+                nuevoEmpleado.insertEmpleado(IdModif);
                 MessageBox.Show("Empleado creado correctamente");
             }
             else
@@ -84,14 +84,17 @@ namespace GestionPersonal
             return vacio;
         }
 
-        public void eliminarEmpleado(string IdBorrado)//IdModif
+        public void eliminarEmpleado(string IdBorrado, string IdModif)
         {
-            empleado.deleteEmpleado(IdBorrado);
+            empleado.deleteEmpleado(IdBorrado, IdModif);
             MessageBox.Show("Empleado eliminado correctamente");
         }
 
-        public void modificarEmpleado(DataRow empleadoModif)//IdModif
+        public void modificarEmpleado(DataRow empleadoModif, string IdModif)
         {
+            empleadoModif["IdModif"] = IdModif;
+            empleadoModif["FechaUltModif"] = DateTime.Now; //cambiamos la auditoría
+
             empleado.updateEmpleado(empleadoModif);
             MessageBox.Show("Cambios guardados correctamente.");
             

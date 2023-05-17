@@ -26,6 +26,7 @@ namespace GestionPersonal
         int contEmpleado;//para indicar el registro del empleado en el datatable
         DataRow empleadoActual;
         bool hayCambios = false; //con esta variable controlamos si ha habido cambios
+        bool dblClic = false;//Solo se me ocurre esto para que controlar que haycambios no se active al cargar desde dtg
 
         public Empleados()
         {
@@ -53,21 +54,44 @@ namespace GestionPersonal
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            if (hayCambios)
+            {
+                DialogResult dr = System.Windows.Forms.MessageBox.Show("Hay cambios sin guardar, ¿quiere salir?", "Exit", MessageBoxButtons.YesNo);
+                if (dr == System.Windows.Forms.DialogResult.No)
+                    e.Cancel = true;
+            }
         }
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-            ControladorE.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
-                txbNumSS.Text, txbTlf.Text, txbCorreoE.Text, txbDepartamento.Text);
-            cargarDTG();
+            if (dniCorrecto())
+            {
+                if (numssCorrecto())
+                {
+                    ControladorE.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
+                txbNumSS.Text, txbTlf.Text, txbCorreoE.Text, txbIdDepartamento.Text, "1");//IdModif
+                    cargarDTG();
+                }
+                else System.Windows.MessageBox.Show("El número de la seguridad social ha de tener 12 dígitos.");
+            }
+            else System.Windows.MessageBox.Show("El DNI ha de tener 9 caracteres.");
         }
+
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)//Condicion explicada en cambioEmpleadoTxb
             {
-                ControladorE.modificarEmpleado(empleadoActual);
-                cargarDTG();
+                if(dniCorrecto())
+                {
+                    if (numssCorrecto())
+                    {
+                        ControladorE.modificarEmpleado(empleadoActual, "1");//IdModif
+                        hayCambios = false;
+                        cargarDTG();
+                    }
+                    else System.Windows.MessageBox.Show("El número de la seguridad social ha de tener 12 dígitos.");
+                }
+                else System.Windows.MessageBox.Show("El DNI ha de tener 9 caracteres.");
             }
             
         }
@@ -78,15 +102,16 @@ namespace GestionPersonal
             //IMPORTANTE QUE LA PROPIEDAD NAME DE CADA ELEMENTO TENGA SUS 3 PRIMERAS LETRAS DESCARTABLES
             //Y LO DEMÁS COINCIDA CON EL NOMBRE DE ESE ATRIBUTO EN EL DATATABLE
 
-            if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
-                //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
+            if (!dblClic)
             {
-                string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
-                System.Windows.Forms.MessageBox.Show(columna);
-                empleadoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
-            }
-            if (empleadoActual["DNI"].Equals(txbDNI.Text))//Explicado en cargarEmpleado()
+                if (empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
+                                                                                          //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
+                {
+                    string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
+                    empleadoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
+                }
                 hayCambios = true;
+            }
         }
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
@@ -97,7 +122,7 @@ namespace GestionPersonal
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
-                    ControladorE.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString());
+                    ControladorE.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString(), "1");//IdModif
                     cargarDTG();
                 }
                 else
@@ -111,6 +136,7 @@ namespace GestionPersonal
                 return;
             else
             {
+                dblClic = true;
                 hayCambios = false;
 
                 contEmpleado = dtgEmpleados.SelectedIndex; //Guardamos la fila por si luego queremos visualizar el siguiente empleado
@@ -125,19 +151,54 @@ namespace GestionPersonal
             txbNombreE.Text = dtEmpleados.Rows[posicion]["NombreE"].ToString();
             txbApellido.Text = dtEmpleados.Rows[posicion]["Apellido"].ToString();
             txbUsuario.Text = dtEmpleados.Rows[posicion]["Usuario"].ToString();
+            txbDNI.Text = dtEmpleados.Rows[posicion]["DNI"].ToString();
             txbNumSS.Text = dtEmpleados.Rows[posicion]["NumSS"].ToString();
             txbTlf.Text = dtEmpleados.Rows[posicion]["Tlf"].ToString();
             txbCorreoE.Text = dtEmpleados.Rows[posicion]["CorreoE"].ToString();
 
-            txbDepartamento.Text = dtEmpleados.Rows[posicion]["IdDepartamento"].ToString(); 
+            txbIdDepartamento.Text = dtEmpleados.Rows[posicion]["IdDepartamento"].ToString();
             //Estaría bien indicar el NOMBRE DEL DEPA
 
             cmbRol.SelectedIndex = Convert.ToInt32(dtEmpleados.Rows[posicion]["Rol"]) - 1;
             cmbEstadoE.SelectedIndex = Convert.ToInt32(dtEmpleados.Rows[posicion]["EstadoE"]) - 1;
 
-            txbDNI.Text = dtEmpleados.Rows[posicion]["DNI"].ToString(); //Lo pongo el último para usarlo en el cambioEmpleadoTxb ya que al seleccionar un empleado habiendo uno cargado ya, entra en el Text_Changed y es un uso de recursos innecesario
+            dblClic = false;
         }
 
+        private bool dniCorrecto()
+        {
+            bool correcto = true;
+            if(txbDNI.Text.Length != 9) correcto = false;
+            return correcto;
+        }
+        private bool numssCorrecto()
+        {
+            bool correcto = true;
+            if (txbNumSS.Text.Length != 12) correcto = false;
+            return correcto;
+        }
 
+        private void btnVacio_Click(object sender, RoutedEventArgs e)
+        {
+
+            empleadoActual = empleadoActual = dtEmpleados.NewRow();
+
+            txbNombreE.Text = "";
+            txbApellido.Text = "";
+            txbUsuario.Text = "";
+            txbNumSS.Text = "";
+            txbTlf.Text = "";
+            txbCorreoE.Text = "";
+            txbIdDepartamento.Text = "";
+            //Estaría bien indicar el NOMBRE DEL DEPA
+            cmbRol.SelectedIndex =  -1;
+            cmbEstadoE.SelectedIndex = -1;
+            txbDNI.Text = "";
+
+            dtgEmpleados.SelectedItem = null;
+            hayCambios = false;
+
+            cargarDTG();
+        }
     }
 }

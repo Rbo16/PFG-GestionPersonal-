@@ -69,9 +69,9 @@ namespace GestionPersonal
             return dtEmpleados;
 
         }
-        public void insertEmpleado()
+        public void insertEmpleado(string IdModif)
         {
-            string consulta = "INSERT INTO Empleado (NombreE, Apellido, Usuario, Contrasenia, Rol, EstadoE, DNI, NumSS, Tlf, CorreoE, IdDepartamento, FechaUltModif) ";
+            string consulta = "INSERT INTO Empleado (NombreE, Apellido, Usuario, Contrasenia, Rol, EstadoE, DNI, NumSS, Tlf, CorreoE, IdDepartamento, FechaUltModif, IdModif) ";
             string valores = "VALUES ('" + this.NombreE + "', '" +
                 this.Apellido + "', '" +
                 this.Usuario + "', '" +
@@ -82,18 +82,19 @@ namespace GestionPersonal
                 this.NumSS + "', '" +
                 this.Tlf + "', '" +
                 this.CorreoE + "', " +
-                "NULL, '" +
-                DateTime.Now.ToString() + "')"; //DE MOMENTO SERÁ NULL PORQUE NO HAY DEPAS
+                "NULL, '" +  //DE MOMENTO SERÁ NULL PORQUE NO HAY DEPAS
+                DateTime.Now.ToString() +
+                IdModif + "')"; 
 
             consulta += valores;
 
             miBBDD.ejecutarConsulta(consulta);
         }
 
-        public void deleteEmpleado(string IdBorrado)
+        public void deleteEmpleado(string IdBorrado, string IdModif)
         {
             //Realmente solo ponemos el campo borrado a TRUE
-            string consultaDelete = "UPDATE Empleado SET Borrado = 1, FechaUltModif = GETDATE() WHERE IdEmpleado = " + IdBorrado;
+            string consultaDelete = "UPDATE Empleado SET Borrado = 1, FechaUltModif = GETDATE(), IdModif = " + IdModif + " WHERE IdEmpleado = " + IdBorrado;
             miBBDD.ejecutarConsulta(consultaDelete);
 
             //AÑADIR TAMBIEN RESPONSABLE DEL CAMBIO
@@ -106,23 +107,29 @@ namespace GestionPersonal
 
             for (int i = 1; i < empleadoModif.Table.Columns.Count - 1; i++)// Empieza en 1 porque no actualizamos el Id. El último no para que no acabe en , 
             {
-                consulta += empleadoModif.Table.Columns[i].ColumnName;
-                consulta += " = ";
+                if(empleadoModif[i].ToString() != "")
+                {
+                    consulta += empleadoModif.Table.Columns[i].ColumnName;
+                    consulta += " = ";
 
-                if (empleadoModif.Table.Columns[i].DataType == typeof(String)) //Sii es string, le añadimos las comillas
-                    consulta += "'";
+                    if (empleadoModif.Table.Columns[i].DataType == typeof(String) 
+                        || empleadoModif.Table.Columns[i].DataType == typeof(DateTime)) //Sii es string o fecha, le añadimos las comillas
+                        consulta += "'";
 
-                consulta += empleadoModif[i].ToString();
+                    consulta += empleadoModif[i].ToString();
 
-                if (empleadoModif.Table.Columns[i].DataType == typeof(String))
-                    consulta += "'";
+                    if (empleadoModif.Table.Columns[i].DataType == typeof(String) 
+                        || empleadoModif.Table.Columns[i].DataType == typeof(DateTime))
+                        consulta += "'";
 
-                consulta += ", ";
+                    consulta += ", ";
+                }
             }
 
             consulta += empleadoModif.Table.Columns["Borrado"].ColumnName;//Lo último en nuestro caso siempre será el borrado
             consulta += " = ";
-            consulta += empleadoModif["Borrado"].ToString();
+            if (empleadoModif["Borrado"].ToString() == "False") consulta += "0";  
+            else consulta += "1";
 
             consulta += " WHERE IdEmpleado = '" + empleadoModif["IdEmpleado"].ToString() + "'";
 
