@@ -19,8 +19,11 @@ namespace GestionPersonal
     /// </summary>
     public partial class Contratos : Window
     {
-        public Contratos()
+        private readonly ContratoControl controladorContrato;
+
+        public Contratos(ContratoControl controladorContrato)
         {
+            this.controladorContrato = controladorContrato;
             InitializeComponent();
         }
     }

@@ -15,18 +15,16 @@ using System.Windows.Shapes;
 namespace GestionPersonal
 {
     /// <summary>
-    /// Lógica de interacción para Ausencias.xaml
+    /// Lógica de interacción para Proyectos.xaml
     /// </summary>
-    public partial class Ausencias : Window
+    public partial class Proyectos : Window
     {
-        public Ausencias()
+        private readonly ProyectoControl controladorProyecto;
+
+        public Proyectos(ProyectoControl controladorProyecto)
         {
+            this.controladorProyecto = controladorProyecto;
             InitializeComponent();
-        }
-
-        private void btnMenu_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

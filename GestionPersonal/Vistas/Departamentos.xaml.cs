@@ -19,8 +19,10 @@ namespace GestionPersonal
     /// </summary>
     public partial class Departamentos : Window
     {
-        public Departamentos()
+        private readonly DepartamentoControl controladorDepartamento;
+        public Departamentos(DepartamentoControl controladorDepartamento)
         {
+            this.controladorDepartamento = controladorDepartamento;
             InitializeComponent();
         }
 

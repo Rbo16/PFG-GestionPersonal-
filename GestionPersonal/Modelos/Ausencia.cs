@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GestionPersonal
 {
-    internal class Ausencia
+    public class Ausencia
     {
         private int IdAusencia { get; set; }
         private string Razon { get; set; }

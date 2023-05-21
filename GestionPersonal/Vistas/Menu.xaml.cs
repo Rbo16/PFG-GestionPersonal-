@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GestionPersonal.Controladores;
+using GestionPersonal.Vistas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +21,12 @@ namespace GestionPersonal
     /// </summary>
     public partial class Menu : Window
     {
-        public Menu()
+        private readonly MenuControl controladorMenu;
+
+        public Menu(MenuControl controladorMenu)
         {
             InitializeComponent();
+            this.controladorMenu = controladorMenu;
         }
 
         private void btnCambioContra_Click(object sender, RoutedEventArgs e)
@@ -31,32 +36,27 @@ namespace GestionPersonal
 
         private void btnEmpleados_Click(object sender, RoutedEventArgs e)
         {
-            Empleados menuEmpleados = new Empleados();
-            menuEmpleados.Show();
+            this.controladorMenu.abrirEmpleados();
         }
 
         private void btnAusencias_Click(object sender, RoutedEventArgs e)
         {
-            Ausencias menuAusencias= new Ausencias();
-            menuAusencias.Show();
+            this.controladorMenu.abrirAusencias();
         }
 
         private void btnProyectos_Click(object sender, RoutedEventArgs e)
         {
-            Proyectos menuProyectos = new Proyectos();
-            menuProyectos.Show();
+            this.controladorMenu.abrirProyectos();
         }
 
         private void btnDepartamentos_Click(object sender, RoutedEventArgs e)
         {
-            Departamentos menuDepartamentos = new Departamentos();
-            menuDepartamentos.Show();
+            this.controladorMenu.abrirDepartamentos();
         }
 
         private void btnContratos_Click(object sender, RoutedEventArgs e)
         {
-            Contratos menuContratos = new Contratos();
-            menuContratos.Show();
+            this.controladorMenu.abrirContratos();
         }
     }
 }

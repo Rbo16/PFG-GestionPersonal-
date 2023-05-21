@@ -10,25 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace GestionPersonal
 {
     /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
+    /// Lógica de interacción para Ausencias.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Ausencias : Window
     {
-        public MainWindow()
+        private readonly AusenciaControl controladorAusencia;
+
+        public Ausencias(AusenciaControl controladorAusencias)
         {
+            this.controladorAusencia = controladorAusencias;
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-            Menu menu = new Menu();
-            menu.Show();
+
         }
     }
 }

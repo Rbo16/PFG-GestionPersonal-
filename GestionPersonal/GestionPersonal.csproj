@@ -14,6 +14,21 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,76 +72,81 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Ausencia.cs" />
-    <Compile Include="AusenciaControl.cs" />
-    <Compile Include="Contrato.cs" />
-    <Compile Include="ContratoControl.cs" />
-    <Compile Include="Contratos.xaml.cs">
+    <Compile Include="Controladores\Controlador.cs" />
+    <Compile Include="Controladores\LoginControlador.cs" />
+    <Compile Include="Controladores\MenuControl.cs" />
+    <Compile Include="Controladores\VentanaControlador.cs" />
+    <Compile Include="Modelos\Auditoria.cs" />
+    <Compile Include="Modelos\Ausencia.cs" />
+    <Compile Include="Controladores\AusenciaControl.cs" />
+    <Compile Include="Modelos\Contrato.cs" />
+    <Compile Include="Controladores\ContratoControl.cs" />
+    <Compile Include="Utiles\ExceptionManager.cs" />
+    <Compile Include="Vistas\Contratos.xaml.cs">
       <DependentUpon>Contratos.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Departamento.cs" />
-    <Compile Include="DepartamentoControl.cs" />
-    <Compile Include="Empleado.cs" />
-    <Compile Include="EmpleadoControl.cs" />
+    <Compile Include="Modelos\Departamento.cs" />
+    <Compile Include="Controladores\DepartamentoControl.cs" />
+    <Compile Include="Modelos\Empleado.cs" />
+    <Compile Include="Controladores\EmpleadoControl.cs" />
     <Compile Include="InteraccionBBDD.cs" />
     <Compile Include="masterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>masterDataSet.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Proyecto.cs" />
-    <Compile Include="ProyectoControl.cs" />
-    <Compile Include="Proyectos.xaml.cs">
+    <Compile Include="Modelos\Proyecto.cs" />
+    <Compile Include="Controladores\ProyectoControl.cs" />
+    <Compile Include="Vistas\Empleados.xaml.cs">
+      <DependentUpon>Empleados.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Vistas\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Vistas\Proyectos.xaml.cs">
       <DependentUpon>Proyectos.xaml</DependentUpon>
     </Compile>
-    <Page Include="Ausencias.xaml">
+    <Page Include="Vistas\Ausencias.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Contratos.xaml">
+    <Page Include="Vistas\Contratos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Departamentos.xaml">
+    <Page Include="Vistas\Departamentos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Empleados.xaml">
+    <Page Include="Vistas\Empleados.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="Vistas\Login.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Ausencias.xaml.cs">
+    <Compile Include="Vistas\Ausencias.xaml.cs">
       <DependentUpon>Ausencias.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Departamentos.xaml.cs">
+    <Compile Include="Vistas\Departamentos.xaml.cs">
       <DependentUpon>Departamentos.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Empleados.xaml.cs">
-      <DependentUpon>Empleados.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Menu.xaml">
+    <Page Include="Vistas\Menu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Proyectos.xaml">
+    <Page Include="Vistas\Proyectos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Menu.xaml.cs">
+    <Compile Include="Vistas\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -179,6 +199,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Imagenes\escoba.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.2 %28x86 y x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -14,38 +14,38 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace GestionPersonal
+namespace GestionPersonal.Vistas
 {
     /// <summary>
     /// Lógica de interacción para Empleados.xaml
     /// </summary>
     public partial class Empleados : Window
     {
-        EmpleadoControl ControladorE = new EmpleadoControl();
+        private readonly EmpleadoControl controladorEmpleado;
         DataTable dtEmpleados = new DataTable();
         int contEmpleado;//para indicar el registro del empleado en el datatable
         DataRow empleadoActual;
         bool hayCambios = false; //con esta variable controlamos si ha habido cambios
         bool dblClic = false;//Solo se me ocurre esto para que controlar que haycambios no se active al cargar desde dtg
 
-        public Empleados()
+        public Empleados(EmpleadoControl controladorEmpleado)
         {
+            this.controladorEmpleado = controladorEmpleado;
             InitializeComponent();
             cargarDTG();
             cargarCombos();
         }
-
         private void cargarDTG()
         {
-            dtEmpleados = ControladorE.listarEmpleados();
+            dtEmpleados = controladorEmpleado.listarEmpleados();
             dtgEmpleados.ItemsSource = dtEmpleados.DefaultView;
             empleadoActual = dtEmpleados.NewRow(); //Sacamos el formato de la fila
         }
 
         private void cargarCombos()
         {
-            cmbRol.ItemsSource = ControladorE.devolverEnum("TipoEmpleado");
-            cmbEstadoE.ItemsSource = ControladorE.devolverEnum("EstadoEmpleado");
+            cmbRol.ItemsSource = controladorEmpleado.devolverEnum("TipoEmpleado");
+            cmbEstadoE.ItemsSource = controladorEmpleado.devolverEnum("EstadoEmpleado");
         }
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -68,7 +68,7 @@ namespace GestionPersonal
             {
                 if (numssCorrecto())
                 {
-                    ControladorE.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
+                    controladorEmpleado.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
                 txbNumSS.Text, txbTlf.Text, txbCorreoE.Text, txbIdDepartamento.Text, "1");//IdModif
                     cargarDTG();
                 }
@@ -81,11 +81,11 @@ namespace GestionPersonal
         {
             if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)//Condicion explicada en cambioEmpleadoTxb
             {
-                if(dniCorrecto())
+                if (dniCorrecto())
                 {
                     if (numssCorrecto())
                     {
-                        ControladorE.modificarEmpleado(empleadoActual, "1");//IdModif
+                        controladorEmpleado.modificarEmpleado(empleadoActual, "1");//IdModif
                         hayCambios = false;
                         cargarDTG();
                     }
@@ -93,10 +93,10 @@ namespace GestionPersonal
                 }
                 else System.Windows.MessageBox.Show("El DNI ha de tener 9 caracteres.");
             }
-            
+
         }
 
-       
+
         private void cambioEmpleadoTxb(object sender, TextChangedEventArgs e) //Método para guardar los cambios de los TextBox
         {
             //IMPORTANTE QUE LA PROPIEDAD NAME DE CADA ELEMENTO TENGA SUS 3 PRIMERAS LETRAS DESCARTABLES
@@ -105,7 +105,7 @@ namespace GestionPersonal
             if (!dblClic)
             {
                 if (empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
-                                                                                          //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
+                                                                            //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
                 {
                     string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
                     empleadoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
@@ -122,7 +122,7 @@ namespace GestionPersonal
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
-                    ControladorE.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString(), "1");//IdModif
+                    controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString());//IdModif
                     cargarDTG();
                 }
                 else
@@ -168,7 +168,7 @@ namespace GestionPersonal
         private bool dniCorrecto()
         {
             bool correcto = true;
-            if(txbDNI.Text.Length != 9) correcto = false;
+            if (txbDNI.Text.Length != 9) correcto = false;
             return correcto;
         }
         private bool numssCorrecto()
@@ -191,7 +191,7 @@ namespace GestionPersonal
             txbCorreoE.Text = "";
             txbIdDepartamento.Text = "";
             //Estaría bien indicar el NOMBRE DEL DEPA
-            cmbRol.SelectedIndex =  -1;
+            cmbRol.SelectedIndex = -1;
             cmbEstadoE.SelectedIndex = -1;
             txbDNI.Text = "";
 

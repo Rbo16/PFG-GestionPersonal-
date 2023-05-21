@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GestionPersonal.Controladores;
+using GestionPersonal.Vistas;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -8,16 +10,19 @@ using System.Windows;
 
 namespace GestionPersonal
 {
-    internal class EmpleadoControl
+    public class EmpleadoControl : Controlador
     {
-        Empleado empleado = new Empleado();
         DataTable dtEmpleadosCif = new DataTable();
-        public EmpleadoControl() { }
+        public EmpleadoControl(VentanaControlador ventanaControl) : base(ventanaControl)
+        {
+            ventanaActiva = new Empleados(this);
+            ventanaActiva.Show();
+        }
         
         public DataTable listarEmpleados()
         {
             //Mostramos una tabla en la que no se muestren las contaseñas
-            dtEmpleadosCif = empleado.listadoEmpleados(string.Empty);
+            dtEmpleadosCif = Usuario.listadoEmpleados(string.Empty);//OJO CON ESTO DEL USUARIO
             dtEmpleadosCif.Columns.Remove("Contrasenia");
 
             return dtEmpleadosCif;
@@ -60,9 +65,9 @@ namespace GestionPersonal
                     return;
                 }
 
-                Empleado nuevoEmpleado = new Empleado(-1, NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa);
+                Empleado nuevoEmpleado = new Empleado(NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa);
                 //Id = -1 porque no se usará al insertarlo
-                nuevoEmpleado.insertEmpleado(IdModif);
+                this.Usuario.insertEmpleado(nuevoEmpleado);
                 MessageBox.Show("Empleado creado correctamente");
             }
             else
@@ -84,9 +89,9 @@ namespace GestionPersonal
             return vacio;
         }
 
-        public void eliminarEmpleado(string IdBorrado, string IdModif)
+        public void eliminarEmpleado(string UsuarioBorrado)
         {
-            empleado.deleteEmpleado(IdBorrado, IdModif);
+            Usuario.deleteEmpleado(UsuarioBorrado);//Ahora tenemos el IdModif en Usuario
             MessageBox.Show("Empleado eliminado correctamente");
         }
 
@@ -95,7 +100,7 @@ namespace GestionPersonal
             empleadoModif["IdModif"] = IdModif;
             empleadoModif["FechaUltModif"] = DateTime.Now; //cambiamos la auditoría
 
-            empleado.updateEmpleado(empleadoModif);
+            Usuario.updateEmpleado(empleadoModif);//IdModif en Usuario
             MessageBox.Show("Cambios guardados correctamente.");
             
         }

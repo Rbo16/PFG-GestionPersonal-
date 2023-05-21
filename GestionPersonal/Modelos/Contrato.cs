@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GestionPersonal
 {
-    internal class Contrato
+    public class Contrato
     {
         private int IdContrato { get; set; }
         private float HorasTrabajo { get; set; }
