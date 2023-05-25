@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Ausencias" Height="720" Width="1280"
         FontFamily="Cambria"  WindowStartupLocation="CenterScreen"
-        FontSize="20" ResizeMode="CanMinimize">
+        FontSize="18" ResizeMode="CanMinimize">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -31,48 +31,47 @@
         <Button Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"
                 Click="btnMenu_Click">
-            
-            <Image Source="/Imagenes/Home.png" Width="40"/>
+            <Image Source="/Imagenes/Home.png" Width="40" />
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250" Margin="0,20,0,0">
-            <TextBlock Text="Motivo de la ausencia" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbMotivoAus" Height="30" Margin="0,0,10,0"/>
+            <TextBlock Text="Motivo de la ausencia" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
+            <TextBox x:Name="txbMotivoAus" Height="30" Margin="0,0,10,0" MaxLength="20"/>
             <Grid Margin="0,5,10,5">
                 <StackPanel Width="115" HorizontalAlignment="Left">
-                    <TextBlock Text="Fecha Inicio" FontWeight="Bold" Margin="0,0,5,5"/>
+                    <TextBlock Text="Fecha Inicio" FontSize="20" FontWeight="Bold" Margin="0,0,5,5"/>
                     <TextBox x:Name="txbfechaInic" Height="30" Margin="0,0,5,0"/>
                 </StackPanel>
                 <StackPanel Width="115" HorizontalAlignment="Right">
-                    <TextBlock Text="Fecha Fin" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="Fecha Fin" FontSize="20" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBox x:Name="txbFechaFin" Height="30"/>
                 </StackPanel>
             </Grid>
         </StackPanel>
         <StackPanel Width="250" Grid.Column="2" Grid.Row="2" Margin="0,20,0,0">
-            <TextBlock Text="Estado" FontWeight="Bold" Margin="0,5,10,5"/>
-            <ComboBox Name="cmbEstadoAus" Height="30" Margin="0,0,10,0"/>
-            <TextBlock Text="Solicitante" FontWeight="Bold" Margin="10,5"/>
-            <TextBox Name="txbSolicitante" Height="30" IsReadOnly="True" Margin="0,0,10,0"/>
+            <TextBlock Text="Estado" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
+            <ComboBox Name="cmbEstadoAus" Height="30" Margin="0,0,10,0" IsEnabled="False"/>
+            <TextBlock x:Name="lblSolicitante" Text="Solicitante" FontWeight="Bold" Margin="10,5" Visibility="Hidden"/>
+            <TextBox Name="txbSolicitante" VerticalContentAlignment="Center" Height="30" IsReadOnly="True" Margin="0,0,10,0" Visibility="Hidden"/>
         </StackPanel>
-        <TextBlock Text="Descripción" FontWeight="Bold" Margin="0,5,10,5" Grid.Column="1" Grid.Row="3"/>
+        <TextBlock Text="Descripción" FontSize="20" FontWeight="Bold" Margin="0,5,10,5" Grid.Column="1" Grid.Row="3"/>
         <TextBox x:Name="txbDescripcion" Height="80" Grid.Column="1" Grid.Row="4"
                  Grid.ColumnSpan="2" Margin="0,0,10,0" TextWrapping="Wrap" MaxLength="50"
                  FontWeight="Normal"/>
         <StackPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2">
-            <TextBlock Text="Adjuntar justificante" FontWeight="Bold" Margin="0,5,10,5"/>
+            <TextBlock Text="Adjuntar justificante" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox x:Name="txbJustificante" Margin="0,0,10,0" Width="435" Height="30"
                      HorizontalAlignment="Left" IsReadOnly="True"/>
         </StackPanel>
         <Button x:Name="btnJustificante" Content="..." Grid.Column="2" Grid.Row="5" HorizontalAlignment="Right"
                 VerticalAlignment="Bottom" Height="30" Width="40" Margin="0,0,10,0"/>
         <Button Name="btnSolicitar" Grid.Column="1" Grid.Row="6" Width="65"
-                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnSolicitar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Agregar.png" Height="40"/>
-                <TextBlock Text="Crear" FontWeight="Bold" FontSize="15"/>
+                <TextBlock Text="Solicitar" FontWeight="Bold" FontSize="15"/>
             </StackPanel>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -99,7 +98,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <TextBlock Text="Listado de ausencias" FontWeight="Bold" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30"/>
+        <TextBlock Text="Listado de ausencias" FontSize="20" FontWeight="Bold" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30"/>
         <Button Name="btnFiltrarAus" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>

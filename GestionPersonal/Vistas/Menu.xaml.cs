@@ -25,13 +25,18 @@ namespace GestionPersonal
 
         public Menu(MenuControl controladorMenu)
         {
-            InitializeComponent();
             this.controladorMenu = controladorMenu;
+            InitializeComponent();
+            cargarRol();
         }
 
-        private void btnCambioContra_Click(object sender, RoutedEventArgs e)
+        private void cargarRol()
         {
-
+            if (controladorMenu.Usuario.rol != TipoEmpleado.Basico)
+            {
+                btnAuditorias.Visibility = Visibility.Visible;
+                btnEmpleados.Visibility = Visibility.Visible;
+            }
         }
 
         private void btnEmpleados_Click(object sender, RoutedEventArgs e)

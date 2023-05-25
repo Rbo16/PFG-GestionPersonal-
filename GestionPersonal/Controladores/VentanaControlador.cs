@@ -13,50 +13,53 @@ namespace GestionPersonal.Controladores
         public Empleado Usuario { get; set; }
 
         Window ventanaActual;
-        Window ventanaAnterior;
 
         public VentanaControlador()
         {
             LoginControlador loginControl = new LoginControlador(this);
             this.ventanaActual = loginControl.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
         }
 
         public void ventanaMenu()
         {
             MenuControl controladorMenu = new MenuControl(this);
+            ventanaActual.Close();
             this.ventanaActual = controladorMenu.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
         }
         public void ventanaEmpleados()
         {
             EmpleadoControl controladorEmpleado = new EmpleadoControl(this);
+            ventanaActual.Close();
             this.ventanaActual = controladorEmpleado.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
         }
         public void ventanaAusencias()
         {
             AusenciaControl controladorAusencia = new AusenciaControl(this);
+            ventanaActual.Close();
             this.ventanaActual = controladorAusencia.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
         }
         public void ventanaContratos()
         {
             ContratoControl controladorContrato = new ContratoControl(this);
+            ventanaActual.Close();
             this.ventanaActual = controladorContrato.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
         }
         public void ventanaProyectos()
         {
             ProyectoControl controladorProyecto = new ProyectoControl(this);
+            ventanaActual.Close();
             this.ventanaActual = controladorProyecto.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
         }
         public void ventanaDepartamentos()
         {
             DepartamentoControl controladorPDepartamento = new DepartamentoControl(this);
+            ventanaActual.Close();
             this.ventanaActual = controladorPDepartamento.devolverVActiva();
-            this.ventanaAnterior = ventanaActual;
+        }
+
+        private void cerrarVentanaAnt()
+        {
+
         }
     }
 }

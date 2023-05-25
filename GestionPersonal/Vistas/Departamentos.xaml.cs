@@ -30,5 +30,10 @@ namespace GestionPersonal
         {
 
         }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+            controladorDepartamento.volverMenu();
+        }
     }
 }

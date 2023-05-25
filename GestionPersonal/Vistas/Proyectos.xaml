@@ -28,8 +28,8 @@
         <TextBlock Text="PROYECTOS" FontWeight="Bold" FontSize="40" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4"
                    HorizontalAlignment="Center" />
         <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
-                Width="40" Height="40">
-            <Image Source="Imagenes/Home.png" Width="40"/>
+                Width="40" Height="40" Click="btnMenu_Click">
+            <Image Source="/Imagenes/Home.png" Width="40"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

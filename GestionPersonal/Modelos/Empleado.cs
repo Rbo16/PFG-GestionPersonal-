@@ -26,7 +26,7 @@ namespace GestionPersonal
         private string Contrasenia { get; set; }
         private string DNI { get; set; }
         private string NumSS { get; set; }
-        TipoEmpleado rol { get; set; }
+        public TipoEmpleado rol { get; set; }
         EstadoEmpleado EstadoE { get; set; }
         private string Tlf { get; set; }
         private string CorreoE { get; set; }
@@ -233,7 +233,7 @@ namespace GestionPersonal
         }
     }
 
-    enum TipoEmpleado
+    public enum TipoEmpleado
     {
         Basico = 1, Gestor = 2, Administrador = 3
     }

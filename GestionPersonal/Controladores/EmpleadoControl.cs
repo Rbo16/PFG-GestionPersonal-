@@ -66,7 +66,6 @@ namespace GestionPersonal
                 }
 
                 Empleado nuevoEmpleado = new Empleado(NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa);
-                //Id = -1 porque no se usará al insertarlo
                 this.Usuario.insertEmpleado(nuevoEmpleado);
                 MessageBox.Show("Empleado creado correctamente");
             }
@@ -76,18 +75,7 @@ namespace GestionPersonal
             }
 
         }
-        private bool camposVacios(List<string> listaCampos)
-        {
-            bool vacio = false;
 
-            for(int i = 0; i < listaCampos.Count(); i++)
-            {
-                if (listaCampos[i].Equals(string.Empty))
-                    vacio = true;
-            }
-
-            return vacio;
-        }
 
         public void eliminarEmpleado(string UsuarioBorrado)
         {

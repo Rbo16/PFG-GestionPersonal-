@@ -26,5 +26,10 @@ namespace GestionPersonal
             this.controladorProyecto = controladorProyecto;
             InitializeComponent();
         }
+
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+            controladorProyecto.volverMenu();
+        }
     }
 }

@@ -28,7 +28,7 @@
         <TextBlock Text="CONTRATOS" FontWeight="Bold" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" FontSize="40"
                    HorizontalAlignment="Center"/>
         <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="35" Height="35" HorizontalAlignment="Left"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top" Click="btnMenu_Click" >
             <Image Source="/Imagenes/Home.png"/>
             <Button.Effect>
                 <DropShadowEffect/>

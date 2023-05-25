@@ -49,7 +49,7 @@ namespace GestionPersonal.Vistas
         }
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-
+            controladorEmpleado.volverMenu();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

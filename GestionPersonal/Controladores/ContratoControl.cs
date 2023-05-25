@@ -14,5 +14,6 @@ namespace GestionPersonal
             ventanaActiva = new Contratos(this);
             ventanaActiva.Show();
         }
+
     }
 }
