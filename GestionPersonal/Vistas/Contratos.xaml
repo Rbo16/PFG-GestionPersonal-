@@ -96,7 +96,8 @@
             </Button.Effect>
         </Button>
         <TextBlock Text="Histórico de contratos" FontWeight="Bold" Grid.Column="3" Grid.Row="2" Margin="0,20,10,5"/>
-        <DataGrid x:Name="dtgContratos" Grid.Row="2" Grid.Column="3" Grid.RowSpan="3" Margin="0,50,0,0"/>
+        <DataGrid x:Name="dtgContratos" Grid.Row="2" Grid.Column="3" Grid.RowSpan="3" Margin="0,50,0,0" SelectionMode="Single"
+                  IsReadOnly="True"/>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
             <StackPanel>

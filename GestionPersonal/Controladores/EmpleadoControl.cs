@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
+using MessageBox = System.Windows.MessageBox;
 
 namespace GestionPersonal
 {
@@ -19,13 +21,41 @@ namespace GestionPersonal
             ventanaActiva.Show();
         }
         
-        public DataTable listarEmpleados()
+        private void cargarEmpleados()
         {
             //Mostramos una tabla en la que no se muestren las contaseñas
-            dtEmpleadosCif = Usuario.listadoEmpleados(string.Empty);//OJO CON ESTO DEL USUARIO
+            dtEmpleadosCif = Usuario.listadoEmpleados();
             dtEmpleadosCif.Columns.Remove("Contrasenia");
+        }
 
+
+        /// <summary>
+        /// Devuelve el DataTable de Empleados sin filtro
+        /// </summary>
+        /// <returns></returns>
+        public DataTable listaEmpleados() 
+        {
+            cargarEmpleados();
             return dtEmpleadosCif;
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable que filtra el DataTable principal de Empleados
+        /// </summary>
+        /// <param name="filtro">string con el filtro que se quiere aplicar</param>
+        /// <returns></returns>
+        public DataTable listaEmpleados(string filtro)
+        {
+
+            DataTable dtAux = dtEmpleadosCif.Clone();
+
+            DataRow [] filasFiltradas = dtEmpleadosCif.Select(filtro);
+            foreach(DataRow fila in filasFiltradas)
+            {
+                dtAux.ImportRow(fila);
+            }
+
+            return dtAux;
         }
 
         public Array devolverEnum(string NombreEnum)
@@ -65,8 +95,9 @@ namespace GestionPersonal
                     return;
                 }
 
-                Empleado nuevoEmpleado = new Empleado(NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa);
-                this.Usuario.insertEmpleado(nuevoEmpleado);
+                Empleado nuevoEmpleado = new Empleado(NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa,
+                    this.Usuario.IdEmpleado);
+                nuevoEmpleado.insertEmpleado();
                 MessageBox.Show("Empleado creado correctamente");
             }
             else
@@ -79,16 +110,29 @@ namespace GestionPersonal
 
         public void eliminarEmpleado(string UsuarioBorrado)
         {
-            Usuario.deleteEmpleado(UsuarioBorrado);//Ahora tenemos el IdModif en Usuario
+            Usuario.deleteEmpleado(UsuarioBorrado, this.Usuario.IdEmpleado);
             MessageBox.Show("Empleado eliminado correctamente");
         }
 
-        public void modificarEmpleado(DataRow empleadoModif, string IdModif)
+        public void modificarEmpleado(DataRow empleadoModif)
         {
-            empleadoModif["IdModif"] = IdModif;
-            empleadoModif["FechaUltModif"] = DateTime.Now; //cambiamos la auditoría
+            int IdEmpleado = Convert.ToInt32(empleadoModif["IdEmpleado"].ToString());
+            string NombreE = empleadoModif["NombreE"].ToString();
+            string Apellido = empleadoModif["Apellido"].ToString();
+            string Usuario = empleadoModif["IdEmpleado"].ToString();
+            TipoEmpleado.TryParse(empleadoModif["Rol"].ToString(), out TipoEmpleado Rol);
+            EstadoEmpleado.TryParse(empleadoModif["EstadoE"].ToString(), out EstadoEmpleado EstadoE);
+            string DNI = empleadoModif["DNI"].ToString();
+            string NumSS = empleadoModif["NumSS"].ToString();
+            string Tlf = empleadoModif["Tlf"].ToString();
+            string CorreoE = empleadoModif["CorreoE"].ToString();
+            int IdDepartamento = Convert.ToInt32(empleadoModif["IdDepartamento"].ToString());
 
-            Usuario.updateEmpleado(empleadoModif);//IdModif en Usuario
+            Empleado empleadoModificado = new Empleado(IdEmpleado, NombreE, Apellido, Usuario, Rol, EstadoE, DNI, 
+                NumSS, Tlf, CorreoE, IdDepartamento, this.Usuario.IdEmpleado);
+
+            empleadoModificado.updateEmpleado();
+
             MessageBox.Show("Cambios guardados correctamente.");
             
         }

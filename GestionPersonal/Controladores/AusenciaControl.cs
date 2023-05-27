@@ -12,7 +12,8 @@ namespace GestionPersonal
 {
     public class AusenciaControl : Controlador
     {
-        private Ausencia ausenciaVacia = new Ausencia();
+        Ausencia ausenciaVacia = new Ausencia();
+        private DataTable dtAusencias;
 
         public AusenciaControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
@@ -25,14 +26,16 @@ namespace GestionPersonal
         /// Método para crear la ausencia e insertarla en la BBDD
         /// </summary>
         /// <param name="Razon">Razón de la ausencia</param>
-        /// <param name="FechaInicioA">Fecha de inicio de la ausencia</param>
-        /// <param name="FechaFinA">Fecha fin de la ausencia</param>
+        /// <param name="InicioA">Fecha de inicio de la ausencia</param>
+        /// <param name="FinA">Fecha fin de la ausencia</param>
         /// <param name="DescripcionAus">Descripción de la ausencia</param>
         /// <param name="JustificantePDF">Ruta donde se ubica el justificante de la ausencia</param>
-        public bool crearAusencia(string Razon, DateTime FechaInicioA, DateTime FechaFinA, string DescripcionAus, string JustificantePDF) 
+        public bool crearAusencia(string Razon, string InicioA, string FinA, string DescripcionAus, string JustificantePDF) 
         {
             bool creado = false;
-            
+            DateTime.TryParse(InicioA, out DateTime FechaInicioA);
+            DateTime.TryParse(InicioA, out DateTime FechaFinA);
+
             List<string> listaCampos = new List<string>();
 
             listaCampos.Add(Razon);
@@ -43,7 +46,8 @@ namespace GestionPersonal
             {
                 if (FechaInicioA < FechaFinA) 
                 {
-                    Ausencia nuevaAusencia = new Ausencia(Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF, Usuario.IdEmpleado);
+                    Ausencia nuevaAusencia = new Ausencia(Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF,
+                        Usuario.IdEmpleado);
                     nuevaAusencia.insertAusencia();
 
                     MessageBox.Show("Ausencia solicitada correctamente.");
@@ -63,9 +67,69 @@ namespace GestionPersonal
         }
 
 
+        public void modificarAusencia(DataRow ausenciaModificada)
+        {
+            int IdAusencia = Convert.ToInt32(ausenciaModificada["IdAusencia"].ToString());
+            string Razon = ausenciaModificada["Razon"].ToString();
+            DateTime.TryParse(ausenciaModificada["FechaInicioA"].ToString(), out DateTime FechaInicioA);
+            DateTime.TryParse(ausenciaModificada["FechaFinA"].ToString(), out DateTime FechaFinA);
+            string DescripcionAus = ausenciaModificada["DescripcionAus"].ToString();
+            string JustificantePDF = ausenciaModificada["JustificantePDF"].ToString();
+            EstadoAusencia.TryParse(ausenciaModificada["EstadoA"].ToString(), out EstadoAusencia EstadoA);
+            int IdSolicitante = Convert.ToInt32(ausenciaModificada["IdSolicitante"].ToString());
+
+           /* int IdAutorizador;
+            if (ausenciaModificada["IdAutorizador"].ToString() != string.Empty)
+                IdAutorizador = Convert.ToInt32(ausenciaModificada["IdAutorizador"].ToString());
+            else
+                IdAutorizador = -1;*/
+
+            Ausencia ausenciaMod = new Ausencia(IdAusencia, Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF,
+                EstadoA, IdSolicitante);
+
+            ausenciaMod.updateAusencia(this.Usuario.IdEmpleado);
+            MessageBox.Show("Datos guardados correctamente");
+        }
+        
+        public void autorizarAusencia(string SIdAusencia)
+        {
+            int IdAusencia = Convert.ToInt32(SIdAusencia);
+            ausenciaVacia.updateAutorizador(IdAusencia, this.Usuario.IdEmpleado);
+        }
+
+        public void borrarAusencia(string SIdAusencia)
+        {
+            int IdAusencia = Convert.ToInt32(SIdAusencia);
+            ausenciaVacia.deleteAusencia(IdAusencia, this.Usuario.IdEmpleado);
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable con las ausencias del empleado indicado, o un listado general si IdSolicitante = -1.
+        /// </summary>
+        /// <param name="IdSolicitante"></param>
+        /// <returns></returns>
         public DataTable listarAusencias(int IdSolicitante)
         {
-            return ausenciaVacia.listarAusencias(IdSolicitante); ;
+            
+            dtAusencias = ausenciaVacia.listarAusencias();
+            DataTable dtAux = new DataTable();
+            if (IdSolicitante != -1)
+            {
+                dtAux = dtAusencias.Clone();
+                string filtro = $"IdSolicitante = {IdSolicitante}";
+
+                DataRow[] filasFiltradas = dtAusencias.Select(filtro);
+                foreach (DataRow fila in filasFiltradas)
+                {
+                    dtAux.ImportRow(fila);
+                }
+                return dtAux;
+            }
+            else
+            {
+                return dtAusencias;
+            }
+
         }
 
     }

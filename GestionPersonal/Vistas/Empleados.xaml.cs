@@ -37,7 +37,7 @@ namespace GestionPersonal.Vistas
         }
         private void cargarDTG()
         {
-            dtEmpleados = controladorEmpleado.listarEmpleados();
+            dtEmpleados = controladorEmpleado.listaEmpleados();
             dtgEmpleados.ItemsSource = dtEmpleados.DefaultView;
             empleadoActual = dtEmpleados.NewRow(); //Sacamos el formato de la fila
         }
@@ -85,7 +85,7 @@ namespace GestionPersonal.Vistas
                 {
                     if (numssCorrecto())
                     {
-                        controladorEmpleado.modificarEmpleado(empleadoActual, "1");//IdModif
+                        controladorEmpleado.modificarEmpleado(empleadoActual);
                         hayCambios = false;
                         cargarDTG();
                     }
@@ -96,12 +96,14 @@ namespace GestionPersonal.Vistas
 
         }
 
-
-        private void cambioEmpleadoTxb(object sender, TextChangedEventArgs e) //Método para guardar los cambios de los TextBox
+        /// <summary>
+        /// Guarda los cambios del Textbox. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cambioEmpleadoTxb(object sender, TextChangedEventArgs e) 
         {
-            //IMPORTANTE QUE LA PROPIEDAD NAME DE CADA ELEMENTO TENGA SUS 3 PRIMERAS LETRAS DESCARTABLES
-            //Y LO DEMÁS COINCIDA CON EL NOMBRE DE ESE ATRIBUTO EN EL DATATABLE
-
             if (!dblClic)
             {
                 if (empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
@@ -113,6 +115,7 @@ namespace GestionPersonal.Vistas
                 hayCambios = true;
             }
         }
+
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgEmpleados.SelectedItem != null)
@@ -122,13 +125,15 @@ namespace GestionPersonal.Vistas
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
-                    controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString());//IdModif
+                    controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString());
                     cargarDTG();
                 }
                 else
                     return;
 
             }
+            else
+                System.Windows.MessageBox.Show("Seleccione un empleado en la tabla");
         }
         private void dtgEmpleados_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -140,7 +145,7 @@ namespace GestionPersonal.Vistas
                 hayCambios = false;
 
                 contEmpleado = dtgEmpleados.SelectedIndex; //Guardamos la fila por si luego queremos visualizar el siguiente empleado
-                empleadoActual = dtEmpleados.Copy().Rows[dtgEmpleados.SelectedIndex];//Lo hago con un copy para que no actualize el dtg a medida que cambias los datos y no se pueda interpretar que se están guardando los cambios
+                empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];//Lo hago con un copy para que no actualize el dtg a medida que cambias los datos y no se pueda interpretar que se están guardando los cambios
                 cargarEmpleado(contEmpleado);
             }
         }

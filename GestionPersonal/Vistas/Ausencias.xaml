@@ -38,32 +38,34 @@
         </Button>
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250" Margin="0,20,0,0">
             <TextBlock Text="Motivo de la ausencia" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbMotivoAus" Height="30" Margin="0,0,10,0" MaxLength="20"/>
+            <TextBox x:Name="txbRazon" Height="30" Margin="0,0,10,0" MaxLength="20" TextChanged="cambioAusenciaTxb"/>
             <Grid Margin="0,5,10,5">
                 <StackPanel Width="115" HorizontalAlignment="Left">
                     <TextBlock Text="Fecha Inicio" FontSize="20" FontWeight="Bold" Margin="0,0,5,5"/>
-                    <TextBox x:Name="txbfechaInic" Height="30" Margin="0,0,5,0"/>
+                    <TextBox x:Name="txbFechaInicioA" Height="30" Margin="0,0,5,0" TextChanged="cambioAusenciaTxb"/>
                 </StackPanel>
                 <StackPanel Width="115" HorizontalAlignment="Right">
                     <TextBlock Text="Fecha Fin" FontSize="20" FontWeight="Bold" Margin="0,0,0,5"/>
-                    <TextBox x:Name="txbFechaFin" Height="30"/>
+                    <TextBox x:Name="txbFechaFinA" Height="30" TextChanged="cambioAusenciaTxb"/>
                 </StackPanel>
             </Grid>
         </StackPanel>
         <StackPanel Width="250" Grid.Column="2" Grid.Row="2" Margin="0,20,0,0">
             <TextBlock Text="Estado" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
             <ComboBox Name="cmbEstadoAus" Height="30" Margin="0,0,10,0" IsEnabled="False"/>
-            <TextBlock x:Name="lblSolicitante" Text="Solicitante" FontWeight="Bold" Margin="10,5" Visibility="Hidden"/>
-            <TextBox Name="txbSolicitante" VerticalContentAlignment="Center" Height="30" IsReadOnly="True" Margin="0,0,10,0" Visibility="Hidden"/>
+            <TextBlock x:Name="lblSolicitante" Text="Solicitante" FontWeight="Bold" Margin="0,5,0,5"
+                       FontSize="20" Visibility="Visible"/>
+            <TextBox Name="txbIdSolicitante" VerticalContentAlignment="Center" Height="30" IsReadOnly="True" 
+                     Margin="0,0,10,0" Visibility="Visible" TextChanged="cambioAusenciaTxb"/>
         </StackPanel>
         <TextBlock Text="Descripción" FontSize="20" FontWeight="Bold" Margin="0,5,10,5" Grid.Column="1" Grid.Row="3"/>
-        <TextBox x:Name="txbDescripcion" Height="80" Grid.Column="1" Grid.Row="4"
+        <TextBox x:Name="txbDescripcionAus" Height="80" Grid.Column="1" Grid.Row="4"
                  Grid.ColumnSpan="2" Margin="0,0,10,0" TextWrapping="Wrap" MaxLength="50"
-                 FontWeight="Normal"/>
+                 FontWeight="Normal" TextChanged="cambioAusenciaTxb"/>
         <StackPanel Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2">
             <TextBlock Text="Adjuntar justificante" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox x:Name="txbJustificante" Margin="0,0,10,0" Width="435" Height="30"
-                     HorizontalAlignment="Left" IsReadOnly="True"/>
+            <TextBox x:Name="txbJustificantePDF" Margin="0,0,10,0" Width="435" Height="30"
+                     HorizontalAlignment="Left" IsReadOnly="True" TextChanged="cambioAusenciaTxb"/>
         </StackPanel>
         <Button x:Name="btnJustificante" Content="..." Grid.Column="2" Grid.Row="5" HorizontalAlignment="Right"
                 VerticalAlignment="Bottom" Height="30" Width="40" Margin="0,0,10,0"/>
@@ -79,7 +81,7 @@
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="6" Width="65"
                 Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom"
-                >
+                Click="btnGuardar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
                 <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>
@@ -89,7 +91,7 @@
             </Button.Effect>
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="6" Width="65"
-                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom" Click="btnBorrar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
                 <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>
@@ -106,6 +108,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <DataGrid Name="dtgListaAus" Grid.Row="2" Grid.Column="3"  Grid.RowSpan="5" Margin="0,55,0,0"/>
+        <DataGrid Name="dtgListaAus" Grid.Row="2" Grid.Column="3"  Grid.RowSpan="5" Margin="0,55,0,0" 
+                  MouseDoubleClick="dtgListaAus_MouseDoubleClick" IsReadOnly="True" SelectionMode="Single"/>
     </Grid>
 </Window>

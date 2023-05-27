@@ -19,15 +19,15 @@ namespace GestionPersonal.Controladores
 
         public void iniciarSesion(string usuario, string contrasenia)
         {
-            /*
+            
             if (usuario == "")
             {
                 MessageBox.Show("Introduzca un usuario");
             }
-            else if (contrasenia == "")
+            /*else if (contrasenia == "")
             {
                 MessageBox.Show("Introduzca una contraseña");
-            }
+            }*/
             else
             {
                 Usuario = new Empleado(usuario);
@@ -41,10 +41,7 @@ namespace GestionPersonal.Controladores
                 {
                     MessageBox.Show("El usuario o la contraseña son erroneas.");//A lo mejor mételo en en makelogin y que indique cuál es incorrecto
                 }
-            }*/
-            Usuario = new Empleado(usuario);
-            ventanaControl.Usuario = Usuario;
-            ventanaControl.ventanaMenu();
+            }
         }
     }
 }

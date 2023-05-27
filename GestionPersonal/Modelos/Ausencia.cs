@@ -17,20 +17,20 @@ namespace GestionPersonal
         private SqlConnection conexionSQL;
         private string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
-        private int IdAusencia { get; set; }
+        public int IdAusencia { get; set; }
         private string Razon { get; set; }
         private DateTime FechaInicioA { get; set; }
         private DateTime FechaFinA { get; set; }
         private string DescripcionAus { get; set; }
         private string JustificantePDF { get; set; }
-        public EstadoAusencia EstadoAus { get; set; }
+        public EstadoAusencia EstadoA { get; set; }
         private int IdSolicitante { get; set; }
-        private int IdGestor { get; set; }
-        private Auditoria Auditoria { get; set; }
+        private int IdAutorizador { get; set; }
+        public Auditoria Auditoria { get; set; }
 
 
         /// <summary>
-        /// Constructor vacío para usar los métodos 
+        /// Constructor para métodos concretos que no requieren muchos parámetros
         /// </summary>
         public Ausencia()
         {
@@ -39,12 +39,12 @@ namespace GestionPersonal
             this.FechaFinA = FechaFinA;
             this.DescripcionAus = string.Empty;
             this.JustificantePDF = string.Empty;
-            this.EstadoAus = EstadoAusencia.Rechazada;
+            this.EstadoA = EstadoAusencia.Rechazada;
             this.IdSolicitante = 0;
         }
 
         /// <summary>
-        /// Constructor ausencia nueva
+        /// Constructor ausencia nueva.
         /// </summary>
         /// <param name="Razon">Indica el motivo de la ausencia</param>
         /// <param name="FechaInicio">Indica la fecha de inicio de la ausencia</param>
@@ -60,38 +60,49 @@ namespace GestionPersonal
             this.FechaFinA= FechaFinA;
             this.DescripcionAus= DescripcionAus;
             this.JustificantePDF= JustificantePD;
-            this.EstadoAus = EstadoAusencia.Pendiente;
-            this.IdSolicitante = IdSolicitante;//Aunque hay que guardarlo permanentemente también
+            this.EstadoA = EstadoAusencia.Pendiente;
+            this.IdSolicitante = IdSolicitante;//Al hacer insert es = al IdModif, pero hay que guardarlo para tenerlo cuando haya algún cambio
+        }
+
+        /// <summary>
+        /// Constructor ausencia a modificar
+        /// </summary>
+        /// <param name="Razon"></param>
+        /// <param name="FechaInicioA"></param>
+        /// <param name="FechaFinA"></param>
+        /// <param name="DescripcionAus"></param>
+        /// <param name="JustificantePD"></param>
+        /// <param name="IdSolicitante"></param>
+        public Ausencia(int IdAusencia, string Razon, DateTime FechaInicioA, DateTime FechaFinA, string DescripcionAus,
+            string JustificantePD, EstadoAusencia EstadoA, int IdSolicitante)
+        {
+            this.IdAusencia = IdAusencia;
+            this.Razon = Razon;
+            this.FechaInicioA = FechaInicioA;
+            this.FechaFinA = FechaFinA;
+            this.DescripcionAus = DescripcionAus;
+            this.JustificantePDF = JustificantePD;
+            this.EstadoA = EstadoA;
+            this.IdSolicitante = IdSolicitante;
         }
 
 
         /// <summary>
-        /// Gestiona la interacción con la BBDD a la hora de obtener un listado de Ausencias
+        /// Gestiona la interacción con la BBDD a la hora de obtener un listado de Ausencias.
         /// </summary>
-        /// <param name="IdSolicitante">Id del empleado del que se quieren obtener las ausencias. 0 si se busca
-        /// un listado general</param>
-        /// <returns></returns>
-        public DataTable listarAusencias(int IdSolicitante)
+        /// <returns>Devuelve el Datatable de la tabla Ausencia</returns>
+        public DataTable listarAusencias()
         {
             try
             {
                 DataTable dtAusencias = new DataTable();
 
-                string consulta = "SELECT * FROM Ausencia WHERE Borrado = 0";
-                if (IdSolicitante != 0)//Se comparará con 0 cuando se quieran obtener todas las ausencias
-                {
-                    consulta += " AND IdSolicitante = @IdSolicitante";
-                }
+                string consulta = "SELECT * FROM Ausencia ";//WHERE Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
-                if (IdSolicitante != 0)
-                {
-                    comando.Parameters.Add("@IdSolicitante", SqlDbType.Int);
-                    comando.Parameters["@IdSolicitante"].Value = IdSolicitante;
-                }
 
                 SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
                 using (adaptadorSql)
@@ -109,7 +120,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Inserta una ausencia creada
+        /// Inserta una ausencia creada.
         /// </summary>
         public void insertAusencia()
         {
@@ -125,7 +136,7 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
                 comando = introducirParametros(comando);
-                this.Auditoria = new Auditoria(IdSolicitante);
+                this.Auditoria = new Auditoria(this.IdSolicitante);
                 comando = Auditoria.introducirParametros(comando);
 
                 comando.ExecuteNonQuery();
@@ -141,7 +152,103 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve el comando con los parámetros necesarios para insertar una Ausencia especificados
+        /// Actualiza la ausencia que llama al método en la Base de Datos.
+        /// </summary>
+        public void updateAusencia(int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Ausencia SET IdSolicitante = @IdSolicitante, Razon = @Razon, FechaInicioA = @FechaInicioA," +
+                    "FechaFinA = @FechaFinA, DescripcionAus = @DescripcionAus, JustificantePDF = @JustificantePDF, " +
+                    "EstadoA = @EstadoA, " + Auditoria.Update + "WHERE IdAusencia = @IdAusencia";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+                comando = introducirParametros(comando);
+                this.Auditoria = new Auditoria(IdModif);
+                comando = this.Auditoria.introducirParametros(comando);
+
+                comando.Parameters.Add("@IdAusencia", SqlDbType.Int);
+                comando.Parameters["@IdAusencia"].Value = this.IdAusencia;
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Ausencia.Actualizar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public void updateAutorizador(int IdAusencia, int IdAutorizador)
+        {
+            try
+            {
+                string consulta = "UPDATE Ausencia SET IdAutorizador = @IdAutorizador , " + Auditoria.Update +
+                    " WHERE IdAusencia = @IdAusencia";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdAusencia", SqlDbType.Int);
+                comando.Parameters["@IdAusencia"].Value = IdAusencia;
+
+                comando.Parameters.Add("@IdAutorizador", SqlDbType.Int);
+                comando.Parameters["@IdAutorizador"].Value = IdAutorizador;
+
+                this.Auditoria = new Auditoria(IdAutorizador);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch(Exception e) 
+            {
+                ExceptionManager.Execute(e, " ERROR[Ausencia.Autorizar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public void deleteAusencia(int IdAusencia, int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Ausencia SET " + Auditoria.Update + " WHERE IdAusencia = @IdAusencia";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdAusencia", SqlDbType.Int);
+                comando.Parameters["@IdAusencia"].Value = IdAusencia;
+
+                this.Auditoria = new Auditoria(IdModif, true);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Ausencia.Borrar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve el comando con los parámetros necesarios para insertar una Ausencia especificados.
         /// </summary>
         /// <param name="comando">Comando con los parámetros sin especificar</param>
         /// <returns></returns>
@@ -161,10 +268,11 @@ namespace GestionPersonal
             comando.Parameters["@FechaFinA"].Value = this.FechaFinA;
             comando.Parameters["@DescripcionAus"].Value = this.DescripcionAus;
             comando.Parameters["@JustificantePDF"].Value = this.JustificantePDF;
-            comando.Parameters["@EstadoA"].Value = this.EstadoAus.GetHashCode();
+            comando.Parameters["@EstadoA"].Value = this.EstadoA.GetHashCode();
 
             return comando;
         }
+
     }
     public enum EstadoAusencia
     {

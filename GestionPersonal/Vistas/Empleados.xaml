@@ -80,7 +80,7 @@
             </Button.Effect>
         </Button>
         <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3" IsReadOnly="True"
-                  Grid.RowSpan="3" MouseDoubleClick="dtgEmpleados_MouseDoubleClick"/>
+                  Grid.RowSpan="3" MouseDoubleClick="dtgEmpleados_MouseDoubleClick" SelectionMode="Single"/>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="5"
                 Height="65" VerticalAlignment="Bottom" Margin="0,0,185,0" Click="btnCrear_Click">
             <StackPanel>
