@@ -83,7 +83,7 @@
             <TextBlock Text="Días de vacaciones por mes" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbVacaciones" Height="30"/>
             <TextBlock Text="Tipo de contrato" FontWeight="Bold" Margin="0,5,0,5"/>
-            <ComboBox x:Name="bmbTipoContrato" Height="30"/>
+            <ComboBox x:Name="cmbTipoContrato" Height="30"/>
         </StackPanel>
         <CheckBox x:Name="chkActivo" Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"
                   Margin="0,10,10,0"/>
@@ -99,7 +99,7 @@
         <DataGrid x:Name="dtgContratos" Grid.Row="2" Grid.Column="3" Grid.RowSpan="3" Margin="0,50,0,0" SelectionMode="Single"
                   IsReadOnly="True"/>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnCrear_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Agregar.png" Height="40"/>
                 <TextBlock Text="Crear" FontWeight="Bold" FontSize="15"/>
@@ -108,8 +108,8 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
+        <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65" Height="65"
+                 HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom" Click="btnGuardar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
                 <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>
@@ -120,7 +120,7 @@
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Right" Margin="0,0,10,0"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom" Click="btnBorrar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
                 <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>

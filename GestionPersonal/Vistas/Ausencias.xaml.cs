@@ -28,7 +28,7 @@ namespace GestionPersonal
         private readonly AusenciaControl controladorAusencia;
         private DataTable dtAusencias;
         private int contAusencia;//para guardar el número de fila seleccionado
-        private bool hayCambios;
+        private bool hayCambiostxt;
         private bool cambioEstado = false;
         private bool dblClic = false;
         private DataRow ausenciaActual;
@@ -50,19 +50,21 @@ namespace GestionPersonal
         {
             dtAusencias = controladorAusencia.listarAusencias(IdSolicitante);
 
-            DataTable dtAux = dtAusencias.Copy();
-            dtAux.Columns.Remove("IdAusencia"); 
-            dtAux.Columns.Remove("IdAutorizador");
-            dtAux.Columns.Remove("IdSolicitante");
-            dtAux.Columns.Remove("DescripcionAus");
-            dtAux.Columns.Remove("JustificantePDF");
-            dtAux.Columns.Remove("FechaUltModif");
-            dtAux.Columns.Remove("IdModif");
-            //dtAux.Columns.Remove("Borrado");
+            ausenciaActual = dtAusencias.NewRow();
+
+            DataTable dtShow = dtAusencias.Copy();
+            dtShow.Columns.Remove("IdAusencia");
+            dtShow.Columns.Remove("IdAutorizador");
+            dtShow.Columns.Remove("IdSolicitante");
+            dtShow.Columns.Remove("DescripcionAus");
+            dtShow.Columns.Remove("JustificantePDF");
+            dtShow.Columns.Remove("FechaUltModif");
+            dtShow.Columns.Remove("IdModif");
+            //dtShow.Columns.Remove("Borrado");
 
             dtgListaAus.ItemsSource = null;
-            dtgListaAus.ItemsSource = dtAux.DefaultView;
-            ausenciaActual = dtAusencias.NewRow();
+            dtgListaAus.ItemsSource = dtShow.DefaultView;
+            
         }
 
         /// <summary>
@@ -76,6 +78,11 @@ namespace GestionPersonal
                 lblSolicitante.Visibility = Visibility.Visible;
                 cmbEstadoAus.IsEnabled = true;
             }
+        }
+
+        private void cmbEstadoAus_Loaded(object sender, RoutedEventArgs e)
+        {
+            cmbEstadoAus.ItemsSource = controladorAusencia.devolverEstadosA();
         }
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
@@ -97,19 +104,36 @@ namespace GestionPersonal
                 {
                     vaciarCampos();
                     cargarDTG(controladorAusencia.Usuario.IdEmpleado);
-                }   
-            }     
+                }
+            }
         }
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            if (hayCambios && ausenciaActual != null)
+            if (ausenciaActual != null)
             {
-                if (comprobarFechas())
+                if (hayCambiostxt)
                 {
-                    controladorAusencia.modificarAusencia(ausenciaActual);
-                    cargarDTG(-1);
+                    if (comprobarFechas())
+                    {
+                        controladorAusencia.modificarAusencia(ausenciaActual);
+
+                        hayCambiostxt = false;
+                    }
                 }
+
+                if (cambioEstado)
+                {
+                    string IdAusencia = ausenciaActual["IdAusencia"].ToString();
+                    string EstadoA = ausenciaActual["EstadoA"].ToString();
+
+                    controladorAusencia.gestionarAusencia(IdAusencia, EstadoA);
+
+                    cambioEstado = false;
+                }
+                cargarDTG(-1);
+                MessageBox.Show("Datos guardados correctamente");
             }
+
 
         }
 
@@ -164,20 +188,31 @@ namespace GestionPersonal
                     string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
                     ausenciaActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
                 }
-                hayCambios = true;
+                hayCambiostxt = true;
+            }
+        }
+
+
+        private void cmbEstadoAus_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!dblClic)
+            {
+                cambioEstado = true;
+                ausenciaActual["EstadoA"] = cmbEstadoAus.SelectedIndex + 1;
             }
         }
 
         private void dtgListaAus_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if(dtgListaAus.SelectedItem == null)
+            if (dtgListaAus.SelectedItem == null)
             {
                 return;
             }
             else
             {
-                dblClic= true;
-                hayCambios= false;
+                dblClic = true;
+                hayCambiostxt = false;
+                cambioEstado = false;
 
                 contAusencia = dtgListaAus.SelectedIndex;
                 ausenciaActual = dtAusencias.Copy().Rows[contAusencia];
@@ -193,7 +228,7 @@ namespace GestionPersonal
             txbFechaInicioA.Text = ausenciaActual["FechaInicioA"].ToString().Split(' ')[0];//Separo la fecha de la hora
             txbFechaFinA.Text = ausenciaActual["FechaFinA"].ToString().Split(' ')[0];
             txbDescripcionAus.Text = ausenciaActual["DescripcionAus"].ToString();
-            cmbEstadoAus.SelectedIndex = Convert.ToInt32(ausenciaActual["EstadoA"].ToString());
+            cmbEstadoAus.SelectedIndex = Convert.ToInt32(ausenciaActual["EstadoA"].ToString()) - 1;
             txbIdSolicitante.Text = ausenciaActual["IdSolicitante"].ToString();
             txbJustificantePDF.Text = ausenciaActual["JustificantePDF"].ToString();
 
@@ -203,12 +238,11 @@ namespace GestionPersonal
         private bool comprobarFechas()
         {
             bool correctas = false;
-            DateTime FechaInicioA = DateTime.MaxValue, FechaFinA = DateTime.MinValue;
             CultureInfo culturaEspañola = new CultureInfo("es-ES");
 
-            if (DateTime.TryParseExact(txbFechaInicioA.Text, "d", culturaEspañola, DateTimeStyles.None, out FechaInicioA))
+            if (DateTime.TryParseExact(txbFechaInicioA.Text, "d", culturaEspañola, DateTimeStyles.None, out DateTime FechaInicioA))
             {
-                if (DateTime.TryParseExact(txbFechaFinA.Text, "d", culturaEspañola, DateTimeStyles.None, out FechaFinA))
+                if (DateTime.TryParseExact(txbFechaFinA.Text, "d", culturaEspañola, DateTimeStyles.None, out DateTime FechaFinA))
                     correctas = true;
                 else
                 {

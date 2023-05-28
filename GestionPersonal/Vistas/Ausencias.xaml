@@ -52,7 +52,8 @@
         </StackPanel>
         <StackPanel Width="250" Grid.Column="2" Grid.Row="2" Margin="0,20,0,0">
             <TextBlock Text="Estado" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
-            <ComboBox Name="cmbEstadoAus" Height="30" Margin="0,0,10,0" IsEnabled="False"/>
+            <ComboBox Loaded="cmbEstadoAus_Loaded" Name="cmbEstadoAus" Height="30" Margin="0,0,10,0" IsEnabled="False"
+                      SelectionChanged="cmbEstadoAus_SelectionChanged"/>
             <TextBlock x:Name="lblSolicitante" Text="Solicitante" FontWeight="Bold" Margin="0,5,0,5"
                        FontSize="20" Visibility="Visible"/>
             <TextBox Name="txbIdSolicitante" VerticalContentAlignment="Center" Height="30" IsReadOnly="True" 

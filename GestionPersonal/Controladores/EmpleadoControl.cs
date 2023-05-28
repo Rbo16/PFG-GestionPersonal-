@@ -58,6 +58,11 @@ namespace GestionPersonal
             return dtAux;
         }
 
+        /// <summary>
+        /// Devuelve un array con los elementos del tipo enumerado de Empleado que se indique
+        /// </summary>
+        /// <param name="NombreEnum">TipoEmpleado o EstadoEmpleado</param>
+        /// <returns></returns>
         public Array devolverEnum(string NombreEnum)
         {
             Array array = Array.Empty<Array>();

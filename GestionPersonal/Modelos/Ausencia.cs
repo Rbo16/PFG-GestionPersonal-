@@ -116,6 +116,10 @@ namespace GestionPersonal
                 ExceptionManager.Execute(ex, "ERROR[Ausencia.Listar]");
                 return null;
             }
+            finally 
+            { 
+                conexionSQL.Close(); 
+            }
           
         }
 
@@ -185,11 +189,11 @@ namespace GestionPersonal
             }
         }
 
-        public void updateAutorizador(int IdAusencia, int IdAutorizador)
+        public void updateAutorizador(int IdAusencia, int EstadoA,  int IdAutorizador)
         {
             try
             {
-                string consulta = "UPDATE Ausencia SET IdAutorizador = @IdAutorizador , " + Auditoria.Update +
+                string consulta = "UPDATE Ausencia SET IdAutorizador = @IdAutorizador, EstadoA = @EstadoA , " + Auditoria.Update +
                     " WHERE IdAusencia = @IdAusencia";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
@@ -202,6 +206,9 @@ namespace GestionPersonal
 
                 comando.Parameters.Add("@IdAutorizador", SqlDbType.Int);
                 comando.Parameters["@IdAutorizador"].Value = IdAutorizador;
+
+                comando.Parameters.Add("@EstadoA", SqlDbType.Int);
+                comando.Parameters["@EstadoA"].Value = EstadoA;
 
                 this.Auditoria = new Auditoria(IdAutorizador);
                 comando = Auditoria.introducirParametros(comando);

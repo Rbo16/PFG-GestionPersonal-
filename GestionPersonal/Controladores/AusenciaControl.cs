@@ -88,14 +88,16 @@ namespace GestionPersonal
                 EstadoA, IdSolicitante);
 
             ausenciaMod.updateAusencia(this.Usuario.IdEmpleado);
-            MessageBox.Show("Datos guardados correctamente");
+
         }
         
-        public void autorizarAusencia(string SIdAusencia)
+        public void gestionarAusencia(string SIdAusencia, string SEstadoA)
         {
+            int EstadoA = Convert.ToInt32(SEstadoA);
             int IdAusencia = Convert.ToInt32(SIdAusencia);
-            ausenciaVacia.updateAutorizador(IdAusencia, this.Usuario.IdEmpleado);
+            ausenciaVacia.updateAutorizador(IdAusencia, EstadoA, this.Usuario.IdEmpleado);
         }
+
 
         public void borrarAusencia(string SIdAusencia)
         {
@@ -132,5 +134,13 @@ namespace GestionPersonal
 
         }
 
+        /// <summary>
+        /// Devuelve un array con los elementos del tipo enumerado EstadoAusencia
+        /// </summary>
+        /// <returns></returns>
+        public Array devolverEstadosA()
+        {
+            return Enum.GetValues(typeof(EstadoAusencia));
+        }
     }
 }
