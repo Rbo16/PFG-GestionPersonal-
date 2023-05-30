@@ -13,7 +13,7 @@ namespace GestionPersonal
     public class ContratoControl : Controlador
     {
         DataTable dtContratos = new DataTable();
-        Contrato contratoVaico = new Contrato();
+        Contrato contratoVaico = new Contrato(0);
 
         public ContratoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
@@ -21,6 +21,10 @@ namespace GestionPersonal
             ventanaActiva.Show();
         }
 
+        public Array devolverTipoContrato()
+        {
+            return Enum.GetValues(typeof(TipoContrato));
+        }
 
         public DataTable listarContratos(int IdEmpleado)
         {
@@ -68,6 +72,8 @@ namespace GestionPersonal
             lCampos.Add(SHoraEntrada);
             lCampos.Add(SHoraSalida);
             lCampos.Add(STipoContrato);
+            if (Duracion.Split(' ')[0] != "Indefinido" && Duracion.Split(' ').Count() == 1)
+                lCampos.Add(string.Empty);//Forzamos el fallo si no ha indicado unidad en la duración.
 
             if (!camposVacios(lCampos))
             {
@@ -101,8 +107,21 @@ namespace GestionPersonal
                     float.TryParse(SVacacionesMes, out float VacacionesMes);
                     int.TryParse(SIdEmpleado, out int IdEmpleado);
                     TipoContrato.TryParse(STipoContrato, out TipoContrato tipoContrato);
-                    Contrato nuevoContrato = new Contrato(HorasTrabajo, HorasDescanso, HoraEntrada, HoraSalida, Salario, 
-                        Puesto, VacacionesMes, Duracion, DocumentoPDF, IdEmpleado, tipoContrato);
+                    Contrato nuevoContrato = new Contrato(0)
+                    {
+                        HorasTrabajo = HorasTrabajo,
+                        HorasDescanso = HorasDescanso,
+                        HoraEntrada = HoraEntrada,
+                        HoraSalida = HoraSalida,
+                        Salario = Salario,
+                        Puesto = Puesto,
+                        VacacionesMes = VacacionesMes,
+                        Duracion = Duracion,
+                        DocumentoPDF = DocumentoPDF,
+                        IdEmpleado = IdEmpleado,
+                        TipoContrato = tipoContrato
+                    };
+                    nuevoContrato.insertContrato(this.Usuario.IdEmpleado);
                 }
             }
             else
@@ -112,6 +131,13 @@ namespace GestionPersonal
             }
 
             return correcto;
+        }
+
+        public void eliminarContrato(string SIdContrato)
+        {
+            int.TryParse(SIdContrato, out int IdContrato);
+            Contrato contratoEliminar = new Contrato(IdContrato);
+            contratoEliminar.deleteContrato(this.Usuario.IdEmpleado);
         }
 
     }

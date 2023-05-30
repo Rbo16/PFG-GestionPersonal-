@@ -17,24 +17,39 @@ namespace GestionPersonal
         private string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
         private int IdContrato { get; set; }
-        private float HorasTrabajo { get; set; }
-        private float HorasDescanso { get; set; }
-        private TimeSpan HoraEntrada { get; set; }
-        private TimeSpan HoraSalida { get; set; }
-        private float Salario { get; set; }
-        private string Puesto { get; set; }
-        private float VacacionesMes { get; set; }
-        private DateTime FechaAlta { get; set; }
-        private DateTime FechaBaja { get; set; }
-        private string Duracion { get; set; }
-        private bool Activo { get; set; }
-        private string DocumentoPDF { get; set; }
-        private int IdEmpleado { get; set; }
-        TipoContrato TipoContrato { get; set; }
-        Auditoria Auditoria { get; set; }
+        public float HorasTrabajo { get; set; }
+        public float HorasDescanso { get; set; }
+        public TimeSpan HoraEntrada { get; set; }
+        public TimeSpan HoraSalida { get; set; }
+        public float Salario { get; set; }
+        public string Puesto { get; set; }
+        public float VacacionesMes { get; set; }
+        public DateTime FechaAlta { get; set; }
+        public DateTime FechaBaja { get; set; }
+        public string Duracion { get; set; }
+        public bool Activo { get; set; }
+        public string DocumentoPDF { get; set; }
+        public int IdEmpleado { get; set; }
+        public TipoContrato TipoContrato { get; set; }
+        public Auditoria Auditoria { get; set; }
 
-        public Contrato() { }
+        public Contrato(int IdContrato) 
+        {
+            this.IdContrato= IdContrato;
+            this.HorasTrabajo = 0;
+            this.HorasDescanso = 0;
+            this.HoraEntrada = TimeSpan.Zero;
+            this.HoraSalida = TimeSpan.Zero;
+            this.Salario = 0;
+            this.Puesto = "";
+            this.VacacionesMes = 0;
+            this.Duracion = "";
+            this.DocumentoPDF = "";
+            this.IdEmpleado = 0;
+            this.TipoContrato = TipoContrato.ParcialManiana;
+        }
 
+        /*
         /// <summary>
         /// Constructor de contrato nuevo.
         /// </summary>
@@ -66,7 +81,7 @@ namespace GestionPersonal
             this.DocumentoPDF = DocumentoPDF;
             this.IdEmpleado = IdEmpleado;
             this.TipoContrato = TipoContrato;
-        }
+        }*/
 
         public DataTable listadoContratos()
         {
@@ -159,6 +174,33 @@ namespace GestionPersonal
             }
         }
 
+        public void deleteContrato(int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Contrato SET " + Auditoria.Update +
+                    "WHERE IdContrato = @IdContrato";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+                comando.Parameters.Add("@IdContrato");
+                comando.Parameters["@IdEmpleado"].Value = this.IdContrato;
+                this.Auditoria = new Auditoria(IdModif, true);
+                comando = this.Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Contrato.Borrar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
 
         private SqlCommand introducirParametros(SqlCommand comando)
         {
@@ -193,6 +235,6 @@ namespace GestionPersonal
     }
     public enum TipoContrato
     {
-        ParcialManiana, ParcialTarde, Completa, Practicas
+        ParcialManiana = 1, ParcialTarde = 2, Completa = 3, Practicas = 4
     }
 }

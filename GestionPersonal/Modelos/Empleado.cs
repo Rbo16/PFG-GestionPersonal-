@@ -21,18 +21,18 @@ namespace GestionPersonal
         private string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
         public int IdEmpleado { get; set; }
-        private string NombreE { get; set; }
-        private string Apellido { get; set; }
-        private string Usuario { get; set; }
-        private string Contrasenia { get; set; }
-        private string DNI { get; set; }
-        private string NumSS { get; set; }
+        public string NombreE { get; set; }
+        public string Apellido { get; set; }
+        public string Usuario { get; set; }
+        public string Contrasenia { get; set; }
+        public string DNI { get; set; }
+        public string NumSS { get; set; }
         public TipoEmpleado rol { get; set; }
         EstadoEmpleado EstadoE { get; set; }
-        private string Tlf { get; set; }
-        private string CorreoE { get; set; }
-        private int IdDepartamento { get; set; }
-        private Auditoria Auditoria { get; set; }
+        public string Tlf { get; set; }
+        public string CorreoE { get; set; }
+        public int IdDepartamento { get; set; }
+        public Auditoria Auditoria { get; set; }
 
         public Empleado(string Usuario)//ESTO HAY QUE CAMBIARLO
         {

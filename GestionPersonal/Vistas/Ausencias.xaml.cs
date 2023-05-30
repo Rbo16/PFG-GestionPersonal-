@@ -154,7 +154,7 @@ namespace GestionPersonal
 
             }
             else
-                System.Windows.MessageBox.Show("Seleccione una ausencia en la tabla");
+                System.Windows.MessageBox.Show("Seleccione una ausencia de la tabla");
         }
 
         /// <summary>
