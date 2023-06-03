@@ -36,6 +36,7 @@ namespace GestionPersonal
             {
                 btnAuditorias.Visibility = Visibility.Visible;
                 btnEmpleados.Visibility = Visibility.Visible;
+                btnDepartamentos.Visibility = Visibility.Visible;
             }
         }
 

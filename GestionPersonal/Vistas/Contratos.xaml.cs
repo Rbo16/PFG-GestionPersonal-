@@ -28,8 +28,13 @@ namespace GestionPersonal
         public Contratos(ContratoControl controladorContrato)
         {
             this.controladorContrato = controladorContrato;
+
             InitializeComponent();
+
+            cargarRol();
+
             txbIdEmpleado.Text = this.controladorContrato.Usuario.Apellido + ", " + this.controladorContrato.Usuario.NombreE;
+
             cargarDTG(this.controladorContrato.Usuario.IdEmpleado);
         }
 
@@ -58,7 +63,22 @@ namespace GestionPersonal
             dtgContratos.ItemsSource = dtShow.DefaultView;
 
         }
-        
+
+        private void cargarRol()
+        {
+            if (controladorContrato.Usuario.rol != TipoEmpleado.Basico)
+            {
+                txbPuesto.IsReadOnly = false;
+                txbSalario.IsReadOnly = false;
+                txbDuracion.IsReadOnly = false;
+                cmbDuracion.IsEnabled= true;
+                txbHoraEntrada.IsReadOnly = false;
+                txbHoraSalida.IsReadOnly = false;
+                cmbTipoContrato.IsEnabled= true;
+                chkActivo.IsEnabled = true;
+            }
+        }
+
         /// <summary>
         /// Carga los elementos del ComboBox TipoContrato
         /// </summary>

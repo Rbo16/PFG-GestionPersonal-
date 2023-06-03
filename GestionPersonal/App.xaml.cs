@@ -1,4 +1,5 @@
 ﻿using GestionPersonal.Controladores;
+using GestionPersonal.Vistas;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

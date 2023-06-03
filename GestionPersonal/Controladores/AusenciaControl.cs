@@ -78,12 +78,6 @@ namespace GestionPersonal
             EstadoAusencia.TryParse(ausenciaModificada["EstadoA"].ToString(), out EstadoAusencia EstadoA);
             int IdSolicitante = Convert.ToInt32(ausenciaModificada["IdSolicitante"].ToString());
 
-           /* int IdAutorizador;
-            if (ausenciaModificada["IdAutorizador"].ToString() != string.Empty)
-                IdAutorizador = Convert.ToInt32(ausenciaModificada["IdAutorizador"].ToString());
-            else
-                IdAutorizador = -1;*/
-
             Ausencia ausenciaMod = new Ausencia(IdAusencia, Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF,
                 EstadoA, IdSolicitante);
 

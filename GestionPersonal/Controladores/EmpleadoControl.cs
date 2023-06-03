@@ -17,10 +17,11 @@ namespace GestionPersonal
         DataTable dtEmpleadosCif = new DataTable();
         public EmpleadoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
+            cargarEmpleados();
             ventanaActiva = new Empleados(this);
             ventanaActiva.Show();
         }
-        
+
         private void cargarEmpleados()
         {
             //Mostramos una tabla en la que no se muestren las contaseñas
@@ -35,7 +36,6 @@ namespace GestionPersonal
         /// <returns></returns>
         public DataTable listaEmpleados() 
         {
-            cargarEmpleados();
             return dtEmpleadosCif;
         }
 

@@ -133,6 +133,11 @@ namespace GestionPersonal
             return correcto;
         }
 
+
+        /// <summary>
+        /// Llama al modelo para hacer el borrado lógico del contrato propocionado.
+        /// </summary>
+        /// <param name="SIdContrato">String con el Id del contrato a borrar.</param>
         public void eliminarContrato(string SIdContrato)
         {
             int.TryParse(SIdContrato, out int IdContrato);

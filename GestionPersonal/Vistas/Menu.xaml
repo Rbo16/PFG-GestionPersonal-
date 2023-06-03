@@ -49,20 +49,21 @@
             </Button.Effect>
         </Button>
         <Button Name="btnProyectos" Content="Proyectos" FontSize="22"  Width="150" Height="70" 
-                Margin="60,0,0,0" Grid.Column="1" Grid.Row="4" Click="btnProyectos_Click">
+                Margin="30,30,30,30" Grid.Column="2" Grid.Row="4" Click="btnProyectos_Click">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnDepartamentos" Content="Departamentos" FontSize="20"  Width="150" Height="70" 
-                Margin="0,0,60,0" Grid.Column="3"  Grid.Row="4" Click="btnDepartamentos_Click">
+                Margin="0,0,60,0" Grid.Column="3"  Grid.Row="4" Click="btnDepartamentos_Click"
+                Visibility="Hidden">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnAuditorias" Content="Auditorías" FontSize="20"  Width="150" Height="70" 
-                Margin="30,30,30,30" Grid.Column="2"  Grid.Row="4" Click="btnDepartamentos_Click"
-                Visibility="Hidden">
+                 Grid.Column="1"  Grid.Row="4" Click="btnDepartamentos_Click"
+                 Margin="60,0,0,0" Visibility="Hidden">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

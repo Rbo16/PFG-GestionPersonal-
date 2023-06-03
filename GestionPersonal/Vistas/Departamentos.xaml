@@ -30,18 +30,20 @@
         
         <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,10,0">
             <TextBlock Text="Nombre" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbNombreDep"  />
+            <TextBox x:Name="txbNombreD"  TextChanged="txb_TextChanged"/>
             <TextBlock Text="Descripción" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbDescripcionD" FontSize="16" MaxLength="50" TextWrapping="Wrap" Height="60"/>
+            <TextBox x:Name="txbDescripcionD" FontSize="16" MaxLength="50" TextWrapping="Wrap" Height="60" TextChanged="txb_TextChanged"/>
             <TextBlock Text="Jefe de Departamento" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbJefe" />
-            <TextBlock Text="DNI" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbDNIjefe"/>
-            <TextBlock Text="Correo electrónico" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbCorreoJefe"/>
+            <TextBox x:Name="txbJefe" IsReadOnly="True"/>
+            <Button Height="30" Margin="0,15,0,0">
+                <TextBlock Text="Ver información Jefe"/>
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="70"
-                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnCrear_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Agregar.png" Height="40"/>
                 <TextBlock Text="Crear" FontWeight="Bold" FontSize="15"/>
@@ -52,7 +54,7 @@
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Center" Margin="0,0,10,0"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom" Click="btnGuardar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
                 <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>
@@ -63,7 +65,7 @@
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Right" Margin="0,0,10,0"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom" Click="btnBorrar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
                 <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>
@@ -73,9 +75,10 @@
             </Button.Effect>
         </Button>
         <TextBlock Text="Listado Departamentos" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
-                   VerticalAlignment="Bottom"/>
+                   VerticalAlignment="Bottom" />
         <DataGrid x:Name="dtgDep" Width="425" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0" 
-                  SelectionMode="Single" IsReadOnly="True"/>
+                  SelectionMode="Single" IsReadOnly="True" MouseDoubleClick="dtgDep_MouseDoubleClick" 
+                  SelectionChanged="dtgDep_SelectionChanged"/>
         <Button Name="btnFiltrarDep" Grid.Column="2" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
@@ -94,7 +97,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,160,0,0">
+        <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,170,0,0">
             <StackPanel.Effect>
                 <DropShadowEffect/>
             </StackPanel.Effect>

@@ -146,26 +146,26 @@ namespace GestionPersonal.Vistas
 
                 contEmpleado = dtgEmpleados.SelectedIndex; //Guardamos la fila por si luego queremos visualizar el siguiente empleado
                 empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];//Lo hago con un copy para que no actualize el dtg a medida que cambias los datos y no se pueda interpretar que se están guardando los cambios
-                cargarEmpleado(contEmpleado);
+                cargarEmpleado();
             }
         }
 
         //Metodo para cargar los datos del empleado a partir de su índice en la tabla
-        private void cargarEmpleado(int posicion)
+        private void cargarEmpleado()
         {
-            txbNombreE.Text = dtEmpleados.Rows[posicion]["NombreE"].ToString();
-            txbApellido.Text = dtEmpleados.Rows[posicion]["Apellido"].ToString();
-            txbUsuario.Text = dtEmpleados.Rows[posicion]["Usuario"].ToString();
-            txbDNI.Text = dtEmpleados.Rows[posicion]["DNI"].ToString();
-            txbNumSS.Text = dtEmpleados.Rows[posicion]["NumSS"].ToString();
-            txbTlf.Text = dtEmpleados.Rows[posicion]["Tlf"].ToString();
-            txbCorreoE.Text = dtEmpleados.Rows[posicion]["CorreoE"].ToString();
+            txbNombreE.Text = empleadoActual["NombreE"].ToString();
+            txbApellido.Text = empleadoActual["Apellido"].ToString();
+            txbUsuario.Text = empleadoActual["Usuario"].ToString();
+            txbDNI.Text = empleadoActual["DNI"].ToString();
+            txbNumSS.Text = empleadoActual["NumSS"].ToString();
+            txbTlf.Text = empleadoActual["Tlf"].ToString();
+            txbCorreoE.Text = empleadoActual["CorreoE"].ToString();
 
-            txbIdDepartamento.Text = dtEmpleados.Rows[posicion]["IdDepartamento"].ToString();
+            txbIdDepartamento.Text = empleadoActual["IdDepartamento"].ToString();
             //Estaría bien indicar el NOMBRE DEL DEPA
 
-            cmbRol.SelectedIndex = Convert.ToInt32(dtEmpleados.Rows[posicion]["Rol"]) - 1;
-            cmbEstadoE.SelectedIndex = Convert.ToInt32(dtEmpleados.Rows[posicion]["EstadoE"]) - 1;
+            cmbRol.SelectedIndex = Convert.ToInt32(empleadoActual["Rol"]) - 1;
+            cmbEstadoE.SelectedIndex = Convert.ToInt32(empleadoActual["EstadoE"]) - 1;
 
             dblClic = false;
         }

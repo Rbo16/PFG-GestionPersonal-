@@ -109,7 +109,7 @@ namespace GestionPersonal
         }
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            if (ausenciaActual != null)
+            if (ausenciaActual["IdAusencia"].ToString() != string.Empty)
             {
                 if (hayCambiostxt)
                 {
@@ -183,7 +183,7 @@ namespace GestionPersonal
         {
             if (!dblClic)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
             {
-                if (ausenciaActual != null)
+                if (ausenciaActual["IdAusencia"].ToString() != string.Empty)
                 {
                     string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
                     ausenciaActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
@@ -216,11 +216,11 @@ namespace GestionPersonal
 
                 contAusencia = dtgListaAus.SelectedIndex;
                 ausenciaActual = dtAusencias.Copy().Rows[contAusencia];
-                cargarAusencia(contAusencia);
+                cargarAusencia();
             }
         }
 
-        private void cargarAusencia(int posicion)
+        private void cargarAusencia()
         {
             CultureInfo culturaEspañola = new CultureInfo("es-ES");
 
