@@ -77,11 +77,14 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
 
+                comando.Parameters.Add("@NombreD", SqlDbType.NVarChar);
+                comando.Parameters.Add("@DescripcionD", SqlDbType.NVarChar);
+
+                comando.Parameters["@NombreD"].Value = this.NombreD;
+                comando.Parameters["@DescripcionD"].Value = this.DescripcionD;
+
                 this.Auditoria = new Auditoria(IdModif, true);
                 comando = Auditoria.introducirParametros(comando);
-
-                comando.Parameters.Add("@IdDepartamento", SqlDbType.Int);
-                comando.Parameters["@IdDepartamento"].Value = this.IdDepartamento;
 
                 comando.ExecuteNonQuery();
             }

@@ -64,5 +64,10 @@ namespace GestionPersonal
         {
             this.controladorMenu.abrirContratos();
         }
+
+        private void btnAuditorias_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

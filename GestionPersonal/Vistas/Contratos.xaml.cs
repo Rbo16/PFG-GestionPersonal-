@@ -25,6 +25,9 @@ namespace GestionPersonal
         private readonly ContratoControl controladorContrato;
         private DataTable dtContratos;
         private DataRow contratoActual;
+        private bool dblClic;
+        private bool hayCambios;
+
         public Contratos(ContratoControl controladorContrato)
         {
             this.controladorContrato = controladorContrato;
@@ -97,6 +100,11 @@ namespace GestionPersonal
             cmbTipoContrato.ItemsSource = nombresTipoContrato;
         }
 
+        /// <summary>
+        /// Carga las distinatas unidades de tiempo que tendrá el ComboBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbDuracion_Loaded(object sender, RoutedEventArgs e)
         {
             List<string> lDuracion = new List<string>();
@@ -108,18 +116,31 @@ namespace GestionPersonal
             cmbDuracion.ItemsSource = lDuracion;
         }
 
+        /// <summary>
+        /// Guarda en el DataRow actual cada vez que se cambia la unidad de duración. Y si es indefinido, bloquea la parte numérica
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbDuracion_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(cmbDuracion.SelectedIndex != -1)
+            if (!dblClic)
             {
-                if(cmbDuracion.SelectedItem.ToString() == "Indefinido")
+                if (cmbDuracion.SelectedIndex != -1)
                 {
-                    txbDuracion.Text = string.Empty;
-                    txbDuracion.IsEnabled= false;
+                    if (cmbDuracion.SelectedItem.ToString() == "Indefinido")
+                    {
+                        txbDuracion.Text = string.Empty;
+                        txbDuracion.IsEnabled = false;
+                    }
+                    else
+                    {
+                        txbDuracion.IsEnabled = true;
+                        contratoActual["Duracion"] = txbDuracion.Text + " " + cmbDuracion.SelectedValue.ToString();
+                    }
+                    hayCambios = true;
                 }
-                else
-                    txbDuracion.IsEnabled= true;
             }
+            
         }
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
@@ -129,7 +150,7 @@ namespace GestionPersonal
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-
+            //¿Que solo se pueda después del clear?
             if (controladorContrato.crearContrato(txbHorasTrabajo.Text, txbHorasDescanso.Text, txbHoraEntrada.Text,
                 txbHoraSalida.Text, txbSalario.Text, txbPuesto.Text, txbVacacionesMes.Text, txbDuracion.Text + cmbDuracion.Text,
                 txbIdEmpleado.Text, cmbTipoContrato.Text))
@@ -194,6 +215,9 @@ namespace GestionPersonal
             }
         }
 
+        private void cmbDuracion_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
     }
 }

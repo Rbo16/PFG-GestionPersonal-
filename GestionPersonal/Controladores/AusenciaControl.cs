@@ -32,19 +32,27 @@ namespace GestionPersonal
         /// <param name="JustificantePDF">Ruta donde se ubica el justificante de la ausencia</param>
         public bool crearAusencia(string Razon, string InicioA, string FinA, string DescripcionAus, string JustificantePDF) 
         {
-            bool creado = false;
-            DateTime.TryParse(InicioA, out DateTime FechaInicioA);
-            DateTime.TryParse(InicioA, out DateTime FechaFinA);
+            bool creado = true;
 
             List<string> listaCampos = new List<string>();
 
             listaCampos.Add(Razon);
-            listaCampos.Add(FechaInicioA.ToString());
-            listaCampos.Add(FechaFinA.ToString());
+            listaCampos.Add(InicioA);
+            listaCampos.Add(FinA);
 
             if (!camposVacios(listaCampos))
             {
-                if (FechaInicioA < FechaFinA) 
+                if(!DateTime.TryParse(InicioA, out DateTime FechaInicioA))
+                {
+                    creado = false;
+                    MessageBox.Show("Introduzca la fecha inicio con formato dd/mm/aaaa");//Voy a poner DatePicker en verdad
+                }
+                else if (!DateTime.TryParse(InicioA, out DateTime FechaFinA))
+                {
+                    creado = false;
+                    MessageBox.Show("Introduzca la fecha fin con formato dd/mm/aaaa");//Voy a poner DatePicker en verdad
+                }
+                else if (FechaInicioA < FechaFinA) 
                 {
                     Ausencia nuevaAusencia = new Ausencia(Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF,
                         Usuario.IdEmpleado);

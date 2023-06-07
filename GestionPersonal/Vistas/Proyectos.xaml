@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Proyectos" Height="720" Width="1280"
         FontFamily="Cambria"  WindowStartupLocation="CenterScreen"
-        FontSize="20" ResizeMode="CanMinimize">
+        FontSize="18" ResizeMode="CanMinimize">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -35,32 +35,35 @@
             </Button.Effect>
         </Button>
         <StackPanel Width="250" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" Margin="0,20,10,0">
-            <TextBlock Text="Nombre" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbNombreP"  />
-            <TextBlock Text="Cliente" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbCliente" />
-            <Grid>
-                <StackPanel Width="125" HorizontalAlignment="Left">
-                    <TextBlock Text="Fecha Inicio" FontWeight="Bold" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbFechaInic" Margin="0,0,10,0"/>
-                    <TextBlock Text="Tiempo" FontWeight="Bold" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbTiempo" Margin="0,0,10,0"/>
-                </StackPanel>
-                <StackPanel Width="125" HorizontalAlignment="Right">
-                    <TextBlock Text="Fecha Fin" FontWeight="Bold" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbFechaFin" />
-                    <TextBlock Text="Presupesto" FontWeight="Bold" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbpresupuesto" />
-                </StackPanel>
-            </Grid>
-            <TextBlock Text="Prioridad" FontWeight="Bold" Margin="0,5,0,5"/>
-            <ComboBox x:Name="cmbPrioridad" />
-            <TextBlock Text="Descripción" FontWeight="Bold" Margin="0,5,0,5"/>
+            <TextBlock Text="Nombre" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbNombreP" TextChanged="cambioTxb"/>
+            <TextBlock Text="Cliente" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
+            <TextBox x:Name="txbCliente" TextChanged="cambioTxb"/>
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock Text="Fecha Inicio" FontWeight="Bold" Margin="0,5,10,5"/>
+                <TextBlock Text="Fecha Fin" FontWeight="Bold" Margin="20,5,10,5"/>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <DatePicker x:Name="txbFechaInicioP" Margin="0,0,5,0" Width="122" FontSize="15" SelectedDateChanged="txbFecha_SelectedDateChanged"/>
+                <DatePicker x:Name="txbFechaFinP" Width="122" FontSize="15" SelectedDateChanged="txbFecha_SelectedDateChanged"/>
+            </StackPanel>
+            <TextBlock Text="Tiempo" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="txbTiempo" Width="40" Margin="0,0,10,0" Height="30" TextChanged="cambioTxb"/>
+                <ComboBox Loaded="cmbDuracion_Loaded" x:Name="cmbDuracion" Width="200" Height="30"
+                          SelectionChanged="cmbDuracion_SelectionChanged"/>
+            </StackPanel>
+            
+            <TextBlock Text="Presupesto" FontWeight="Bold" FontSize="20" Margin="0,5,10,5"/>
+            <TextBox x:Name="txbPresupuesto" TextChanged="cambioTxb"/>
+            <TextBlock Text="Prioridad" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
+            <ComboBox x:Name="cmbPrioridad" SelectionChanged="cmbPrioridad_SelectionChanged" Loaded="cmbPrioridad_Loaded"/>
+            <TextBlock Text="Descripción" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbDescripcionP" Height="40" FontSize="16" FontWeight="Normal" TextWrapping="Wrap"
-                     MaxLength="50"/>
+                     MaxLength="50" TextChanged="cambioTxb"/>
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnCrear_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Agregar.png" Height="40"/>
                 <TextBlock Text="Crear" FontWeight="Bold" FontSize="15"/>
@@ -70,7 +73,7 @@
             </Button.Effect>
         </Button>
         <Button Name="btnGuardar" Grid.Column="1" Grid.Row="4" Width="65"
-                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom">
+                Height="65" HorizontalAlignment="Center" Margin="0,0,10,0" VerticalAlignment="Bottom" Click="btnGuardar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Guardar.png" Height="40"/>
                 <TextBlock Text="Guardar" FontWeight="Bold" FontSize="15"/>
@@ -90,10 +93,10 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <TextBlock Text="Listado de proyectos" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
+        <TextBlock Text="Listado de proyectos" FontSize="20" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
                    VerticalAlignment="Bottom"/>
         <DataGrid x:Name="dtgPro" Width="415" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0"
-                  SelectionMode="Single" IsReadOnly="True"/>
+                  SelectionMode="Single" IsReadOnly="True" MouseDoubleClick="dtgPro_MouseDoubleClick" FontSize="18"/>
         <Button Name="btnFiltrarPro" Grid.Column="2" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" >
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
@@ -101,10 +104,11 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <TextBlock Text="Participantes" FontWeight="Bold" Grid.Column="3" Grid.Row="2" Margin="20,0,0,5"
+        <TextBlock Text="Participantes" FontWeight="Bold" FontSize="20" Grid.Column="3" Grid.Row="2" Margin="20,0,0,5"
                    VerticalAlignment="Bottom"/>
         <DataGrid x:Name="dtgEmpleadosPro" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Column="3" Grid.Row="3"
-                  VerticalAlignment="Top" Height="440" Margin="20,0,0,0" IsReadOnly="True" SelectionMode="Single"/>
+                  VerticalAlignment="Top" Height="440" Margin="20,0,0,0" IsReadOnly="True" SelectionMode="Single" 
+                  FontSize="18"/>
         <Button Name="btnFiltrarEPro" Grid.Column="4" Grid.Row="2" Width="35" Height="35" 
                  Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
@@ -112,7 +116,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,120,0,0">
+        <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,90,0,0">
             <StackPanel.Effect>
                 <DropShadowEffect/>
             </StackPanel.Effect>
