@@ -9,11 +9,14 @@ namespace GestionPersonal.Controladores
 {
     public class Controlador
     {
+
         protected Window ventanaActiva;
         protected VentanaControlador ventanaControl;
         public Empleado Usuario { get; set; } = null; //Usuario manejando la app
 
-        public Controlador(VentanaControlador ventanaControl) 
+        public string filtro;
+
+        protected Controlador(VentanaControlador ventanaControl) 
         { 
             this.ventanaControl = ventanaControl;
             this.Usuario= ventanaControl.Usuario;
@@ -51,6 +54,14 @@ namespace GestionPersonal.Controladores
             }
 
             return vacio;
+        }
+
+        /// <summary>
+        /// Da el control al controlador de ventanas para que active de nuevo la ventana bloqueada
+        /// </summary>
+        public void cerrarFiltro()
+        {
+            ventanaControl.desbloquearVActual();
         }
     }
 }

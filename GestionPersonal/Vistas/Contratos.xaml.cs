@@ -166,7 +166,7 @@ namespace GestionPersonal
         {
             if (dtgContratos.SelectedItem != null)
             {
-                DialogResult dr = MessageBox.Show("¿Eliminar el contrato seleccionada?", "Eliminar Contrato",
+                DialogResult dr = MessageBox.Show("¿Eliminar el CONTRATO seleccionada?", "Eliminar Contrato",
                     MessageBoxButtons.YesNo);
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
@@ -218,6 +218,11 @@ namespace GestionPersonal
         private void cmbDuracion_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void btnFiltrarCont_Click(object sender, RoutedEventArgs e)
+        {
+            controladorContrato.prepararFiltro();
         }
     }
 }

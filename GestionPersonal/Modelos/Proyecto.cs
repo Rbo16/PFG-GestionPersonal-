@@ -69,41 +69,6 @@ namespace GestionPersonal
             }
         }
 
-        public DataTable listarProyectos()
-        {
-            try
-            {
-                DataTable dtProyectos = new DataTable();
-
-                string consulta = "SELECT * FROM Proyecto ";//+
-                    //"INNER JOIN ParticipacionProyecto ON Proyecto.IdProyecto = " +
-                   // "ParticipacionProyecto.IdProyecto";//WHERE Borrado = 0";
-
-                conexionSQL = new SqlConnection(cadenaConexion);
-                conexionSQL.Open();
-
-                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
-
-                SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
-                using (adaptadorSql)
-                {
-                    adaptadorSql.Fill(dtProyectos);
-                }
-
-                return dtProyectos;
-
-            }
-            catch (Exception ex)
-            {
-                ExceptionManager.Execute(ex, "ERROR[Proyecto.Listar]:");
-                return null;
-            }
-            finally
-            {
-                conexionSQL.Close();
-            }
-        }
-
         public void updateProyecto(int IdModif)
         {
             try
@@ -133,6 +98,60 @@ namespace GestionPersonal
             finally
             {
                 conexionSQL.Close();
+            }
+        }
+
+        public void deleteProyecto(int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Proyecto SET " + Auditoria.Update +
+                    "WHERE IdProyecto = @IdProyecto";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdProyecto");
+                comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
+
+                this.Auditoria = new Auditoria(IdModif, true);
+                comando = this.Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+
+                this.deleteParticipacion();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.Borrar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        private void deleteParticipacion()
+        {
+            try 
+            {
+                string consulta = "UPDATE ParticipacionProyecto SET " + Auditoria.Update +
+                        "WHERE IdProyecto = @IdProyecto";
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdProyecto");
+                comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
+
+                comando = this.Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+        }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Participacion.Borrar]:");
             }
         }
 

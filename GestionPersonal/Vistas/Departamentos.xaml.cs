@@ -87,7 +87,7 @@ namespace GestionPersonal
             {
                 //if (dtEmpleadosDep.Rows.Count == 0)
                 //{
-                    DialogResult dr = MessageBox.Show("¿Eliminar el departamento seleccionado?", "Eliminar Departamento",
+                    DialogResult dr = MessageBox.Show("¿Eliminar el DEPARTAMENTO seleccionado?", "Eliminar Departamento",
                    MessageBoxButtons.YesNo);
 
                     if (dr == System.Windows.Forms.DialogResult.Yes)
@@ -160,5 +160,13 @@ namespace GestionPersonal
                 
             }
         }
+
+        private void txbBucarDep_GotFocus(object sender, RoutedEventArgs e)
+        {
+            txbBucarDep.Text= string.Empty;
+            txbBucarDep.GotFocus -= txbBucarDep_GotFocus;
+        }
+
+        //HAY QUE HACER EL BUSCAR TEXT CHANGED PARA QUE BUSQEU DEPARTAMENTOS EN FUNCION SE VAYAN ESCRIBIENDO
     }
 }

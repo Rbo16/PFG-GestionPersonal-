@@ -76,27 +76,15 @@
         </Button>
         <TextBlock Text="Listado Departamentos" FontWeight="Bold" Grid.Column="2" Grid.Row="2" Margin="10,0,0,5"
                    VerticalAlignment="Bottom" />
-        <DataGrid x:Name="dtgDep" Width="425" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0" 
+        <TextBox Name="txbBucarDep" Text="Buscar Departamento..."  Grid.Column="2" Grid.Row="3" Margin="10,5,0,5"
+                   VerticalAlignment="Top" Height="30" GotFocus="txbBucarDep_GotFocus"/>
+        <DataGrid x:Name="dtgDep" Width="425" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,40,0,0" 
                   SelectionMode="Single" IsReadOnly="True" MouseDoubleClick="dtgDep_MouseDoubleClick" 
                   SelectionChanged="dtgDep_SelectionChanged"/>
-        <Button Name="btnFiltrarDep" Grid.Column="2" Grid.Row="2" Width="35" Height="35" 
-                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Image Source="/Imagenes/Filtro.png" Width="20"/>
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
-        </Button>
         <TextBlock Text="Integrantes" FontWeight="Bold" Grid.Column="3" Grid.Row="2" Margin="20,0,0,5"
                    VerticalAlignment="Bottom"/>
         <DataGrid x:Name="dtgEmpleadosDep" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Column="3" Grid.Row="3"
                   Height="440" Margin="20,0,0,0" VerticalAlignment="Top" SelectionMode="Single" IsReadOnly="True"/>
-        <Button Name="btnFiltrarEDep" Grid.Column="4" Grid.Row="2" Width="35" Height="35" 
-                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Image Source="/Imagenes/Filtro.png" Width="20"/>
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
-        </Button>
         <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,170,0,0">
             <StackPanel.Effect>
                 <DropShadowEffect/>

@@ -1,4 +1,6 @@
 ﻿using GestionPersonal.Controladores;
+using GestionPersonal.Controladores.Filtros;
+using GestionPersonal.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +14,6 @@ namespace GestionPersonal
 {
     public class ProyectoControl : Controlador
     {
-        Proyecto proyectoVacio = new Proyecto(0);
         DataTable dtProyectos;
 
         public ProyectoControl(VentanaControlador ventanaControl) : base(ventanaControl)
@@ -23,7 +24,7 @@ namespace GestionPersonal
 
         public DataTable listarProyectos(int IdSolicitante)
         {
-            dtProyectos = proyectoVacio.listarProyectos();
+            dtProyectos = Listar.listarProyectos();
 
             if(IdSolicitante != -1)
             {
@@ -125,6 +126,20 @@ namespace GestionPersonal
             };
 
             proyectoModificado.updateProyecto(this.Usuario.IdEmpleado);
+        }
+
+        public void borrarProyecto(string SIdProyecto)
+        {
+            int IdProyecto = Convert.ToInt32(SIdProyecto);
+            Proyecto proyectoBorrado = new Proyecto(IdProyecto);
+            proyectoBorrado.deleteProyecto(this.Usuario.IdEmpleado);
+        }
+
+        public void prepararFiltro()
+        {
+            this.filtro = string.Empty;
+            ventanaControl.bloquearVActual();
+            FiltroProyectoControl controladorFiltroP = new FiltroProyectoControl(this);
         }
     }
 }

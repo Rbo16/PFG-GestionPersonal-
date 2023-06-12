@@ -8,7 +8,7 @@
         Title="Empleados" Height="720" Width="1280" 
         FontFamily="Cambria" 
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
-        Closing="Window_Closing" FontSize="20" >
+        Closing="Window_Closing" FontSize="20" IsEnabledChanged="Window_IsEnabledChanged">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -73,7 +73,7 @@
         </StackPanel>
         <TextBlock Text="Listado de empleados" FontWeight="Bold" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5"/>
         <Button Name="btnFiltrarE" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
-                 Margin="10" HorizontalAlignment="Right">
+                 Margin="10" HorizontalAlignment="Right" Click="btnFiltrarE_Click">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
             <Button.Effect>
                 <DropShadowEffect/>

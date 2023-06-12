@@ -1,4 +1,5 @@
 ﻿using GestionPersonal.Controladores;
+using GestionPersonal.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +12,6 @@ namespace GestionPersonal
 {
     public  class DepartamentoControl : Controlador
     {
-        Departamento depaVacio = new Departamento();
         DataTable dtDepas;
 
         public DepartamentoControl(VentanaControlador ventanaControl) : base(ventanaControl) 
@@ -74,7 +74,7 @@ namespace GestionPersonal
 
         public DataTable listarDepartamentos()
         {
-            dtDepas = depaVacio.listarDepartamentos();
+            dtDepas = Listar.listarDepartamentos();
             return dtDepas;
         }
 

@@ -49,71 +49,8 @@ namespace GestionPersonal
             this.TipoContrato = TipoContrato.ParcialManiana;
         }
 
-        /*
-        /// <summary>
-        /// Constructor de contrato nuevo.
-        /// </summary>
-        /// <param name="HorasTrabajo">Horas diarias trabajadas</param>
-        /// <param name="HorasDescanso">Horas diarias de descanso</param>
-        /// <param name="HoraEntrada"> Hora de entrada diaria</param>
-        /// <param name="HoraSalida">Hora de salida diaria</param>
-        /// <param name="Salario">Salario anual</param>
-        /// <param name="Puesto">Nombre del puesto dentro de la empresa</param>
-        /// <param name="VacacionesMes">Días de vacaciones por mes</param>
-        /// <param name="Duracion">Duración del contrato</param>
-        /// <param name="DocumentoPDF">Ruta en la que se encuenrta el PDF con la información del contrato</param>
-        /// <param name="IdEmpleado">Id del empleado poseedor del contrato</param>
-        /// <param name="TipoContrato">Tipo de contrato</param>
-        public Contrato(float HorasTrabajo, float HorasDescanso, TimeSpan HoraEntrada,
-            TimeSpan HoraSalida, float Salario, string Puesto, float VacacionesMes,
-            string Duracion, string DocumentoPDF, int IdEmpleado,
-            TipoContrato TipoContrato)
-        {
 
-            this.HorasTrabajo = HorasTrabajo;
-            this.HorasDescanso = HorasDescanso;
-            this.HoraEntrada = HoraEntrada;
-            this.HoraSalida = HoraSalida;
-            this.Salario = Salario;
-            this.Puesto = Puesto;
-            this.VacacionesMes = VacacionesMes;
-            this.Duracion = Duracion;
-            this.DocumentoPDF = DocumentoPDF;
-            this.IdEmpleado = IdEmpleado;
-            this.TipoContrato = TipoContrato;
-        }*/
 
-        public DataTable listadoContratos()
-        {
-            try
-            {
-                DataTable dtContratos= new DataTable();
-
-                string consulta = "SELECT * FROM Contrato";//WHERE Borrado = 0";
-
-                conexionSQL = new SqlConnection(cadenaConexion);
-                conexionSQL.Open();
-
-                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
-
-                SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
-                using (adaptadorSql)
-                {
-                    adaptadorSql.Fill(dtContratos);
-                }
-
-                return dtContratos;
-            }
-            catch(Exception ex)
-            {
-                ExceptionManager.Execute(ex, "ERROR[Contrato.Listar]");
-                return null;
-            }
-            finally
-            {
-                conexionSQL.Close();
-            }
-        }
 
         public void insertContrato(int IdModif)
         {

@@ -8,10 +8,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GestionPersonal
 {
@@ -42,15 +44,12 @@ namespace GestionPersonal
 
             DataTable dtShow = dtProyectos.Copy();
             dtShow.Columns.Remove("IdProyecto");
-            //dtShow.Columns.Remove("IdProyecto1");//por el inner join
             dtShow.Columns.Remove("Tiempo");
             dtShow.Columns.Remove("Presupuesto");
             dtShow.Columns.Remove("DescripcionP");
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
             dtShow.Columns.Remove("Borrado");
-            //dtShow.Columns.Remove("IdParticipacion");
-            // dtShow.Columns.Remove("IdEmpleado");
 
             dtgPro.ItemsSource = null;
             dtgPro.ItemsSource = dtShow.DefaultView;
@@ -188,6 +187,26 @@ namespace GestionPersonal
             }
         }
 
+        private void btnBorrar_Click(object sender, RoutedEventArgs e)
+        {
+            if (dtgPro.SelectedItem != null)
+            {
+                DialogResult dr = MessageBox.Show("¿Eliminar el PROYECTO seleccionada?", "Eliminar Proyecto",
+                    MessageBoxButtons.YesNo);
+
+                if (dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    controladorProyecto.borrarProyecto(dtProyectos.Rows[dtgPro.SelectedIndex]["IdProyecto"].ToString());
+                    cargarDTG(-1);
+
+                    //Se cargará del empleado actual!!!!!!
+
+                }
+                else
+                    return;
+            }
+        }
+
         private void dtgPro_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgPro.SelectedItem == null)
@@ -221,6 +240,9 @@ namespace GestionPersonal
             dblClic = false;
         }
 
-
+        private void btnFiltrarPro_Click(object sender, RoutedEventArgs e)
+        {
+            controladorProyecto.prepararFiltro();
+        }
     }
 }

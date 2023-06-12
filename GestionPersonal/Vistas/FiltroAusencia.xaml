@@ -1,0 +1,54 @@
+﻿<Window x:Class="GestionPersonal.Vistas.FiltroAusencia"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GestionPersonal.Vistas"
+        mc:Ignorable="d"
+        Title="FiltroAusencia" Height="370" Width="400" FontFamily="Cambria"  WindowStartupLocation="CenterScreen"
+        FontSize="18" ResizeMode="CanMinimize" Closing="Window_Closing">
+    <Grid Background="#FF949494">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="2" Margin="0,10,25,10">
+            <TextBlock Text="DNI solicitante" HorizontalAlignment="Right" />
+            <TextBlock Text="Estado solicitud" HorizontalAlignment="Right" Margin="0,18,0,0"/>
+            <TextBlock Text="Estado ausencia" HorizontalAlignment="Right" Margin="0,18,0,0"/>
+            <TextBlock Text="Desde" HorizontalAlignment="Right" Margin="0,18,0,0"/>
+            <TextBlock Text="Hasta" HorizontalAlignment="Right" Margin="0,18,0,0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Margin="70,10,10,10">
+            <TextBox x:Name="txbDNI" TextChanged="txbDNI_TextChanged"/>
+            <ComboBox x:Name="cmbEstadoS" Loaded="cmbEstadoS_Loaded" Margin="0,12,0,0" SelectionChanged="cmbEstadoS_SelectionChanged"/>
+            <ComboBox x:Name="cmbEstadoA" Loaded="cmbEstadoA_Loaded" Margin="0,12,0,0" SelectionChanged="cmbEstadoA_SelectionChanged"/>
+            <DatePicker Name="dtpFechaDesde" Margin="0,12,0,0" SelectedDateChanged="dtpFechaDesde_SelectedDateChanged"/>
+            <DatePicker Name="dtpFechaHasta" Margin="0,12,0,0" SelectedDateChanged="dtpFechaHasta_SelectedDateChanged"/>
+        </StackPanel>
+        <Button Name="btnBuscar" Grid.Column="4" Grid.Row="5" Click="btnBuscar_Click">
+            <StackPanel>
+                <Image Source="/imagenes/lupa.png" Height="30"/>
+                <TextBlock Text="Buscar"/>
+            </StackPanel>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+    </Grid>
+</Window>

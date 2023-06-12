@@ -1,4 +1,5 @@
 ﻿using GestionPersonal.Controladores;
+using GestionPersonal.Utiles;
 using GestionPersonal.Vistas;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace GestionPersonal
     public class EmpleadoControl : Controlador
     {
         DataTable dtEmpleadosCif = new DataTable();
+
         public EmpleadoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
             cargarEmpleados();
@@ -25,7 +27,7 @@ namespace GestionPersonal
         private void cargarEmpleados()
         {
             //Mostramos una tabla en la que no se muestren las contaseñas
-            dtEmpleadosCif = Usuario.listadoEmpleados();
+            dtEmpleadosCif = Listar.listarEmpleados();
             dtEmpleadosCif.Columns.Remove("Contrasenia");
         }
 
@@ -46,16 +48,7 @@ namespace GestionPersonal
         /// <returns></returns>
         public DataTable listaEmpleados(string filtro)
         {
-
-            DataTable dtAux = dtEmpleadosCif.Clone();
-
-            DataRow [] filasFiltradas = dtEmpleadosCif.Select(filtro);
-            foreach(DataRow fila in filasFiltradas)
-            {
-                dtAux.ImportRow(fila);
-            }
-
-            return dtAux;
+            return Listar.filtrarTabla(dtEmpleadosCif, filtro);
         }
 
         /// <summary>
@@ -141,5 +134,14 @@ namespace GestionPersonal
             MessageBox.Show("Cambios guardados correctamente.");
             
         }
+
+        public void prepararFiltro()
+        {
+            this.filtro = string.Empty;
+            ventanaControl.bloquearVActual();
+            FiltroEmpleadoControl controladorFiltroE = new FiltroEmpleadoControl(this);
+        }
+
+
     }
 }

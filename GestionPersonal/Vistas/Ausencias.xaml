@@ -103,7 +103,7 @@
         </Button>
         <TextBlock Text="Listado de ausencias" FontSize="20" FontWeight="Bold" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30"/>
         <Button Name="btnFiltrarAus" Grid.Column="3" Grid.Row="2" Width="35" Height="35" 
-                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
+                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="btnFiltrarAus_Click">
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
             <Button.Effect>
                 <DropShadowEffect/>

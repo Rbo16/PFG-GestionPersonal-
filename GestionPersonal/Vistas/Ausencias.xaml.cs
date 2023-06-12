@@ -141,7 +141,7 @@ namespace GestionPersonal
         {
             if (dtgListaAus.SelectedItem != null)
             {
-                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar la ausencia seleccionada?", "Eliminar Ausencia",
+                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar la AUSENCIA seleccionada?", "Eliminar Ausencia",
                     MessageBoxButtons.YesNo);
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
@@ -257,6 +257,9 @@ namespace GestionPersonal
             return correctas;
         }
 
-
+        private void btnFiltrarAus_Click(object sender, RoutedEventArgs e)
+        {
+            controladorAusencia.prepararFiltro();
+        }
     }
 }

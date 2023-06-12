@@ -56,10 +56,16 @@ namespace GestionPersonal.Controladores
             ventanaActual.Close();
             this.ventanaActual = controladorPDepartamento.devolverVActiva();
         }
-
-        private void cerrarVentanaAnt()
+        
+        public void bloquearVActual()
         {
+            ventanaActual.IsEnabled= false;
+        }
 
+        public void desbloquearVActual()
+        {
+            ventanaActual.IsEnabled= true;
+            ventanaActual.Show();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestionPersonal.Controladores;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -32,14 +33,39 @@ namespace GestionPersonal.Vistas
         {
             this.controladorEmpleado = controladorEmpleado;
             InitializeComponent();
-            cargarDTG();
+            cargarDTG(string.Empty);
             cargarCombos();
         }
-        private void cargarDTG()
+        private void cargarDTG(string filtro)
         {
-            dtEmpleados = controladorEmpleado.listaEmpleados();
-            dtgEmpleados.ItemsSource = dtEmpleados.DefaultView;
+            if(filtro == string.Empty)
+            {
+                dtEmpleados = controladorEmpleado.listaEmpleados();
+            }
+            else
+            {
+                dtEmpleados = controladorEmpleado.listaEmpleados(filtro);
+            }
+           
             empleadoActual = dtEmpleados.NewRow(); //Sacamos el formato de la fila
+
+            dtgEmpleados.ItemsSource = eliminarColumnas(dtEmpleados).DefaultView;
+        }
+
+
+        private DataTable eliminarColumnas(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
+
+            dtShow.Columns.Remove("IdEmpleado");
+            dtShow.Columns.Remove("NumSS");
+            dtShow.Columns.Remove("CorreoE");
+            dtShow.Columns.Remove("Tlf");
+            dtShow.Columns.Remove("Rol");
+            dtShow.Columns.Remove("EstadoE");
+            dtShow.Columns.Remove("IdDepartamento");
+
+            return dtShow;
         }
 
         private void cargarCombos()
@@ -70,7 +96,7 @@ namespace GestionPersonal.Vistas
                 {
                     controladorEmpleado.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
                 txbNumSS.Text, txbTlf.Text, txbCorreoE.Text, txbIdDepartamento.Text, "1");//IdModif
-                    cargarDTG();
+                    cargarDTG(string.Empty);
                 }
                 else System.Windows.MessageBox.Show("El número de la seguridad social ha de tener 12 dígitos.");
             }
@@ -87,7 +113,7 @@ namespace GestionPersonal.Vistas
                     {
                         controladorEmpleado.modificarEmpleado(empleadoActual);
                         hayCambios = false;
-                        cargarDTG();
+                        cargarDTG(string.Empty);
                     }
                     else System.Windows.MessageBox.Show("El número de la seguridad social ha de tener 12 dígitos.");
                 }
@@ -120,13 +146,13 @@ namespace GestionPersonal.Vistas
         {
             if (dtgEmpleados.SelectedItem != null)
             {
-                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar el usuario " + dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString() + "?", "Eliminar empleado",
+                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar el USUARIO seleccionado?", "Eliminar Empleado",
                     MessageBoxButtons.YesNo);
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString());
-                    cargarDTG();
+                    cargarDTG(string.Empty);
                 }
                 else
                     return;
@@ -135,6 +161,11 @@ namespace GestionPersonal.Vistas
             else
                 System.Windows.MessageBox.Show("Seleccione un empleado en la tabla");
         }
+
+
+
+
+
         private void dtgEmpleados_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgEmpleados.SelectedItem == null)
@@ -203,7 +234,20 @@ namespace GestionPersonal.Vistas
             dtgEmpleados.SelectedItem = null;
             hayCambios = false;
 
-            cargarDTG();
+            cargarDTG(string.Empty);
+        }
+
+        private void btnFiltrarE_Click(object sender, RoutedEventArgs e)
+        {
+            controladorEmpleado.prepararFiltro();
+        }
+
+        private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if(this.IsEnabled)
+            {
+                cargarDTG(controladorEmpleado.filtro);
+            }
         }
     }
 }

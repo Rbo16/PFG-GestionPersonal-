@@ -114,25 +114,6 @@ namespace GestionPersonal
             this.Auditoria = new Auditoria(IdModif);
         }
 
-        public DataTable listadoEmpleados()
-        {
-            DataTable dtEmpleados = new DataTable();
-            string consulta = "SELECT * FROM Empleado ";
-
-            conexionSQL = new SqlConnection(cadenaConexion);
-            conexionSQL.Open();
-
-            SqlCommand comando = new SqlCommand(consulta, conexionSQL);
-
-            SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
-            using (adaptadorSql)
-            {
-                adaptadorSql.Fill(dtEmpleados);
-            }
-
-            return dtEmpleados;
-
-        }
         private DataTable obtenerEmpleado(string Usuario)//casi igual que el listado pero todavía no se me ocurre cómo hacer varias inserciones. creo que lo mejor será separar la clase
         {
             try

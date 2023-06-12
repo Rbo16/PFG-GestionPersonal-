@@ -84,7 +84,7 @@
         </Button>
         <Button Name="btnBorrar" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Right" Margin="0,0,10,0"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Bottom" Click="btnBorrar_Click">
             <StackPanel>
                 <Image Source="/Imagenes/Eliminar.png" Height="40"/>
                 <TextBlock Text="Eliminar" FontWeight="Bold" FontSize="15"/>
@@ -98,7 +98,7 @@
         <DataGrid x:Name="dtgPro" Width="415" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,0,0,0"
                   SelectionMode="Single" IsReadOnly="True" MouseDoubleClick="dtgPro_MouseDoubleClick" FontSize="18"/>
         <Button Name="btnFiltrarPro" Grid.Column="2" Grid.Row="2" Width="35" Height="35" 
-                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" >
+                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="btnFiltrarPro_Click" >
             <Image Source="/Imagenes/Filtro.png" Width="20"/>
             <Button.Effect>
                 <DropShadowEffect/>
@@ -109,13 +109,6 @@
         <DataGrid x:Name="dtgEmpleadosPro" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Column="3" Grid.Row="3"
                   VerticalAlignment="Top" Height="440" Margin="20,0,0,0" IsReadOnly="True" SelectionMode="Single" 
                   FontSize="18"/>
-        <Button Name="btnFiltrarEPro" Grid.Column="4" Grid.Row="2" Width="35" Height="35" 
-                 Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Image Source="/Imagenes/Filtro.png" Width="20"/>
-            <Button.Effect>
-                <DropShadowEffect/>
-            </Button.Effect>
-        </Button>
         <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,90,0,0">
             <StackPanel.Effect>
                 <DropShadowEffect/>

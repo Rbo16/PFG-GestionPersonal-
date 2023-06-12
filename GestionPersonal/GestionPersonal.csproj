@@ -73,6 +73,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controladores\Controlador.cs" />
+    <Compile Include="Controladores\Filtros\FiltroAusenciaControl.cs" />
+    <Compile Include="Controladores\Filtros\FiltroContratoControl.cs" />
+    <Compile Include="Controladores\Filtros\FiltroEmpleadoControl.cs" />
+    <Compile Include="Controladores\Filtros\FiltroProyectoControl.cs" />
     <Compile Include="Controladores\LoginControlador.cs" />
     <Compile Include="Controladores\MenuControl.cs" />
     <Compile Include="Controladores\VentanaControlador.cs" />
@@ -85,6 +89,7 @@
       <DependentUpon>OpcionesMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utiles\ExceptionManager.cs" />
+    <Compile Include="Utiles\Listar.cs" />
     <Compile Include="Vistas\Contratos.xaml.cs">
       <DependentUpon>Contratos.xaml</DependentUpon>
     </Compile>
@@ -103,8 +108,17 @@
     <Compile Include="Vistas\Empleados.xaml.cs">
       <DependentUpon>Empleados.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Vistas\FiltroAusencia.xaml.cs">
+      <DependentUpon>FiltroAusencia.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Vistas\FiltroContrato.xaml.cs">
+      <DependentUpon>FiltroContrato.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vistas\FiltroEmpleado.xaml.cs">
       <DependentUpon>FiltroEmpleado.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Vistas\FiltroProyecto.xaml.cs">
+      <DependentUpon>FiltroProyecto.xaml</DependentUpon>
     </Compile>
     <Compile Include="Vistas\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
@@ -132,7 +146,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Vistas\FiltroAusencia.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Vistas\FiltroContrato.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Vistas\FiltroEmpleado.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Vistas\FiltroProyecto.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

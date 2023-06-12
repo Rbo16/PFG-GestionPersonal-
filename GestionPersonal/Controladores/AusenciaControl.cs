@@ -1,4 +1,6 @@
 ﻿using GestionPersonal.Controladores;
+using GestionPersonal.Controladores.Filtros;
+using GestionPersonal.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,7 +14,6 @@ namespace GestionPersonal
 {
     public class AusenciaControl : Controlador
     {
-        Ausencia ausenciaVacia = new Ausencia();
         private DataTable dtAusencias;
 
         public AusenciaControl(VentanaControlador ventanaControl) : base(ventanaControl)
@@ -54,8 +55,15 @@ namespace GestionPersonal
                 }
                 else if (FechaInicioA < FechaFinA) 
                 {
-                    Ausencia nuevaAusencia = new Ausencia(Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF,
-                        Usuario.IdEmpleado);
+                    Ausencia nuevaAusencia = new Ausencia(0)
+                    {
+                        Razon = Razon,
+                        FechaInicioA = FechaInicioA,
+                        FechaFinA = FechaFinA,
+                        DescripcionAus = DescripcionAus,
+                        JustificantePDF = JustificantePDF,
+                        IdSolicitante = Usuario.IdEmpleado 
+                    };
                     nuevaAusencia.insertAusencia();
 
                     MessageBox.Show("Ausencia solicitada correctamente.");
@@ -86,8 +94,16 @@ namespace GestionPersonal
             EstadoAusencia.TryParse(ausenciaModificada["EstadoA"].ToString(), out EstadoAusencia EstadoA);
             int IdSolicitante = Convert.ToInt32(ausenciaModificada["IdSolicitante"].ToString());
 
-            Ausencia ausenciaMod = new Ausencia(IdAusencia, Razon, FechaInicioA, FechaFinA, DescripcionAus, JustificantePDF,
-                EstadoA, IdSolicitante);
+            Ausencia ausenciaMod = new Ausencia(IdAusencia)
+            {
+                Razon = Razon,
+                FechaInicioA = FechaInicioA,
+                FechaFinA = FechaFinA,
+                DescripcionAus = DescripcionAus,
+                JustificantePDF = JustificantePDF,
+                EstadoA = EstadoA,
+                IdSolicitante = IdSolicitante//ESTO NO CREO QUE HAGA FALTA PORQUE SERÁ READONLY 
+            };
 
             ausenciaMod.updateAusencia(this.Usuario.IdEmpleado);
 
@@ -97,14 +113,22 @@ namespace GestionPersonal
         {
             int EstadoA = Convert.ToInt32(SEstadoA);
             int IdAusencia = Convert.ToInt32(SIdAusencia);
-            ausenciaVacia.updateAutorizador(IdAusencia, EstadoA, this.Usuario.IdEmpleado);
+
+            Ausencia ausenciaGestion = new Ausencia(IdAusencia)
+            {
+                EstadoA = (EstadoAusencia)EstadoA,
+                IdAutorizador = this.Usuario.IdEmpleado
+            };
+            
+            ausenciaGestion.updateAutorizador();
         }
 
 
         public void borrarAusencia(string SIdAusencia)
         {
             int IdAusencia = Convert.ToInt32(SIdAusencia);
-            ausenciaVacia.deleteAusencia(IdAusencia, this.Usuario.IdEmpleado);
+            Ausencia ausenciaBorrada = new Ausencia(IdAusencia);
+            ausenciaBorrada.deleteAusencia(this.Usuario.IdEmpleado);
         }
 
         /// <summary>
@@ -114,8 +138,8 @@ namespace GestionPersonal
         /// <returns></returns>
         public DataTable listarAusencias(int IdSolicitante)
         {
-            
-            dtAusencias = ausenciaVacia.listarAusencias();
+
+            dtAusencias = Listar.listarAusencias();
             DataTable dtAux = new DataTable();
             if (IdSolicitante != -1)
             {
@@ -133,7 +157,6 @@ namespace GestionPersonal
             {
                 return dtAusencias;
             }
-
         }
 
         /// <summary>
@@ -143,6 +166,13 @@ namespace GestionPersonal
         public Array devolverEstadosA()
         {
             return Enum.GetValues(typeof(EstadoAusencia));
+        }
+
+        public void prepararFiltro()
+        {
+            this.filtro = string.Empty;
+            ventanaControl.bloquearVActual();
+            FiltroAusenciaControl controladorFiltroA = new FiltroAusenciaControl(this);
         }
     }
 }

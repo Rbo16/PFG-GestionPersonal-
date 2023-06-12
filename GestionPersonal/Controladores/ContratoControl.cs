@@ -1,4 +1,6 @@
 ﻿using GestionPersonal.Controladores;
+using GestionPersonal.Controladores.Filtros;
+using GestionPersonal.Utiles;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +15,6 @@ namespace GestionPersonal
     public class ContratoControl : Controlador
     {
         DataTable dtContratos = new DataTable();
-        Contrato contratoVaico = new Contrato(0);
 
         public ContratoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
@@ -28,7 +29,7 @@ namespace GestionPersonal
 
         public DataTable listarContratos(int IdEmpleado)
         {
-            dtContratos = contratoVaico.listadoContratos();
+            dtContratos = Listar.listarContratos();
 
             string filtro = $"IdEmpleado = {IdEmpleado}";
             DataTable dtAux = dtContratos.Clone();
@@ -143,6 +144,13 @@ namespace GestionPersonal
             int.TryParse(SIdContrato, out int IdContrato);
             Contrato contratoEliminar = new Contrato(IdContrato);
             contratoEliminar.deleteContrato(this.Usuario.IdEmpleado);
+        }
+
+        public void prepararFiltro()
+        {
+            this.filtro = string.Empty;
+            ventanaControl.bloquearVActual();
+            FiltroContratoControl controladorFiltroC = new FiltroContratoControl(this);
         }
 
     }

@@ -31,40 +31,6 @@ namespace GestionPersonal
             IdJefeDep = 0;
         }
 
-        public DataTable listarDepartamentos()
-        {
-            try
-            {
-                DataTable dtDepas = new DataTable();
-
-                string consulta = "SELECT * FROM Departamento";//WHERE Borrado = 0";
-
-                conexionSQL = new SqlConnection(cadenaConexion);
-                conexionSQL.Open();
-
-                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
-
-                SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
-                using (adaptadorSql)
-                {
-                    adaptadorSql.Fill(dtDepas);
-                }
-
-                return dtDepas;
-
-            }
-            catch (Exception ex)
-            {
-                ExceptionManager.Execute(ex, "ERROR[Departamento.Listar]:");
-                return null;
-            }
-            finally
-            {
-                conexionSQL.Close();
-            }
-        }
-
-
         public void insertarDepartamento(int IdModif)
         {
             try
