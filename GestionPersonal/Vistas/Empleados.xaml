@@ -67,7 +67,7 @@
             <TextBlock Text="Rol" FontWeight="Bold" Margin="0,5,10,5"/>
             <ComboBox Name="cmbRol"  Margin="0,0,10,0" Height="30" />
             <TextBlock Text="Departamento" FontWeight="Bold" Margin="0,5,10,5"/>
-            <TextBox Name="txbIdDepartamento" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
+            <TextBox Name="txbIdDepartamento" Margin="0,0,10,0" Height="30" IsReadOnly="True"/>
             <TextBlock Text="Correo Electrónico" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbCorreoE" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
         </StackPanel>

@@ -32,22 +32,43 @@ namespace GestionPersonal
         {
             this.controladorContrato = controladorContrato;
 
+            this.controladorContrato.filtro = $"IdEmpleado = {this.controladorContrato.Usuario.IdEmpleado}";
+
             InitializeComponent();
 
             cargarRol();
 
             txbIdEmpleado.Text = this.controladorContrato.Usuario.Apellido + ", " + this.controladorContrato.Usuario.NombreE;
 
-            cargarDTG(this.controladorContrato.Usuario.IdEmpleado);
+            cargarDTG(controladorContrato.filtro);
         }
 
-        private void cargarDTG(int IdEmpleado)
+        /// <summary>
+        /// Carga el listado de ausencias en función del filtro que se le indique. Si el filtro = string.Empty,
+        /// carga un listado de todas las ausencias del sistema
+        /// </summary>
+        /// <param name="filtro"></param>
+        private void cargarDTG(string filtro)
         {
-            dtContratos = controladorContrato.listarContratos(IdEmpleado);
+            if (filtro == string.Empty)
+            {
+                dtContratos = controladorContrato.listaContratos();
+            }
+            else
+            {
+                dtContratos = controladorContrato.listaContratos(filtro);
+            }
 
             contratoActual = dtContratos.NewRow();
 
-            DataTable dtShow = dtContratos.Copy();
+            dtgContratos.ItemsSource = null;
+            dtgContratos.ItemsSource = eliminarColumnas(dtContratos).DefaultView;
+
+        }
+
+        private DataTable eliminarColumnas(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
             dtShow.Columns.Remove("IdContrato");
             dtShow.Columns.Remove("HorasTrabajo");
             dtShow.Columns.Remove("HorasDescanso");
@@ -62,10 +83,9 @@ namespace GestionPersonal
             dtShow.Columns.Remove("IdModif");
             //dtShow.Columns.Remove("Borrado");
 
-            dtgContratos.ItemsSource = null;
-            dtgContratos.ItemsSource = dtShow.DefaultView;
-
+            return dtShow;
         }
+        
 
         private void cargarRol()
         {
@@ -172,10 +192,7 @@ namespace GestionPersonal
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     controladorContrato.eliminarContrato(dtContratos.Rows[dtgContratos.SelectedIndex]["IdContrato"].ToString());
-                    cargarDTG(1);
-                    
-                    //Se cargará del empleado actual!!!!!!
-                
+                    cargarDTG(controladorContrato.filtro);
                 }
                 else
                     return;
@@ -223,6 +240,15 @@ namespace GestionPersonal
         private void btnFiltrarCont_Click(object sender, RoutedEventArgs e)
         {
             controladorContrato.prepararFiltro();
+        }
+
+        private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsEnabled)
+            {
+                cargarDTG(controladorContrato.filtro);
+                //vaciarCampos();
+            }
         }
     }
 }

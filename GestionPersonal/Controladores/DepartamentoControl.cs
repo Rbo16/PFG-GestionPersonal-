@@ -20,6 +20,31 @@ namespace GestionPersonal
             ventanaActiva.Show();
         }
 
+        private void cargarDepartamentos()
+        {
+            dtDepas = Listar.listarDepartamentos();
+        }
+
+        /// <summary>
+        /// Devuelve el DataTable de Departamentos sin filtro
+        /// </summary>
+        /// <returns></returns>
+        public DataTable listaDepartamentos()
+        {
+            cargarDepartamentos();
+            return dtDepas;
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable que filtra el DataTable principal de Departamentos
+        /// </summary>
+        /// <param name="filtro">string con el filtro que se quiere aplicar</param>
+        /// <returns></returns>
+        public DataTable listaDepartamentos(string filtro)
+        {
+            return Listar.filtrarTabla(dtDepas, filtro);
+        }
+
         public bool crearDepartamento(string NombreD, string DescripcionD)
         {
             bool creado = true;
@@ -70,12 +95,6 @@ namespace GestionPersonal
                 IdDepartamento = IdDepartamento
             };
             departamentoBorrado.deleteDepartamento(this.Usuario.IdEmpleado);
-        }
-
-        public DataTable listarDepartamentos()
-        {
-            dtDepas = Listar.listarDepartamentos();
-            return dtDepas;
         }
 
     }

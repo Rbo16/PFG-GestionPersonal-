@@ -38,39 +38,55 @@ namespace GestionPersonal
             this.controladorAusencia = controladorAusencias;
             InitializeComponent();
             cargarRol();
-            cargarDTG(controladorAusencia.Usuario.IdEmpleado);
+            cargarDTG($"IdSolicitante = {controladorAusencia.Usuario.IdEmpleado}");
         }
 
         /// <summary>
-        /// Carga un listado de ausencias en función del valor IdSolicitante especificado. Si el valor es -1,
-        /// carga un listado de las ausencias del sistema.
+        /// Carga el listado de ausencias en función del filtro que se le indique. Si el filtro = string.Empty,
+        /// carga un listado de todas las ausencias del sistema
         /// </summary>
-        /// <param name="IdSolicitante"></param>
-        private void cargarDTG(int IdSolicitante)
+        /// <param name="filtro"></param>
+        private void cargarDTG(string filtro)
         {
-            dtAusencias = controladorAusencia.listarAusencias(IdSolicitante);
+            if(filtro == string.Empty)
+            {
+                dtAusencias = controladorAusencia.listaAusencias();
+            }
+            else
+            {
+                dtAusencias = controladorAusencia.listaAusencias(filtro);
+            }
 
             ausenciaActual = dtAusencias.NewRow();
 
-            DataTable dtShow = dtAusencias.Copy();
+            dtgListaAus.ItemsSource = null;
+            dtgListaAus.ItemsSource = eliminarColumnas(dtAusencias).DefaultView;
+            
+        }
+
+        private DataTable eliminarColumnas(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
+
             dtShow.Columns.Remove("IdAusencia");
             dtShow.Columns.Remove("IdAutorizador");
+            dtShow.Columns.Remove("Autorizador");
+            dtShow.Columns.Remove("EstadoA");
             dtShow.Columns.Remove("IdSolicitante");
             dtShow.Columns.Remove("DescripcionAus");
             dtShow.Columns.Remove("JustificantePDF");
+            dtShow.Columns.Remove("DNI");
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
             //dtShow.Columns.Remove("Borrado");
 
-            dtgListaAus.ItemsSource = null;
-            dtgListaAus.ItemsSource = dtShow.DefaultView;
-            
+            return dtShow;
         }
 
-        /// <summary>
-        /// Carga los elementos en función del rol del Usuario
-        /// </summary>
-        private void cargarRol()
+            /// <summary>
+            /// Carga los elementos en función del rol del Usuario
+            /// </summary>
+            private void cargarRol()
         {
             if (controladorAusencia.Usuario.rol != TipoEmpleado.Basico)
             {
@@ -97,13 +113,13 @@ namespace GestionPersonal
         /// <param name="e"></param>
         private void btnSolicitar_Click(object sender, RoutedEventArgs e)
         {
-            if (comprobarFechas())
+            if (dtgListaAus.SelectedItem == null)
             {
-                if (controladorAusencia.crearAusencia(txbRazon.Text, txbFechaInicioA.Text, txbFechaFinA.Text, txbDescripcionAus.Text,
-                        txbJustificantePDF.Text))
+                if (controladorAusencia.crearAusencia(txbRazon.Text, dtpFechaInicioA.SelectedDate, dtpFechaFinA.SelectedDate,
+                    txbDescripcionAus.Text, txbJustificantePDF.Text))
                 {
                     vaciarCampos();
-                    cargarDTG(controladorAusencia.Usuario.IdEmpleado);
+                    cargarDTG($"IdSolicitante = {controladorAusencia.Usuario.IdEmpleado}");
                 }
             }
         }
@@ -113,12 +129,9 @@ namespace GestionPersonal
             {
                 if (hayCambiostxt)
                 {
-                    if (comprobarFechas())
-                    {
                         controladorAusencia.modificarAusencia(ausenciaActual);
-
+                        
                         hayCambiostxt = false;
-                    }
                 }
 
                 if (cambioEstado)
@@ -130,7 +143,7 @@ namespace GestionPersonal
 
                     cambioEstado = false;
                 }
-                cargarDTG(-1);
+                cargarDTG(string.Empty);
                 MessageBox.Show("Datos guardados correctamente");
             }
 
@@ -147,7 +160,7 @@ namespace GestionPersonal
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     controladorAusencia.borrarAusencia(dtAusencias.Rows[dtgListaAus.SelectedIndex]["IdAusencia"].ToString());
-                    cargarDTG(-1);
+                    cargarDTG(string.Empty);
                 }
                 else
                     return;
@@ -155,21 +168,6 @@ namespace GestionPersonal
             }
             else
                 System.Windows.MessageBox.Show("Seleccione una ausencia de la tabla");
-        }
-
-        /// <summary>
-        /// Vacía el contenido de los elementos de la vista
-        /// </summary>
-        private void vaciarCampos()
-        {
-            txbRazon.Text = string.Empty;
-            txbFechaInicioA.Text = string.Empty;
-            txbFechaFinA.Text = string.Empty;
-            cmbEstadoAus.SelectedIndex = 0;
-            txbIdSolicitante.Text = string.Empty;
-            txbDescripcionAus.Text = string.Empty;
-            txbJustificantePDF.Text = string.Empty;
-
         }
 
 
@@ -187,8 +185,8 @@ namespace GestionPersonal
                 {
                     string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
                     ausenciaActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
+                    hayCambiostxt = true;
                 }
-                hayCambiostxt = true;
             }
         }
 
@@ -197,18 +195,32 @@ namespace GestionPersonal
         {
             if (!dblClic)
             {
-                cambioEstado = true;
-                ausenciaActual["EstadoA"] = cmbEstadoAus.SelectedIndex + 1;
+                if (ausenciaActual["IdAusencia"].ToString() != string.Empty)
+                {
+                    cambioEstado = true;
+                    ausenciaActual["EstadoA"] = cmbEstadoAus.SelectedIndex + 1;
+                }
             }
         }
 
+
+        private void dtpFecha_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!dblClic)
+            {
+                if (ausenciaActual["IdAusencia"].ToString() != string.Empty)
+                {
+                    string columna = ((DatePicker)sender).Name.Substring(3);
+                    ausenciaActual[columna] = ((DatePicker)sender).SelectedDate.ToString();
+                    hayCambiostxt = true;
+                }
+            }
+        }
+
+
         private void dtgListaAus_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (dtgListaAus.SelectedItem == null)
-            {
-                return;
-            }
-            else
+            if (dtgListaAus.SelectedItem != null)
             {
                 dblClic = true;
                 hayCambiostxt = false;
@@ -225,41 +237,50 @@ namespace GestionPersonal
             CultureInfo culturaEspañola = new CultureInfo("es-ES");
 
             txbRazon.Text = ausenciaActual["Razon"].ToString();
-            txbFechaInicioA.Text = ausenciaActual["FechaInicioA"].ToString().Split(' ')[0];//Separo la fecha de la hora
-            txbFechaFinA.Text = ausenciaActual["FechaFinA"].ToString().Split(' ')[0];
+            dtpFechaInicioA.Text = ausenciaActual["FechaInicioA"].ToString().Split(' ')[0];//Separo la fecha de la hora
+            dtpFechaFinA.Text = ausenciaActual["FechaFinA"].ToString().Split(' ')[0];
             txbDescripcionAus.Text = ausenciaActual["DescripcionAus"].ToString();
             cmbEstadoAus.SelectedIndex = Convert.ToInt32(ausenciaActual["EstadoA"].ToString()) - 1;
-            txbIdSolicitante.Text = ausenciaActual["IdSolicitante"].ToString();
+            txbIdSolicitante.Text = ausenciaActual["Solicitante"].ToString();
+            txbIdAutorizador.Text = ausenciaActual["Autorizador"].ToString();
             txbJustificantePDF.Text = ausenciaActual["JustificantePDF"].ToString();
 
             dblClic = false;
         }
 
-        private bool comprobarFechas()
+
+        /// <summary>
+        /// Vacía el contenido de los elementos de la vista
+        /// </summary>
+        private void vaciarCampos()
         {
-            bool correctas = false;
-            CultureInfo culturaEspañola = new CultureInfo("es-ES");
+            ausenciaActual = dtAusencias.NewRow();
 
-            if (DateTime.TryParseExact(txbFechaInicioA.Text, "d", culturaEspañola, DateTimeStyles.None, out DateTime FechaInicioA))
-            {
-                if (DateTime.TryParseExact(txbFechaFinA.Text, "d", culturaEspañola, DateTimeStyles.None, out DateTime FechaFinA))
-                    correctas = true;
-                else
-                {
-                    MessageBox.Show("Introduzca la fecha fin con formato dd/MM/yyyy.");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Introduzca la fecha incio con formato dd/MM/yyyy.");
-            }
+            txbRazon.Text = string.Empty;
+            dtpFechaInicioA.Text = string.Empty;
+            dtpFechaFinA.Text = string.Empty;
+            cmbEstadoAus.SelectedIndex = 0;
+            txbIdSolicitante.Text = string.Empty;
+            txbDescripcionAus.Text = string.Empty;
+            txbJustificantePDF.Text = string.Empty;
+            txbIdAutorizador.Text = string.Empty;
 
-            return correctas;
+            hayCambiostxt = false;
+            cambioEstado = false;
         }
 
         private void btnFiltrarAus_Click(object sender, RoutedEventArgs e)
         {
             controladorAusencia.prepararFiltro();
+        }
+
+        private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsEnabled)
+            {
+                cargarDTG(controladorAusencia.filtro);
+                vaciarCampos();
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Contratos" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"
-        FontFamily="Cambria" FontSize="18" >
+        FontFamily="Cambria" FontSize="18" IsEnabledChanged="Window_IsEnabledChanged">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -37,16 +37,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250" Margin="0,20,10,0">
             <TextBlock Text="Poseedor" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
-            <StackPanel Orientation="Horizontal">
-                <Button x:Name="btnBuscarE" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25" Width="30"
-                        Margin="0,0,10,0">
-                    <Image Source="/Imagenes/lupa.png"/>
-                    <Button.Effect>
-                        <DropShadowEffect/>
-                    </Button.Effect>
-                </Button>
-                <TextBox x:Name="txbIdEmpleado" IsReadOnly="True" Height="30" Width="210" HorizontalAlignment="Right"/>
-            </StackPanel>
+            <TextBox x:Name="txbIdEmpleado" IsReadOnly="True" Height="30"/>
             <TextBlock Text="Puesto" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbPuesto" Height="30" IsReadOnly="True"/>
             <TextBlock Text="Salario" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>

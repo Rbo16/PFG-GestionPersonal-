@@ -33,16 +33,36 @@ namespace GestionPersonal
         {
             this.controladorProyecto = controladorProyecto;
             InitializeComponent();
-            cargarDTG(-1);
+            cargarDTG(string.Empty);
         }
 
-        private void cargarDTG(int IdSolicitante)
+        /// <summary>
+        /// Carga el listado de proyectos en función del filtro que se le indique. Si el filtro = string.Empty,
+        /// carga un listado de todos los proyectos del sistema
+        /// </summary>
+        /// <param name="filtro"></param>
+        private void cargarDTG(string filtro)
         {
-            dtProyectos = controladorProyecto.listarProyectos(IdSolicitante);
+            if (filtro == string.Empty)
+            {
+                dtProyectos = controladorProyecto.listaProyectos();
+            }
+            else
+            {
+                dtProyectos = controladorProyecto.listaProyectos(filtro);
+            }
 
             proyectoActual = dtProyectos.NewRow();
 
-            DataTable dtShow = dtProyectos.Copy();
+            dtgPro.ItemsSource = null;
+            dtgPro.ItemsSource = eliminarColumnas(dtProyectos).DefaultView;
+
+        }
+
+        private DataTable eliminarColumnas(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
+
             dtShow.Columns.Remove("IdProyecto");
             dtShow.Columns.Remove("Tiempo");
             dtShow.Columns.Remove("Presupuesto");
@@ -51,8 +71,7 @@ namespace GestionPersonal
             dtShow.Columns.Remove("IdModif");
             dtShow.Columns.Remove("Borrado");
 
-            dtgPro.ItemsSource = null;
-            dtgPro.ItemsSource = dtShow.DefaultView;
+            return dtShow;
         }
 
         /// <summary>
@@ -100,7 +119,7 @@ namespace GestionPersonal
                     controladorProyecto.modificarProyecto(proyectoActual);
                     hayCambios = false;
                     MessageBox.Show("Datos guardados correctamente");
-                    cargarDTG(-1);
+                    cargarDTG(string.Empty);
                 }
             }
         }
@@ -197,10 +216,9 @@ namespace GestionPersonal
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     controladorProyecto.borrarProyecto(dtProyectos.Rows[dtgPro.SelectedIndex]["IdProyecto"].ToString());
-                    cargarDTG(-1);
+                    cargarDTG(string.Empty);
 
-                    //Se cargará del empleado actual!!!!!!
-
+                    //Carga el filtro del controlador??
                 }
                 else
                     return;
@@ -243,6 +261,15 @@ namespace GestionPersonal
         private void btnFiltrarPro_Click(object sender, RoutedEventArgs e)
         {
             controladorProyecto.prepararFiltro();
+        }
+
+        private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsEnabled)
+            {
+                cargarDTG(controladorProyecto.filtro);
+                //vaciarCampos();
+            }
         }
     }
 }

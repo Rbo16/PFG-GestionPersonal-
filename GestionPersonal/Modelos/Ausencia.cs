@@ -19,8 +19,8 @@ namespace GestionPersonal
 
         private int IdAusencia { get; set; }
         public string Razon { get; set; }
-        public DateTime FechaInicioA { get; set; }
-        public DateTime FechaFinA { get; set; }
+        public DateTime? FechaInicioA { get; set; }
+        public DateTime? FechaFinA { get; set; }
         public string DescripcionAus { get; set; }
         public string JustificantePDF { get; set; }
         public EstadoAusencia EstadoA { get; set; }

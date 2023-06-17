@@ -18,31 +18,35 @@ namespace GestionPersonal
 
         public ContratoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
+            cargarContratos();
             ventanaActiva = new Contratos(this);
             ventanaActiva.Show();
         }
-
-        public Array devolverTipoContrato()
-        {
-            return Enum.GetValues(typeof(TipoContrato));
-        }
-
-        public DataTable listarContratos(int IdEmpleado)
+        private void cargarContratos()
         {
             dtContratos = Listar.listarContratos();
-
-            string filtro = $"IdEmpleado = {IdEmpleado}";
-            DataTable dtAux = dtContratos.Clone();
-
-            DataRow[] filasFiltradas = dtContratos.Select(filtro);
-            foreach(DataRow fila in filasFiltradas)
-            {
-                dtAux.ImportRow(fila);
-            }
-
-            return dtAux;
         }
 
+
+        /// <summary>
+        /// Devuelve el DataTable de Contratos sin filtro
+        /// </summary>
+        /// <returns></returns>
+        public DataTable listaContratos()
+        {
+            cargarContratos();
+            return dtContratos;
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable que filtra el DataTable principal de Contratos
+        /// </summary>
+        /// <param name="filtro">string con el filtro que se quiere aplicar</param>
+        /// <returns></returns>
+        public DataTable listaContratos(string filtro)
+        {
+            return Listar.filtrarTabla(dtContratos, filtro);
+        }
 
         /// <summary>
         /// Recibe los strings con la información necesaria para la creación de un contrato, comprueba que estén correctos,
@@ -148,7 +152,6 @@ namespace GestionPersonal
 
         public void prepararFiltro()
         {
-            this.filtro = string.Empty;
             ventanaControl.bloquearVActual();
             FiltroContratoControl controladorFiltroC = new FiltroContratoControl(this);
         }

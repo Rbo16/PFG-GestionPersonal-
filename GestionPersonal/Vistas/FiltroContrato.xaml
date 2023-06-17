@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="2" Margin="0,10,25,10">
-            <TextBlock Text="Usuario poseedor" HorizontalAlignment="Right" />
+            <TextBlock Text="DNI poseedor" HorizontalAlignment="Right" />
             <TextBlock Text="Tipo de contrato" HorizontalAlignment="Right" Margin="0,18,0,0"/>
             <TextBlock Text="Alta posterior a" HorizontalAlignment="Right" Margin="0,18,0,0"/>
             <TextBlock Text="Baja anterior a" HorizontalAlignment="Right" Margin="0,18,0,0"/>

@@ -18,42 +18,59 @@ namespace GestionPersonal
 
         public AusenciaControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
+            cargarAusencias();
             ventanaActiva = new Ausencias(this);
             ventanaActiva.Show();
         }
 
+        private void cargarAusencias()
+        {
+            dtAusencias = Listar.listarAusencias();
+        }
+
+
+        /// <summary>
+        /// Devuelve el DataTable de Ausencias sin filtro
+        /// </summary>
+        /// <returns></returns>
+        public DataTable listaAusencias()
+        {
+            cargarAusencias();
+            return dtAusencias;
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable que filtra el DataTable principal de Ausencias
+        /// </summary>
+        /// <param name="filtro">string con el filtro que se quiere aplicar</param>
+        /// <returns></returns>
+        public DataTable listaAusencias(string filtro)
+        {
+            return Listar.filtrarTabla(dtAusencias, filtro);
+        }
 
         /// <summary>
         /// Método para crear la ausencia e insertarla en la BBDD
         /// </summary>
         /// <param name="Razon">Razón de la ausencia</param>
-        /// <param name="InicioA">Fecha de inicio de la ausencia</param>
-        /// <param name="FinA">Fecha fin de la ausencia</param>
+        /// <param name="FechaInicioA">Fecha de inicio de la ausencia</param>
+        /// <param name="FechaFinA">Fecha fin de la ausencia</param>
         /// <param name="DescripcionAus">Descripción de la ausencia</param>
         /// <param name="JustificantePDF">Ruta donde se ubica el justificante de la ausencia</param>
-        public bool crearAusencia(string Razon, string InicioA, string FinA, string DescripcionAus, string JustificantePDF) 
+        public bool crearAusencia(string Razon, DateTime? FechaInicioA, DateTime? FechaFinA, string DescripcionAus, string JustificantePDF) 
         {
             bool creado = true;
 
             List<string> listaCampos = new List<string>();
 
             listaCampos.Add(Razon);
-            listaCampos.Add(InicioA);
-            listaCampos.Add(FinA);
+            listaCampos.Add(FechaInicioA.ToString());
+            listaCampos.Add(FechaFinA.ToString());
 
             if (!camposVacios(listaCampos))
             {
-                if(!DateTime.TryParse(InicioA, out DateTime FechaInicioA))
-                {
-                    creado = false;
-                    MessageBox.Show("Introduzca la fecha inicio con formato dd/mm/aaaa");//Voy a poner DatePicker en verdad
-                }
-                else if (!DateTime.TryParse(InicioA, out DateTime FechaFinA))
-                {
-                    creado = false;
-                    MessageBox.Show("Introduzca la fecha fin con formato dd/mm/aaaa");//Voy a poner DatePicker en verdad
-                }
-                else if (FechaInicioA < FechaFinA) 
+
+                if (FechaInicioA < FechaFinA) 
                 {
                     Ausencia nuevaAusencia = new Ausencia(0)
                     {
@@ -132,34 +149,6 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve un DataTable con las ausencias del empleado indicado, o un listado general si IdSolicitante = -1.
-        /// </summary>
-        /// <param name="IdSolicitante"></param>
-        /// <returns></returns>
-        public DataTable listarAusencias(int IdSolicitante)
-        {
-
-            dtAusencias = Listar.listarAusencias();
-            DataTable dtAux = new DataTable();
-            if (IdSolicitante != -1)
-            {
-                dtAux = dtAusencias.Clone();
-                string filtro = $"IdSolicitante = {IdSolicitante}";
-
-                DataRow[] filasFiltradas = dtAusencias.Select(filtro);
-                foreach (DataRow fila in filasFiltradas)
-                {
-                    dtAux.ImportRow(fila);
-                }
-                return dtAux;
-            }
-            else
-            {
-                return dtAusencias;
-            }
-        }
-
-        /// <summary>
         /// Devuelve un array con los elementos del tipo enumerado EstadoAusencia
         /// </summary>
         /// <returns></returns>
@@ -170,7 +159,6 @@ namespace GestionPersonal
 
         public void prepararFiltro()
         {
-            this.filtro = string.Empty;
             ventanaControl.bloquearVActual();
             FiltroAusenciaControl controladorFiltroA = new FiltroAusenciaControl(this);
         }

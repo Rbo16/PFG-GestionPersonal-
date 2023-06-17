@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,6 +39,7 @@ namespace GestionPersonal
         /// <returns></returns>
         public DataTable listaEmpleados() 
         {
+            cargarEmpleados();
             return dtEmpleadosCif;
         }
 
@@ -65,9 +67,11 @@ namespace GestionPersonal
                 array = Enum.GetValues(typeof(EstadoEmpleado));
             return array;
         }
-        public void crearEmpleado(string NombreE, string Apellido, string Usuario, string DNI, 
-            string NumSS, string Tlf, string CorreoE, string IdDepartamento, string IdModif)
+        public bool crearEmpleado(string NombreE, string Apellido, string Usuario, string DNI, 
+            string NumSS, string Tlf, string CorreoE)
         {
+            bool creado = true;
+
             List<string> listaCampos = new List<string>();
             //Guardamos los campos para comprobar que no estén vacíos
 
@@ -78,61 +82,109 @@ namespace GestionPersonal
             listaCampos.Add(NumSS);
             listaCampos.Add(Tlf);
             listaCampos.Add(CorreoE);
-            listaCampos.Add(IdDepartamento);//Se comprobará que se pueda pasar a int
 
             if (!camposVacios(listaCampos))
             {
-                int IdDepa = 0;
-                try
-                {
-                    IdDepa = Convert.ToInt32(IdDepartamento);//Comprobamos de IdDep sea un número 
-                }
-                catch
-                {
-                    MessageBox.Show("El Id del Departamento ha de ser un número");
-                    return;
-                }
+                if (comprobarCaracteres(DNI,NumSS))
+                { 
+                    //int.TryParse(SIdDepartamento, out int IdDepartamento);
+                    Empleado nuevoEmpleado = new Empleado(0)
+                    {
+                        NombreE = NombreE,
+                        Apellido = Apellido,
+                        Usuario = Usuario,
+                        DNI = DNI,
+                        NumSS = NumSS,
+                        Tlf = Tlf,
+                        CorreoE = CorreoE,
+                        //IdDepartamento = IdDepartamento,
+                    };
 
-                Empleado nuevoEmpleado = new Empleado(NombreE,Apellido, Usuario, DNI, NumSS, Tlf, CorreoE, IdDepa,
-                    this.Usuario.IdEmpleado);
-                nuevoEmpleado.insertEmpleado();
-                MessageBox.Show("Empleado creado correctamente");
+                    nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
+                }
+               
             }
             else
             {
                 MessageBox.Show("Rellene todos los campos necesarios");
             }
 
+            return creado;
         }
 
 
-        public void eliminarEmpleado(string UsuarioBorrado)
+        public void eliminarEmpleado(string SIdEmpleado)
         {
-            Usuario.deleteEmpleado(UsuarioBorrado, this.Usuario.IdEmpleado);
-            MessageBox.Show("Empleado eliminado correctamente");
+            int.TryParse(SIdEmpleado, out int IdEmpelado);
+            Empleado empleadoBorrado = new Empleado(IdEmpelado);
+            empleadoBorrado.deleteEmpleado(this.Usuario.IdEmpleado);
         }
 
         public void modificarEmpleado(DataRow empleadoModif)
         {
-            int IdEmpleado = Convert.ToInt32(empleadoModif["IdEmpleado"].ToString());
-            string NombreE = empleadoModif["NombreE"].ToString();
-            string Apellido = empleadoModif["Apellido"].ToString();
-            string Usuario = empleadoModif["IdEmpleado"].ToString();
-            TipoEmpleado.TryParse(empleadoModif["Rol"].ToString(), out TipoEmpleado Rol);
-            EstadoEmpleado.TryParse(empleadoModif["EstadoE"].ToString(), out EstadoEmpleado EstadoE);
-            string DNI = empleadoModif["DNI"].ToString();
-            string NumSS = empleadoModif["NumSS"].ToString();
-            string Tlf = empleadoModif["Tlf"].ToString();
-            string CorreoE = empleadoModif["CorreoE"].ToString();
-            int IdDepartamento = Convert.ToInt32(empleadoModif["IdDepartamento"].ToString());
+            List<string> lCampos = new List<string>();
 
-            Empleado empleadoModificado = new Empleado(IdEmpleado, NombreE, Apellido, Usuario, Rol, EstadoE, DNI, 
-                NumSS, Tlf, CorreoE, IdDepartamento, this.Usuario.IdEmpleado);
+            for(int i = 1; i < empleadoModif.Table.Rows.Count; i++)
+            {
+                lCampos.Add(empleadoModif[i].ToString());
+            }
+            if(!camposVacios(lCampos)) 
+            {
+                int.TryParse(empleadoModif["IdEmpleado"].ToString(), out int IdEmpleado);
+                string NombreE = empleadoModif["NombreE"].ToString();
+                string Apellido = empleadoModif["Apellido"].ToString();
+                string Usuario = empleadoModif["IdEmpleado"].ToString();
+                TipoEmpleado.TryParse(empleadoModif["Rol"].ToString(), out TipoEmpleado rol);
+                EstadoEmpleado.TryParse(empleadoModif["EstadoE"].ToString(), out EstadoEmpleado EstadoE);
+                string DNI = empleadoModif["DNI"].ToString();
+                string NumSS = empleadoModif["NumSS"].ToString();
+                string Tlf = empleadoModif["Tlf"].ToString();
+                string CorreoE = empleadoModif["CorreoE"].ToString();
+                int.TryParse(empleadoModif["IdDepartamento"].ToString(), out int IdDepartamento);
 
-            empleadoModificado.updateEmpleado();
+                if (comprobarCaracteres(DNI, NumSS))
+                {
+                    Empleado empleadoModificado = new Empleado(IdEmpleado)
+                    {
+                        NombreE = NombreE,
+                        Apellido = Apellido,
+                        Usuario = Usuario,
+                        rol = rol,
+                        EstadoE = EstadoE,
+                        DNI = DNI,
+                        NumSS = NumSS,
+                        Tlf = Tlf,
+                        CorreoE = CorreoE,
+                        IdDepartamento = IdDepartamento,
+                    };
 
-            MessageBox.Show("Cambios guardados correctamente.");
-            
+                    empleadoModificado.updateEmpleado(this.Usuario.IdEmpleado);
+
+                    MessageBox.Show("Cambios guardados correctamente.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Rellene todos los campos necesarios");
+            }
+        }
+
+        private bool comprobarCaracteres(string DNI, string NumSS)
+        {
+            bool result = true;
+
+            if (DNI.Trim().Length != 9)
+            {
+                result = false;
+                MessageBox.Show("El DNI ha de tener 9 caracteres.");//HAZ UN METODO PARA USARLO EN UPDATE
+            }
+            else if (NumSS.Trim().Length != 12)
+            {
+                result = false;
+                MessageBox.Show("El Número de la Seguridad Social ha de tener 12 caracteres.");
+            }
+
+            return result;
         }
 
         public void prepararFiltro()

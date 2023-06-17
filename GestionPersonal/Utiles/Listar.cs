@@ -19,7 +19,10 @@ namespace GestionPersonal.Utiles
             try
             {
                 DataTable dtEmpleados = new DataTable();
-                string consulta = "SELECT * FROM Empleado ";
+                string consulta = "SELECT Empleado.*, Departamento.NombreD, EnumEstadoEmpleado.EstadoE AS Estado " +
+                    "FROM Empleado LEFT JOIN Departamento ON Empleado.IdDepartamento = Departamento.IdDepartamento " +
+                    "LEFT JOIN EnumEstadoEmpleado ON Empleado.EstadoE = EnumEstadoEmpleado.IdEstadoE " +
+                    "WHERE Empleado.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -36,7 +39,7 @@ namespace GestionPersonal.Utiles
             }
             catch (Exception ex)
             {
-                ExceptionManager.Execute(ex, "ERROR[Ausencia.Listar]");
+                ExceptionManager.Execute(ex, "ERROR[Empleado.Listar]");
                 return null;
             }
             finally
@@ -50,7 +53,11 @@ namespace GestionPersonal.Utiles
             try
             {
                 DataTable dtAusencias = new DataTable();
-                string consulta = "SELECT * FROM Ausencia ";//WHERE Borrado = 0";
+                string consulta = "SELECT Ausencia.*,  CONCAT(Empleado.NombreE,' ',Empleado.Apellido) AS Solicitante, Empleado.DNI,  " +
+                    "CONCAT(Empleado1.NombreE,' ',Empleado1.Apellido) AS Autorizador, EnumEstadoAusencia.EstadoA as Estado " +
+                    "FROM Ausencia LEFT JOIN Empleado ON Ausencia.IdSolicitante = Empleado.IdEmpleado " +
+                    "LEFT JOIN Empleado as Empleado1 ON Ausencia.IdAutorizador = Empleado1.IdEmpleado " +
+                    "LEFT JOIN EnumEstadoAusencia ON Ausencia.EstadoA = EnumEstadoAusencia.IdEstadoA ";//WHERE Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -185,10 +192,10 @@ namespace GestionPersonal.Utiles
             DataRow[] filasFiltradas = dtAux.Select(filtro);
             foreach (DataRow fila in filasFiltradas)
             {
-                dtAux.ImportRow(fila);
+                dtFiltro.ImportRow(fila);
             }
 
-            return dtAux;
+            return dtFiltro;
         }
     }
 }

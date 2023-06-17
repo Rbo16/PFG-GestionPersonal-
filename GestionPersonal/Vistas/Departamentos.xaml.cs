@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GestionPersonal.Utiles;
+using GestionPersonal.Vistas;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
@@ -36,16 +38,31 @@ namespace GestionPersonal
         {
             this.controladorDepartamento = controladorDepartamento;
             InitializeComponent();
-            cargarDTG();
+            cargarDTG(string.Empty);
         }
 
-        private void cargarDTG()
+
+        private void cargarDTG(string filtro)
         {
-            dtDepartamentos = controladorDepartamento.listarDepartamentos();
+            if (filtro == string.Empty)
+            {
+                dtDepartamentos = controladorDepartamento.listaDepartamentos();
+            }
+            else
+            {
+                dtDepartamentos = controladorDepartamento.listaDepartamentos(filtro);
+            }
 
-            departamentoActual = dtDepartamentos.NewRow();
+            departamentoActual = dtDepartamentos.NewRow(); //Sacamos el formato de la fila
 
-            DataTable dtShow = dtDepartamentos.Copy();
+            dtgDep.ItemsSource = null;
+            dtgDep.ItemsSource = eliminarColumnas(dtDepartamentos).DefaultView;
+        }
+
+
+        private DataTable eliminarColumnas(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
 
             dtShow.Columns.Remove("IdDepartamento");
             dtShow.Columns.Remove("IdJefeDep");
@@ -53,9 +70,7 @@ namespace GestionPersonal
             dtShow.Columns.Remove("IdModif");
             dtShow.Columns.Remove("Borrado");
 
-            dtgDep.ItemsSource = null;
-            dtgDep.ItemsSource = dtShow.DefaultView;
-
+            return dtShow;
         }
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
@@ -63,7 +78,7 @@ namespace GestionPersonal
             if (controladorDepartamento.crearDepartamento(txbNombreD.Text, txbDescripcionD.Text) == true)
             {
                 MessageBox.Show("Departamento creado con éxito");
-                cargarDTG();
+                cargarDTG(string.Empty);
             } 
         }
 
@@ -76,7 +91,7 @@ namespace GestionPersonal
                     controladorDepartamento.modificarDepartamento(departamentoActual);
                     hayCambios = false;
                     MessageBox.Show("Datos guardados correctamente");
-                    cargarDTG();
+                    cargarDTG(string.Empty);
                 } 
             }
         }
@@ -93,7 +108,7 @@ namespace GestionPersonal
                     if (dr == System.Windows.Forms.DialogResult.Yes)
                     {
                         controladorDepartamento.eliminarDepartamento(dtDepartamentos.Rows[dtgDep.SelectedIndex]["IdDepartamento"].ToString());
-                        cargarDTG();
+                        cargarDTG(string.Empty);
                     }
                     else
                         return;
@@ -153,6 +168,8 @@ namespace GestionPersonal
             }
         }
 
+
+
         private void dtgDep_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(dtgDep.SelectedItem != null) 
@@ -165,8 +182,14 @@ namespace GestionPersonal
         {
             txbBucarDep.Text= string.Empty;
             txbBucarDep.GotFocus -= txbBucarDep_GotFocus;
+            txbBucarDep.TextChanged += txbBucarDep_TextChanged;
         }
 
-        //HAY QUE HACER EL BUSCAR TEXT CHANGED PARA QUE BUSQEU DEPARTAMENTOS EN FUNCION SE VAYAN ESCRIBIENDO
+        private void txbBucarDep_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string filtro = $"NombreD like '%{txbBucarDep.Text}%'";
+            cargarDTG(filtro);
+        }
+
     }
 }

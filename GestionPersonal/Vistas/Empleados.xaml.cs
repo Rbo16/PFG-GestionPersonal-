@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GestionPersonal.Vistas
 {
@@ -24,7 +25,7 @@ namespace GestionPersonal.Vistas
     {
         private readonly EmpleadoControl controladorEmpleado;
         DataTable dtEmpleados = new DataTable();
-        int contEmpleado;//para indicar el registro del empleado en el datatable
+        int contEmpleado;//para indicar el registro del empleado en el datatable. SIGUIENTE-ANTERIOR
         DataRow empleadoActual;
         bool hayCambios = false; //con esta variable controlamos si ha habido cambios
         bool dblClic = false;//Solo se me ocurre esto para que controlar que haycambios no se active al cargar desde dtg
@@ -38,7 +39,7 @@ namespace GestionPersonal.Vistas
         }
         private void cargarDTG(string filtro)
         {
-            if(filtro == string.Empty)
+            if (filtro == string.Empty)
             {
                 dtEmpleados = controladorEmpleado.listaEmpleados();
             }
@@ -46,9 +47,10 @@ namespace GestionPersonal.Vistas
             {
                 dtEmpleados = controladorEmpleado.listaEmpleados(filtro);
             }
-           
+
             empleadoActual = dtEmpleados.NewRow(); //Sacamos el formato de la fila
 
+            dtgEmpleados.ItemsSource = null;
             dtgEmpleados.ItemsSource = eliminarColumnas(dtEmpleados).DefaultView;
         }
 
@@ -60,10 +62,13 @@ namespace GestionPersonal.Vistas
             dtShow.Columns.Remove("IdEmpleado");
             dtShow.Columns.Remove("NumSS");
             dtShow.Columns.Remove("CorreoE");
-            dtShow.Columns.Remove("Tlf");
             dtShow.Columns.Remove("Rol");
             dtShow.Columns.Remove("EstadoE");
             dtShow.Columns.Remove("IdDepartamento");
+            dtShow.Columns.Remove("FechaUltModif");
+            dtShow.Columns.Remove("Borrado");
+            dtShow.Columns.Remove("IdModif");
+            dtShow.Columns.Remove("NombreD");
 
             return dtShow;
         }
@@ -73,6 +78,7 @@ namespace GestionPersonal.Vistas
             cmbRol.ItemsSource = controladorEmpleado.devolverEnum("TipoEmpleado");
             cmbEstadoE.ItemsSource = controladorEmpleado.devolverEnum("EstadoEmpleado");
         }
+
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorEmpleado.volverMenu();
@@ -82,7 +88,7 @@ namespace GestionPersonal.Vistas
         {
             if (hayCambios)
             {
-                DialogResult dr = System.Windows.Forms.MessageBox.Show("Hay cambios sin guardar, ¿quiere salir?", "Exit", MessageBoxButtons.YesNo);
+                DialogResult dr = MessageBox.Show("Hay cambios sin guardar, ¿quiere salir?", "Exit", MessageBoxButtons.YesNo);
                 if (dr == System.Windows.Forms.DialogResult.No)
                     e.Cancel = true;
             }
@@ -90,17 +96,18 @@ namespace GestionPersonal.Vistas
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-            if (dniCorrecto())
+            if (dtgEmpleados.SelectedItem == null)
             {
-                if (numssCorrecto())
+                if (controladorEmpleado.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
+                    txbNumSS.Text, txbTlf.Text, txbCorreoE.Text))
                 {
-                    controladorEmpleado.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
-                txbNumSS.Text, txbTlf.Text, txbCorreoE.Text, txbIdDepartamento.Text, "1");//IdModif
+                    MessageBox.Show("Empleado creado correctamente.");
                     cargarDTG(string.Empty);
                 }
-                else System.Windows.MessageBox.Show("El número de la seguridad social ha de tener 12 dígitos.");
             }
-            else System.Windows.MessageBox.Show("El DNI ha de tener 9 caracteres.");
+            else
+                MessageBox.Show("No puede haber ningún empleado seleccionado a la hora de crear uno nuevo");
+
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -128,7 +135,7 @@ namespace GestionPersonal.Vistas
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cambioEmpleadoTxb(object sender, TextChangedEventArgs e) 
+        private void cambioEmpleadoTxb(object sender, TextChangedEventArgs e)
         {
             if (!dblClic)
             {
@@ -146,13 +153,14 @@ namespace GestionPersonal.Vistas
         {
             if (dtgEmpleados.SelectedItem != null)
             {
-                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar el USUARIO seleccionado?", "Eliminar Empleado",
+                DialogResult dr = System.Windows.Forms.MessageBox.Show("¿Eliminar el EMPLEADO seleccionado?", "Eliminar Empleado",
                     MessageBoxButtons.YesNo);
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
-                    controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["Usuario"].ToString());
+                    controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString());
                     cargarDTG(string.Empty);
+                    MessageBox.Show("Empleado eliminado correctamente.");
                 }
                 else
                     return;
@@ -191,10 +199,7 @@ namespace GestionPersonal.Vistas
             txbNumSS.Text = empleadoActual["NumSS"].ToString();
             txbTlf.Text = empleadoActual["Tlf"].ToString();
             txbCorreoE.Text = empleadoActual["CorreoE"].ToString();
-
-            txbIdDepartamento.Text = empleadoActual["IdDepartamento"].ToString();
-            //Estaría bien indicar el NOMBRE DEL DEPA
-
+            txbIdDepartamento.Text = empleadoActual["NombreD"].ToString();
             cmbRol.SelectedIndex = Convert.ToInt32(empleadoActual["Rol"]) - 1;
             cmbEstadoE.SelectedIndex = Convert.ToInt32(empleadoActual["EstadoE"]) - 1;
 
@@ -216,8 +221,12 @@ namespace GestionPersonal.Vistas
 
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
+            vaciarCampos();
+        }
 
-            empleadoActual = empleadoActual = dtEmpleados.NewRow();
+        private void vaciarCampos()
+        {
+            empleadoActual = dtEmpleados.NewRow();
 
             txbNombreE.Text = "";
             txbApellido.Text = "";
@@ -226,7 +235,6 @@ namespace GestionPersonal.Vistas
             txbTlf.Text = "";
             txbCorreoE.Text = "";
             txbIdDepartamento.Text = "";
-            //Estaría bien indicar el NOMBRE DEL DEPA
             cmbRol.SelectedIndex = -1;
             cmbEstadoE.SelectedIndex = -1;
             txbDNI.Text = "";
@@ -244,9 +252,10 @@ namespace GestionPersonal.Vistas
 
         private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if(this.IsEnabled)
+            if (this.IsEnabled)
             {
                 cargarDTG(controladorEmpleado.filtro);
+                vaciarCampos();
             }
         }
     }

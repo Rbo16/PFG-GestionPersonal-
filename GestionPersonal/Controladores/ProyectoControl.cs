@@ -18,31 +18,35 @@ namespace GestionPersonal
 
         public ProyectoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
+            cargarProyectos();
             ventanaActiva = new Proyectos(this);
             ventanaActiva.Show();
         }
 
-        public DataTable listarProyectos(int IdSolicitante)
+        private void cargarProyectos()
         {
             dtProyectos = Listar.listarProyectos();
+        }
 
-            if(IdSolicitante != -1)
-            {
-                DataTable dtAux = dtProyectos.Clone();
-                DataRow[] filasFiltradas = dtProyectos.Select($"IdEmpleado = {IdSolicitante}");
 
-                foreach(DataRow fila in filasFiltradas)
-                {
-                    dtAux.ImportRow(fila);
-                }
+        /// <summary>
+        /// Devuelve el DataTable de Proyectos sin filtro
+        /// </summary>
+        /// <returns></returns>
+        public DataTable listaProyectos()
+        {
+            cargarProyectos();
+            return dtProyectos;
+        }
 
-                return dtAux;
-
-            }
-            else
-            {
-                return dtProyectos;
-            }             
+        /// <summary>
+        /// Devuelve un DataTable que filtra el DataTable principal de Proyectos
+        /// </summary>
+        /// <param name="filtro">string con el filtro que se quiere aplicar</param>
+        /// <returns></returns>
+        public DataTable listaProyectos(string filtro)
+        {
+            return Listar.filtrarTabla(dtProyectos, filtro);
         }
 
         public bool crearProyecto(string NombreP, string Cliente, string SFechaInicioP, string SNTiempo, string Tiempo, string SPresupuesto,

@@ -64,17 +64,18 @@ namespace GestionPersonal.Vistas
 
             if (contenidoFiltro[1] != "")
             {
+                string fechaActual = DateTime.Now.ToShortDateString();
                 if (contenidoFiltro[1] == "En curso")
                 {
-                    filtro += "(GETDATE() BETWEEN FechaInicioA AND FechaFinA) AND ";
+                    filtro += $"FechaFinA > '{fechaActual}' AND FechaInicioA < '{fechaActual}' AND ";
                 }
                 else if (contenidoFiltro[1] == "Finalizada")
                 {
-                    filtro += "FechaFinA < GETDATE() AND ";
+                    filtro += $"FechaFinA < '{fechaActual}' AND ";
                 }
                 else if (contenidoFiltro[1] == "Próxima")
                 {
-                    filtro += "FechaInicioA > GETDATE() AND ";
+                    filtro += $"FechaInicioA > '{fechaActual}' AND ";
                 }
             }
 
@@ -93,7 +94,6 @@ namespace GestionPersonal.Vistas
             }
             else
             {
-                //filtro = "WHERE " + filtro;
                 filtro = filtro.Remove(filtro.Length - 4);
                 controladorFiltroA.asignarFiltro(filtro);
                 this.Close();
@@ -112,12 +112,12 @@ namespace GestionPersonal.Vistas
 
         private void cmbEstadoS_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            contenidoFiltro[1] = cmbEstadoS.SelectedValue.ToString();
+            contenidoFiltro[1] = (cmbEstadoS.SelectedIndex+1).ToString();
         }
 
         private void cmbEstadoA_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            contenidoFiltro[2] = cmbEstadoA.SelectedValue.ToString();
+            contenidoFiltro[2] = (cmbEstadoA.SelectedIndex+1).ToString();
         }
 
         private void dtpFechaDesde_SelectedDateChanged(object sender, SelectionChangedEventArgs e)

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Proyectos" Height="720" Width="1280"
         FontFamily="Cambria"  WindowStartupLocation="CenterScreen"
-        FontSize="18" ResizeMode="CanMinimize">
+        FontSize="18" ResizeMode="CanMinimize" IsEnabledChanged="Window_IsEnabledChanged">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>

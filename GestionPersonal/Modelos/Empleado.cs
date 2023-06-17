@@ -28,7 +28,7 @@ namespace GestionPersonal
         public string DNI { get; set; }
         public string NumSS { get; set; }
         public TipoEmpleado rol { get; set; }
-        EstadoEmpleado EstadoE { get; set; }
+        public EstadoEmpleado EstadoE { get; set; }
         public string Tlf { get; set; }
         public string CorreoE { get; set; }
         public int IdDepartamento { get; set; }
@@ -55,63 +55,20 @@ namespace GestionPersonal
             }
         }
 
-        /// <summary>
-        /// Constructor para crear un empleado nuevo
-        /// </summary>
-        /// <param name="NombreE"></param>
-        /// <param name="Apellido"></param>
-        /// <param name="Usuario"></param>
-        /// <param name="DNI"></param>
-        /// <param name="NumSS"></param>
-        /// <param name="Tlf"></param>
-        /// <param name="CorreoE"></param>
-        /// <param name="IdDepartamento"></param>
-        public Empleado( string NombreE, string Apellido, string Usuario,
-            string DNI, string NumSS, string Tlf, string CorreoE, int IdDepartamento, int IdModif)
+        public Empleado(int IdEmpleado)
         {
-            this.NombreE = NombreE;
-            this.Apellido = Apellido;
-            this.Usuario = Usuario;
+            this.IdEmpleado = IdEmpleado;
+            this.NombreE = string.Empty;
+            this.Apellido = string.Empty;
+            this.Usuario = string.Empty;
             this.Contrasenia = "DEFAULT????";
             this.rol = TipoEmpleado.Basico;//Defaul basico, será un admin quien lo tenga que cambiar
             this.EstadoE = EstadoEmpleado.Pendiente; //Ya que cuando se crea, no está autorizado. Se autoriza modificando el combobox
-            this.DNI = DNI;
-            this.NumSS = NumSS;
-            this.Tlf = Tlf;
-            this.CorreoE = CorreoE;
-            this.IdDepartamento = IdDepartamento;
-            this.Auditoria = new Auditoria(IdModif);
-        }
-
-        /// <summary>
-        /// Constructor para guardar un empleado existente
-        /// </summary>
-        /// <param name="IdEmpleado"></param>
-        /// <param name="NombreE"></param>
-        /// <param name="Apellido"></param>
-        /// <param name="Usuario"></param>
-        /// <param name="rol"></param>
-        /// <param name="EstadoE"></param>
-        /// <param name="DNI"></param>
-        /// <param name="NumSS"></param>
-        /// <param name="Tlf"></param>
-        /// <param name="CorreoE"></param>
-        /// <param name="IdDepartamento"></param>
-        public Empleado(int IdEmpleado, string NombreE, string Apellido, string Usuario, TipoEmpleado rol,
-            EstadoEmpleado EstadoE, string DNI, string NumSS, string Tlf, string CorreoE, int IdDepartamento, int IdModif)
-        {
-            this.IdEmpleado = IdEmpleado;
-            this.NombreE = NombreE;
-            this.Apellido = Apellido;
-            this.Usuario = Usuario;
-            this.rol = rol;
-            this.EstadoE = EstadoE; 
-            this.DNI = DNI;
-            this.NumSS = NumSS;
-            this.Tlf = Tlf;
-            this.CorreoE = CorreoE;
-            this.IdDepartamento = IdDepartamento;
-            this.Auditoria = new Auditoria(IdModif);
+            this.DNI = string.Empty;
+            this.NumSS = string.Empty;
+            this.Tlf = string.Empty;
+            this.CorreoE = string.Empty;
+            this.IdDepartamento = 0;
         }
 
         private DataTable obtenerEmpleado(string Usuario)//casi igual que el listado pero todavía no se me ocurre cómo hacer varias inserciones. creo que lo mejor será separar la clase
@@ -141,13 +98,14 @@ namespace GestionPersonal
             }
         }
 
-        public void insertEmpleado()
+        public void insertEmpleado(int IdModif)
         {
             try
             {
-                string consulta = "INSERT INTO Empleado (NombreE, Apellido, Usuario, Contrasenia, Rol, EstadoE, DNI, NumSS, Tlf, CorreoE, IdDepartamento, " + Auditoria.Insert_1 + ")";
-                string valores = "VALUES (@NombreE, @Apellido, @Usuario, @Contrasenia, @Rol, @EstadoE, @DNI, @NumSS, @Tlf, @CorreoE, @IdDepartamento, " + Auditoria.Insert_2 + ")";
-                consulta += valores;
+                string consulta = "INSERT INTO Empleado (NombreE, Apellido, Usuario, Contrasenia, Rol, EstadoE, DNI, " +
+                    "NumSS, Tlf, CorreoE, " + Auditoria.Insert_1 + ") VALUES (@NombreE, @Apellido, " +
+                    "@Usuario, @Contrasenia, @Rol, @EstadoE, @DNI, @NumSS, @Tlf, @CorreoE, "
+                    + Auditoria.Insert_2 + ")";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -155,6 +113,8 @@ namespace GestionPersonal
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
                 comando = introducirParametros(comando);
                 comando = introducirParametroContraseña(comando);
+
+                this.Auditoria = new Auditoria(IdModif);
                 comando = Auditoria.introducirParametros(comando);
 
                 comando.ExecuteNonQuery();
@@ -169,19 +129,22 @@ namespace GestionPersonal
             }
         }
 
-        public void deleteEmpleado(string UsuarioBorrado, int IdModif)
+        public void deleteEmpleado(int IdModif)
         {
             try
             {
-                this.Auditoria = new Auditoria(IdModif, true);
-                string consultaDelete = "UPDATE Empleado SET" + Auditoria.Update + " WHERE Usuario = @Usuario";
+                
+                string consultaDelete = "UPDATE Empleado SET" + Auditoria.Update + " WHERE IdEmpleado = @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
 
                 SqlCommand comando = new SqlCommand(consultaDelete, conexionSQL);
-                comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
-                comando.Parameters["@Usuario"].Value = UsuarioBorrado;
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.NVarChar);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
+
+                this.Auditoria = new Auditoria(IdModif, true);
                 this.Auditoria.introducirParametros(comando);
 
                 comando.ExecuteNonQuery();
@@ -197,7 +160,7 @@ namespace GestionPersonal
 
             //!!LUEGO HAY QUE ELIMINARLO DEL DEPARTAMENTO, PROYECTOS, SUS CONTRATOS, AUSENCIAS 
         }
-        public void updateEmpleado()
+        public void updateEmpleado(int IdModif)
         {
             try
             {
@@ -210,8 +173,13 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
                 comando = introducirParametros(comando);
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
+
+                this.Auditoria = new Auditoria(IdModif);
                 comando = this.Auditoria.introducirParametros(comando);
-                comando = introducirParametroId(comando);
+                
 
                 comando.ExecuteNonQuery();
             }
@@ -236,19 +204,16 @@ namespace GestionPersonal
             comando.Parameters.Add("@NombreE", SqlDbType.NVarChar);
             comando.Parameters.Add("@Apellido", SqlDbType.NVarChar);
             comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
-
             comando.Parameters.Add("@Rol", SqlDbType.Int);
             comando.Parameters.Add("@EstadoE", SqlDbType.Int);
             comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
             comando.Parameters.Add("@NumSS", SqlDbType.NVarChar);
             comando.Parameters.Add("@Tlf", SqlDbType.NVarChar);
             comando.Parameters.Add("@CorreoE", SqlDbType.NVarChar);
-            comando.Parameters.Add("@IdDepartamento", SqlDbType.Int);
 
             comando.Parameters["@NombreE"].Value = this.NombreE;
             comando.Parameters["@Apellido"].Value = this.Apellido;
             comando.Parameters["@Usuario"].Value = this.Usuario;
-
             //comando.Parameters["@password"].Value = Convert.ToBase64String(mySHA256.ComputeHash(Encoding.UTF8.GetBytes(password)));
             comando.Parameters["@Rol"].Value = this.rol.GetHashCode();
             comando.Parameters["@EstadoE"].Value = this.EstadoE.GetHashCode();
@@ -256,7 +221,6 @@ namespace GestionPersonal
             comando.Parameters["@NumSS"].Value = this.NumSS;
             comando.Parameters["@Tlf"].Value = this.Tlf;
             comando.Parameters["@CorreoE"].Value = this.CorreoE;
-            comando.Parameters["@IdDepartamento"].Value = this.IdDepartamento;
 
 
             return comando;
@@ -271,20 +235,6 @@ namespace GestionPersonal
         {
             comando.Parameters.Add("@Contrasenia", SqlDbType.NVarChar);
             comando.Parameters["@Contrasenia"].Value = this.Contrasenia;
-
-            return comando;
-
-        }
-
-        /// <summary>
-        /// Introduce el parámetro Contrasenia y su valor en el comando indicado.
-        /// </summary>
-        /// <param name="comando"></param>
-        /// <returns></returns>
-        private SqlCommand introducirParametroId(SqlCommand comando)
-        {
-            comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
-            comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
 
             return comando;
 
