@@ -12,6 +12,7 @@ using System.Windows;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Xml.Linq;
 using System.Security.AccessControl;
+using System.Management.Instrumentation;
 
 namespace GestionPersonal
 {
@@ -31,14 +32,71 @@ namespace GestionPersonal
         public EstadoEmpleado EstadoE { get; set; }
         public string Tlf { get; set; }
         public string CorreoE { get; set; }
-        public int IdDepartamento { get; set; }
+        public int? IdDepartamento { get; set; }
         public Auditoria Auditoria { get; set; }
 
-        public Empleado(string Usuario)//ESTO HAY QUE CAMBIARLO
+        public Empleado(int IdEmpleado)
+        {
+            this.IdEmpleado = IdEmpleado;
+            this.NombreE = string.Empty;
+            this.Apellido = string.Empty;
+            this.Usuario = string.Empty;
+            //Contraseña en el insert
+            this.rol = TipoEmpleado.Basico;//Defaul basico, será un admin quien lo tenga que cambiar
+            this.EstadoE = EstadoEmpleado.Pendiente; //Ya que cuando se crea, no está autorizado. Se autoriza modificando el combobox
+            this.DNI = string.Empty;
+            this.NumSS = string.Empty;
+            this.Tlf = string.Empty;
+            this.CorreoE = string.Empty;
+            this.IdDepartamento = 0;
+        }
+
+        public bool iniciarSesion()
+        {
+            bool inicio = false;
+
+            string contrasenia;
+
+            try
+            {
+                string consulta = "SELECT Contrasenia FROM Empleado WHERE Usuario = @Usuario"; //vrJ;!W|.#84q
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+                comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
+                comando.Parameters["@Usuario"].Value = this.Usuario;
+
+                SqlDataReader reader= comando.ExecuteReader();
+                if(reader.HasRows)
+                {
+                    while(reader.Read())
+                    {
+                        contrasenia = reader.GetString(0);
+                        if(contrasenia == this.Contrasenia)
+                        {
+                            cargarUsuario(this.Usuario);
+                            inicio = true;
+                        }
+                    }
+                }
+
+                return inicio;
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Empleado.Login]:");
+                return false;
+            }
+
+        }
+
+        private void cargarUsuario(string Usuario)
         {
             DataTable dtEmpleado = obtenerEmpleado(Usuario);
 
-            if(dtEmpleado.Rows.Count != 0)
+            if (dtEmpleado.Rows.Count != 0)
             {
                 this.IdEmpleado = Convert.ToInt32(dtEmpleado.Rows[0]["IdEmpleado"].ToString());
                 this.NombreE = dtEmpleado.Rows[0]["NombreE"].ToString();
@@ -51,24 +109,10 @@ namespace GestionPersonal
                 this.NumSS = dtEmpleado.Rows[0]["NumSS"].ToString();
                 this.Tlf = dtEmpleado.Rows[0]["Tlf"].ToString();
                 this.CorreoE = dtEmpleado.Rows[0]["CorreoE"].ToString();
-                this.IdDepartamento = Convert.ToInt32(dtEmpleado.Rows[0]["IdDepartamento"].ToString());
-            }
-        }
 
-        public Empleado(int IdEmpleado)
-        {
-            this.IdEmpleado = IdEmpleado;
-            this.NombreE = string.Empty;
-            this.Apellido = string.Empty;
-            this.Usuario = string.Empty;
-            this.Contrasenia = "DEFAULT????";
-            this.rol = TipoEmpleado.Basico;//Defaul basico, será un admin quien lo tenga que cambiar
-            this.EstadoE = EstadoEmpleado.Pendiente; //Ya que cuando se crea, no está autorizado. Se autoriza modificando el combobox
-            this.DNI = string.Empty;
-            this.NumSS = string.Empty;
-            this.Tlf = string.Empty;
-            this.CorreoE = string.Empty;
-            this.IdDepartamento = 0;
+                if(dtEmpleado.Rows[0]["IdDepartamento"].ToString() != "")
+                    this.IdDepartamento = Convert.ToInt32(dtEmpleado.Rows[0]["IdDepartamento"].ToString());
+            }
         }
 
         private DataTable obtenerEmpleado(string Usuario)//casi igual que el listado pero todavía no se me ocurre cómo hacer varias inserciones. creo que lo mejor será separar la clase

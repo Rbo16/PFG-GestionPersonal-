@@ -70,7 +70,7 @@ namespace GestionPersonal
         public bool crearEmpleado(string NombreE, string Apellido, string Usuario, string DNI, 
             string NumSS, string Tlf, string CorreoE)
         {
-            bool creado = true;
+            bool creado = false;
 
             List<string> listaCampos = new List<string>();
             //Guardamos los campos para comprobar que no estén vacíos
@@ -93,14 +93,19 @@ namespace GestionPersonal
                         NombreE = NombreE,
                         Apellido = Apellido,
                         Usuario = Usuario,
+                        Contrasenia = Password.Generate(12, 4),
                         DNI = DNI,
                         NumSS = NumSS,
                         Tlf = Tlf,
                         CorreoE = CorreoE,
-                        //IdDepartamento = IdDepartamento,
                     };
 
+                    //Hay que mandar el correo con la contraseña
+                    nuevoEmpleado.Contrasenia = ConvertidorHASH.GetHashString(nuevoEmpleado.Contrasenia);
+
                     nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
+
+                    creado = true;
                 }
                
             }

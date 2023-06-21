@@ -26,7 +26,7 @@
         <TextBlock Text="INICIAR SESIÓN" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" FontSize="30"/>
         <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,20,0,0">
             <TextBlock Text="Usuario" Margin="20,0,0,5"/>
-            <TextBox x:Name="txbEmail" Width="300" FontWeight="Normal"/>
+            <TextBox x:Name="txbUsuario" Width="300" FontWeight="Normal"/>
             <TextBlock Text="Contraseña" Margin="20,15,0,5"/>
             <PasswordBox x:Name="txbContraseña"  Width="300" FontWeight="Normal"/>
         </StackPanel>

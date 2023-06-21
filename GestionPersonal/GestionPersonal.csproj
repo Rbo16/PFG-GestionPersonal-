@@ -88,8 +88,10 @@
     <Compile Include="Paginas\OpcionesMenu.xaml.cs">
       <DependentUpon>OpcionesMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utiles\ConvertidorHASH.cs" />
     <Compile Include="Utiles\ExceptionManager.cs" />
     <Compile Include="Utiles\Listar.cs" />
+    <Compile Include="Utiles\Password.cs" />
     <Compile Include="Vistas\Contratos.xaml.cs">
       <DependentUpon>Contratos.xaml</DependentUpon>
     </Compile>

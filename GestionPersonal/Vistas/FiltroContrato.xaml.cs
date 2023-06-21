@@ -22,10 +22,49 @@ namespace GestionPersonal.Vistas
     {
         FiltroContratoControl controladorFiltroC;
 
+        private string[] contenidoFiltro = new string[4];
+
         public FiltroContrato(FiltroContratoControl controladorFiltroC)
         {
             this.controladorFiltroC= controladorFiltroC;
             InitializeComponent();
+            cargarListas();
+        }
+
+        private void cargarListas()
+        {
+            contenidoFiltro[0] = "";
+            contenidoFiltro[1] = "";
+            contenidoFiltro[2] = "";
+            contenidoFiltro[3] = "";
+        }
+
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        {
+            string filtro = string.Empty;
+
+            if (contenidoFiltro[0].Trim() != "")
+                filtro += "DNI like '%" + contenidoFiltro[0] + "%' AND ";
+
+            if (contenidoFiltro[1] != "")
+                filtro += "TipoContrato = " + contenidoFiltro[1] + " AND ";
+
+            if (contenidoFiltro[2] != "")
+                filtro += "FechaAlta > '" + contenidoFiltro[2] + "' AND ";
+
+            if (contenidoFiltro[3] != "")
+                filtro += "FechaBaja < '" + contenidoFiltro[3] + "' AND ";
+
+            if (filtro == string.Empty)
+            {
+                MessageBox.Show("Debe especificar al menos un campo");
+            }
+            else
+            {
+                filtro = filtro.Remove(filtro.Length - 4);
+                controladorFiltroC.asignarFiltro(filtro);
+                this.Close();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -33,9 +72,24 @@ namespace GestionPersonal.Vistas
             controladorFiltroC.volver();
         }
 
-        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        private void txbPoseedor_TextChanged(object sender, TextChangedEventArgs e)
         {
+            contenidoFiltro[0] = txbPoseedor.Text;
+        }
 
+        private void cmbTipoContrato_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            contenidoFiltro[1] = cmbTipoContrato.SelectedValue.ToString();
+        }
+
+        private void dtpFechaDesde_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            contenidoFiltro[2] = dtpFechaDesde.SelectedDate.ToString();
+        }
+
+        private void dtpFechaHasta_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            contenidoFiltro[3] = dtpFechaHasta.SelectedDate.ToString();
         }
     }
 }

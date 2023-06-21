@@ -34,10 +34,10 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-
+        <TextBox Name="txbIdEmpleado" Visibility="Hidden"/>
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250" Margin="0,20,10,0">
             <TextBlock Text="Poseedor" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbIdEmpleado" IsReadOnly="True" Height="30"/>
+            <TextBox x:Name="txbNombreE" IsReadOnly="True" Height="30"/>
             <TextBlock Text="Puesto" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbPuesto" Height="30" IsReadOnly="True"/>
             <TextBlock Text="Salario" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>

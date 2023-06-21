@@ -31,15 +31,13 @@
             <TextBlock Text="Tipo de contrato" HorizontalAlignment="Right" Margin="0,18,0,0"/>
             <TextBlock Text="Alta posterior a" HorizontalAlignment="Right" Margin="0,18,0,0"/>
             <TextBlock Text="Baja anterior a" HorizontalAlignment="Right" Margin="0,18,0,0"/>
-            <TextBlock Text="Baja prematura" HorizontalAlignment="Right" Margin="0,18,0,0"/>
         </StackPanel>
 
         <StackPanel Grid.Column="2" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Margin="70,10,10,10">
-            <TextBox x:Name="txbPoseedor"/>
-            <ComboBox x:Name="cmbTipoContrato" Margin="0,12,0,0"/>
-            <DatePicker Name="dtpFechaDesde" Margin="0,12,0,0"/>
-            <DatePicker Name="dtpFechaHasta" Margin="0,12,0,0"/>
-            <CheckBox Name="chkBajaPre" Margin="0,16,0,0"/>
+            <TextBox x:Name="txbPoseedor" TextChanged="txbPoseedor_TextChanged"/>
+            <ComboBox x:Name="cmbTipoContrato" Margin="0,12,0,0" SelectionChanged="cmbTipoContrato_SelectionChanged"/>
+            <DatePicker Name="dtpFechaDesde" Margin="0,12,0,0" SelectedDateChanged="dtpFechaDesde_SelectedDateChanged"/>
+            <DatePicker Name="dtpFechaHasta" Margin="0,12,0,0" SelectedDateChanged="dtpFechaHasta_SelectedDateChanged"/>
         </StackPanel>
         <Button Name="btnBuscar" Grid.Column="4" Grid.Row="5" Click="btnBuscar_Click">
             <StackPanel>

@@ -38,9 +38,10 @@ namespace GestionPersonal
 
             cargarRol();
 
-            txbIdEmpleado.Text = this.controladorContrato.Usuario.Apellido + ", " + this.controladorContrato.Usuario.NombreE;
+            txbNombreE.Text = this.controladorContrato.Usuario.Apellido + ", " + this.controladorContrato.Usuario.NombreE;
+            txbIdEmpleado.Text = this.controladorContrato.Usuario.IdEmpleado.ToString();
 
-            cargarDTG(controladorContrato.filtro);
+            cargarDTG(this.controladorContrato.filtro);
         }
 
         /// <summary>
@@ -82,6 +83,11 @@ namespace GestionPersonal
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
             //dtShow.Columns.Remove("Borrado");
+
+            dtShow.Columns.Remove("TipoContrato");
+            dtShow.Columns.Remove("NombreE");
+            dtShow.Columns.Remove("Apellido");
+            dtShow.Columns.Remove("DNI");
 
             return dtShow;
         }
@@ -172,8 +178,8 @@ namespace GestionPersonal
         {
             //¿Que solo se pueda después del clear?
             if (controladorContrato.crearContrato(txbHorasTrabajo.Text, txbHorasDescanso.Text, txbHoraEntrada.Text,
-                txbHoraSalida.Text, txbSalario.Text, txbPuesto.Text, txbVacacionesMes.Text, txbDuracion.Text + cmbDuracion.Text,
-                txbIdEmpleado.Text, cmbTipoContrato.Text))
+                txbHoraSalida.Text, txbSalario.Text, txbPuesto.Text, txbVacacionesMes.Text, txbDuracion.Text + " "
+                + cmbDuracion.Text, txbIdEmpleado.Text, cmbTipoContrato.Text))
                 MessageBox.Show("Contrato creado con éxito."); //Hay que poner un txb vacío que cargue el IdEmpleado sobre el que se actua
         }
 

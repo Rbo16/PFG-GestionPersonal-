@@ -30,7 +30,7 @@ namespace GestionPersonal.Vistas
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            controladorLogin.iniciarSesion(txbEmail.Text, txbContraseña.Password);
+            controladorLogin.iniciarSesion(txbUsuario.Text, txbContraseña.Password);
         }
     }
 }

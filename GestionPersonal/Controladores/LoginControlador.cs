@@ -1,4 +1,5 @@
-﻿using GestionPersonal.Vistas;
+﻿using GestionPersonal.Utiles;
+using GestionPersonal.Vistas;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,18 +27,22 @@ namespace GestionPersonal.Controladores
             }
             /*else if (contrasenia == "")
             {
-                MessageBox.Show("Introduzca una contraseña");
+                MessageBox.Show("Introduzca la contraseña");
             }*/
             else
             {
-                Usuario = new Empleado(usuario);
-                //if (Usuario.Makelogin())
-                //{
-                ventanaControl.Usuario = Usuario;
-                //windowsController.DidClose = false;
-                ventanaControl.ventanaMenu();
-                //}
-                //else
+                Usuario = new Empleado(0)
+                {
+                    Usuario = usuario,
+                    Contrasenia= ConvertidorHASH.GetHashString(contrasenia),
+                    rol = TipoEmpleado.Administrador
+                };
+                if (Usuario.iniciarSesion())
+                {
+                    ventanaControl.Usuario = Usuario;
+                    ventanaControl.ventanaMenu();
+                }
+                else
                 {
                     MessageBox.Show("El usuario o la contraseña son erroneas.");//A lo mejor mételo en en makelogin y que indique cuál es incorrecto
                 }
