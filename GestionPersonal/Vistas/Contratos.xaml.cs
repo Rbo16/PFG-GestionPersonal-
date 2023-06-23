@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GestionPersonal
@@ -42,6 +43,8 @@ namespace GestionPersonal
             txbIdEmpleado.Text = this.controladorContrato.Usuario.IdEmpleado.ToString();
 
             cargarDTG(this.controladorContrato.filtro);
+            contratoActual = dtContratos.NewRow();
+
         }
 
         /// <summary>
@@ -59,8 +62,6 @@ namespace GestionPersonal
             {
                 dtContratos = controladorContrato.listaContratos(filtro);
             }
-
-            contratoActual = dtContratos.NewRow();
 
             dtgContratos.ItemsSource = null;
             dtgContratos.ItemsSource = eliminarColumnas(dtContratos).DefaultView;
@@ -91,7 +92,7 @@ namespace GestionPersonal
 
             return dtShow;
         }
-        
+
 
         private void cargarRol()
         {
@@ -100,11 +101,10 @@ namespace GestionPersonal
                 txbPuesto.IsReadOnly = false;
                 txbSalario.IsReadOnly = false;
                 txbDuracion.IsReadOnly = false;
-                cmbDuracion.IsEnabled= true;
+                cmbDuracion.IsEnabled = true;
                 txbHoraEntrada.IsReadOnly = false;
                 txbHoraSalida.IsReadOnly = false;
-                cmbTipoContrato.IsEnabled= true;
-                chkActivo.IsEnabled = true;
+                cmbTipoContrato.IsEnabled = true;
             }
         }
 
@@ -166,7 +166,7 @@ namespace GestionPersonal
                     hayCambios = true;
                 }
             }
-            
+
         }
 
         private void btnMenu_Click(object sender, RoutedEventArgs e)
@@ -180,19 +180,32 @@ namespace GestionPersonal
             if (controladorContrato.crearContrato(txbHorasTrabajo.Text, txbHorasDescanso.Text, txbHoraEntrada.Text,
                 txbHoraSalida.Text, txbSalario.Text, txbPuesto.Text, txbVacacionesMes.Text, txbDuracion.Text + " "
                 + cmbDuracion.Text, txbIdEmpleado.Text, cmbTipoContrato.Text))
-                MessageBox.Show("Contrato creado con éxito."); //Hay que poner un txb vacío que cargue el IdEmpleado sobre el que se actua
+                MessageBox.Show("Contrato creado con éxito.");
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-
+            if (contratoActual["IdContrato"].ToString() != string.Empty)
+            {
+                if (hayCambios)
+                {
+                    if (controladorContrato.modificarContrato(contratoActual))
+                    {
+                        hayCambios = false;
+                        cargarDTG(string.Empty);
+                        cargarDTG(controladorContrato.filtro);
+                        MessageBox.Show("Datos guardados correctamente");
+                    }
+                }
+                
+            }
         }
 
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgContratos.SelectedItem != null)
             {
-                DialogResult dr = MessageBox.Show("¿Eliminar el CONTRATO seleccionada?", "Eliminar Contrato",
+                DialogResult dr = MessageBox.Show("¿Eliminar el CONTRATO seleccionado?", "Eliminar Contrato",
                     MessageBoxButtons.YesNo);
 
                 if (dr == System.Windows.Forms.DialogResult.Yes)
@@ -215,9 +228,16 @@ namespace GestionPersonal
         /// <param name="e"></param>
         private void cmbTipoContrato_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(cmbTipoContrato.SelectedIndex != -1)
+            if (cmbTipoContrato.SelectedIndex != -1)
             {
-                if(cmbTipoContrato.SelectedItem.ToString() == "Parcial Mañana" || cmbTipoContrato.SelectedItem.ToString() == "Parcial Tarde")
+                if (contratoActual["IdContrato"].ToString() != string.Empty)
+                {
+                    string columna = ((System.Windows.Controls.ComboBox)sender).Name.Substring(3);
+                    contratoActual[columna] = (TipoContrato)(((System.Windows.Controls.ComboBox)sender).SelectedIndex + 1);
+                    hayCambios = true;
+                }
+
+                if (cmbTipoContrato.SelectedItem.ToString() == "Parcial Mañana" || cmbTipoContrato.SelectedItem.ToString() == "Parcial Tarde")
                 {
                     txbHorasTrabajo.Text = "80";
                     txbHorasDescanso.Text = "0,5";
@@ -238,9 +258,41 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Guarda los cambios del Textbox. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cambioContratoTxb(object sender, TextChangedEventArgs e)
+        {
+            if (!dblClic)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
+            {
+                if (contratoActual["IdContrato"].ToString() != string.Empty)
+                {
+                    string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
+                    contratoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
+                    if (columna == "Duracion")
+                        contratoActual[columna] += " " + cmbDuracion.Text;
+                    hayCambios = true;
+                }
+            }
+        }
         private void cmbDuracion_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
         {
-
+            if (!dblClic)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
+            {
+                if (contratoActual["IdContrato"].ToString() != string.Empty)
+                {
+                    string columna = ((System.Windows.Controls.ComboBox)sender).Name.Substring(3);
+                    string valor = ((System.Windows.Controls.ComboBox)sender).SelectedValue.ToString();
+                    if (valor == "Indefinido")
+                        contratoActual[columna] = valor;
+                    else
+                        contratoActual[columna] = txbDuracion.Text + " " + valor;
+                    hayCambios = true;
+                }
+            }
         }
 
         private void btnFiltrarCont_Click(object sender, RoutedEventArgs e)
@@ -255,6 +307,60 @@ namespace GestionPersonal
                 cargarDTG(controladorContrato.filtro);
                 //vaciarCampos();
             }
+        }
+
+
+
+        private void chkActivo_Checked(object sender, RoutedEventArgs e)
+        {
+            string filtroActivo = controladorContrato.filtro;
+            if (filtroActivo != string.Empty)
+                filtroActivo += " AND ";
+            filtroActivo += " Activo = 1";
+            cargarDTG(filtroActivo);
+        }
+
+        private void chkActivo_Unchecked(object sender, RoutedEventArgs e)
+        {
+            cargarDTG(controladorContrato.filtro);
+        }
+
+        private void dtgContratos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (dtgContratos.SelectedItem != null)
+            {
+                dblClic = true;
+                hayCambios = false;
+
+                contratoActual = dtContratos.Copy().Rows[dtgContratos.SelectedIndex];
+                cargarAusencia();
+            }
+        }
+
+        private void cargarAusencia()
+        {
+            txbNombreE.Text = contratoActual["Apellido"].ToString() + ", " + contratoActual["NombreE"].ToString();
+            txbPuesto.Text = contratoActual["Puesto"].ToString();
+            txbSalario.Text = contratoActual["Salario"].ToString();
+            if (contratoActual["Puesto"].ToString() == "Indefinido")
+                cmbDuracion.SelectedValue = "Indefinido";
+            else
+            {
+                txbDuracion.Text = contratoActual["Duracion"].ToString().Split(' ')[0];
+                cmbDuracion.SelectedValue = contratoActual["Duracion"].ToString().Split(' ')[1];
+            }
+
+            txbFechaAlta.Text = contratoActual["FechaAlta"].ToString();
+            txbFechaBaja.Text = contratoActual["FechaBaja"].ToString();
+            txbHoraEntrada.Text = contratoActual["HoraEntrada"].ToString();
+            txbHoraSalida.Text = contratoActual["HoraSalida"].ToString();
+            txbHorasTrabajo.Text = contratoActual["HorasTrabajo"].ToString();
+            txbHorasDescanso.Text = contratoActual["HorasDescanso"].ToString();
+            txbIdEmpleado.Text = contratoActual["IdEmpleado"].ToString();
+            txbVacacionesMes.Text = contratoActual["VacacionesMes"].ToString();
+            cmbTipoContrato.SelectedIndex = Convert.ToInt32(contratoActual["TipoContrato"].ToString()) - 1;
+
+            dblClic = false;
         }
     }
 }

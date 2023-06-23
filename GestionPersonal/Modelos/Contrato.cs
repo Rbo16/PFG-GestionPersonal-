@@ -56,7 +56,7 @@ namespace GestionPersonal
         {
             try
             {
-                //cambiarActivo(this.IdEmpleado);
+                //cambiarActivo();
 
                 string consulta = "INSERT INTO Contrato (HorasTrabajo, HorasDescanso, HoraEntrada, HoraSalida, Salario, " +
                     "Puesto, VacacionesMes, FechaAlta, Duracion, Activo, DocumentoPDF, IdEmpleado, " +
@@ -85,7 +85,7 @@ namespace GestionPersonal
             }
         }
 
-        private void cambiarActivo(int IdEmpleado)
+        private void cambiarActivo()
         {
             try
             {
@@ -97,13 +97,45 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
                 comando.Parameters.Add("@IdEmpleado");
-                comando.Parameters["@IdEmpleado"].Value = IdEmpleado;
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
 
                 comando.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
                 ExceptionManager.Execute(ex, "ERROR[Contrato.CambiarActivo]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public void updateContrato(int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE  Contrato SET HorasTrabajo = @HorasTrabajo, HorasDescanso = @HorasDescanso, " +
+                    "HoraEntrada = @HoraEntrada, HoraSalida = @HoraSalida, Salario = @Salario, Puesto = @Puesto, " +
+                    "VacacionesMes = @VacacionesMes, Duracion = @Duracion, " +
+                    "DocumentoPDF = @DocumentoPDF, IdEmpleado = @IdEmpleado, TipoContrato = @TipoContrato, "
+                    + Auditoria.Update + " WHERE IdContrato = @IdContrato";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+                comando = introducirParametros(comando);
+                comando.Parameters.Add("@IdContrato",SqlDbType.Int);
+                comando.Parameters["@IdContrato"].Value = this.IdContrato;
+                this.Auditoria = new Auditoria(IdModif);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Contrato.Crear]:");
             }
             finally
             {
@@ -138,6 +170,8 @@ namespace GestionPersonal
                 conexionSQL.Close();
             }
         }
+
+
 
         private SqlCommand introducirParametros(SqlCommand comando)
         {

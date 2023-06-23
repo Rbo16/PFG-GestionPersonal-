@@ -32,8 +32,12 @@ namespace GestionPersonal
         public Proyectos(ProyectoControl controladorProyecto)
         {
             this.controladorProyecto = controladorProyecto;
+
             InitializeComponent();
+
             cargarDTG(string.Empty);
+
+            proyectoActual = dtProyectos.NewRow();
         }
 
         /// <summary>
@@ -51,8 +55,6 @@ namespace GestionPersonal
             {
                 dtProyectos = controladorProyecto.listaProyectos(filtro);
             }
-
-            proyectoActual = dtProyectos.NewRow();
 
             dtgPro.ItemsSource = null;
             dtgPro.ItemsSource = eliminarColumnas(dtProyectos).DefaultView;

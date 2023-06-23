@@ -36,9 +36,16 @@ namespace GestionPersonal
         public Ausencias(AusenciaControl controladorAusencias)
         {
             this.controladorAusencia = controladorAusencias;
+
+            this.controladorAusencia.filtro = $"IdSolicitante = {controladorAusencia.Usuario.IdEmpleado}";
+
             InitializeComponent();
+
             cargarRol();
-            cargarDTG($"IdSolicitante = {controladorAusencia.Usuario.IdEmpleado}");
+
+            cargarDTG(controladorAusencia.filtro);
+
+            ausenciaActual = dtAusencias.NewRow();
         }
 
         /// <summary>
@@ -56,8 +63,6 @@ namespace GestionPersonal
             {
                 dtAusencias = controladorAusencia.listaAusencias(filtro);
             }
-
-            ausenciaActual = dtAusencias.NewRow();
 
             dtgListaAus.ItemsSource = null;
             dtgListaAus.ItemsSource = eliminarColumnas(dtAusencias).DefaultView;

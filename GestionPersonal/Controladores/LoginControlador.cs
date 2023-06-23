@@ -25,17 +25,16 @@ namespace GestionPersonal.Controladores
             {
                 MessageBox.Show("Introduzca un usuario");
             }
-            /*else if (contrasenia == "")
+            else if (contrasenia == "")
             {
                 MessageBox.Show("Introduzca la contraseña");
-            }*/
+            }
             else
             {
                 Usuario = new Empleado(0)
                 {
                     Usuario = usuario,
                     Contrasenia= ConvertidorHASH.GetHashString(contrasenia),
-                    rol = TipoEmpleado.Administrador
                 };
                 if (Usuario.iniciarSesion())
                 {

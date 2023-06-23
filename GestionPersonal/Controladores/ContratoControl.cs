@@ -60,14 +60,12 @@ namespace GestionPersonal
         /// <param name="Puesto">Nombre del puesto dentro de la empresa</param>
         /// <param name="SVacacionesMes">Días de vacaciones por mes</param>
         /// <param name="Duracion">Duración del contrato</param>
-        /// <param name="DocumentoPDF">Ruta en la que se encuenrta el PDF con la información del contrato</param>
         /// <param name="SIdEmpleado">Id del empleado poseedor del contrato</param>
         /// <param name="STipoContrato">Tipo de contrato</param>
         public bool crearContrato(string SHorasTrabajo, string SHorasDescanso, string SHoraEntrada, string SHoraSalida,
             string SSalario, string Puesto, string SVacacionesMes, string Duracion, string SIdEmpleado, string STipoContrato)
         {
             bool correcto = true;
-            CultureInfo culturaEspañola = new CultureInfo("es-ES");
 
             List<string> lCampos = new List<string>();
 
@@ -98,16 +96,16 @@ namespace GestionPersonal
                     correcto = false;
                     MessageBox.Show("Introduzca el salario como un decimal.");
                 }
-                else if (Duracion.Split(' ')[0] != "Indefinido" && !int.TryParse(Duracion.Split(' ')[0], out int NDuracion))
+                else if (Duracion.Split(' ')[0] != "Indefinido" && !float.TryParse(Duracion.Split(' ')[0], out float NDuracion))
                 {
                     correcto = false;
-                    MessageBox.Show("Introduzca la duración como un entero.");
+                    MessageBox.Show("Introduzca la duración como un decimal.");
                 }
                 else
                 {
                     string DocumentoPDF = "porcrear";//METODO PARA CREAR EL PDF
 
-                    float.TryParse(SHoraSalida, out float HorasTrabajo);
+                    float.TryParse(SHorasTrabajo, out float HorasTrabajo);
                     float.TryParse(SHorasDescanso, out float HorasDescanso);
                     float.TryParse(SVacacionesMes, out float VacacionesMes);
                     int.TryParse(SIdEmpleado, out int IdEmpleado);
@@ -138,6 +136,90 @@ namespace GestionPersonal
             return correcto;
         }
 
+
+        public bool modificarContrato(DataRow contratoModif)
+        {
+            bool correcto = true;
+
+            string Puesto = contratoModif["Puesto"].ToString();
+            string Duracion = contratoModif["Duracion"].ToString();
+            string SSalario = contratoModif["Salario"].ToString();
+            string SHoraEntrada = contratoModif["HoraEntrada"].ToString();
+            string SHoraSalida = contratoModif["HoraSalida"].ToString();
+            string SHorasTrabajo = contratoModif["HorasTrabajo"].ToString();
+            string SHorasDescanso = contratoModif["HorasDescanso"].ToString();
+            string SIdEmpleado = contratoModif["IdEmpleado"].ToString();
+            string SVacacionesMes = contratoModif["VacacionesMes"].ToString();
+            string STipoContrato = contratoModif["TipoContrato"].ToString();
+
+            List<string> lCampos = new List<string>();
+
+            lCampos.Add(Puesto);
+            lCampos.Add(Duracion);
+            lCampos.Add(SSalario);
+            lCampos.Add(SHoraEntrada);
+            lCampos.Add(SHoraSalida);
+            if (Duracion.Split(' ')[0] != "Indefinido" && Duracion.Split(' ').Count() == 1)
+                lCampos.Add(string.Empty);//Forzamos el fallo si no ha indicado unidad en la duración.
+
+            if (!camposVacios(lCampos))
+            {
+                //Si no hay comrpobación del campo, es que el usuario no tiene posibilidad de editarlo.
+                if (!TimeSpan.TryParse(SHoraEntrada, out TimeSpan HoraEntrada))
+                {
+                    correcto = false;
+                    MessageBox.Show("Introduzca la hora de entrada con formato HH:mm.");
+                }
+                else if (!TimeSpan.TryParse(SHoraSalida, out TimeSpan HoraSalida))
+                {
+                    correcto = false;
+                    MessageBox.Show("Introduzca la hora de salida con formato HH:mm.");
+                }
+                else if (!float.TryParse(SSalario, out float Salario))
+                {
+                    correcto = false;
+                    MessageBox.Show("Introduzca el salario como un decimal.");
+                }
+                else if (Duracion.Split(' ')[0] != "Indefinido" && !float.TryParse(Duracion.Split(' ')[0], out float NDuracion))
+                {
+                    correcto = false;
+                    MessageBox.Show("Introduzca la duración como un decimal.");
+                }
+                else
+                {
+                    string DocumentoPDF = "porcrear";//METODO PARA CREAR EL PDF
+
+                    int.TryParse(contratoModif["IdContrato"].ToString(), out int IdContrato);
+                    float.TryParse(SHorasTrabajo, out float HorasTrabajo);
+                    float.TryParse(SHorasDescanso, out float HorasDescanso);
+                    float.TryParse(SVacacionesMes, out float VacacionesMes);
+                    int.TryParse(SIdEmpleado, out int IdEmpleado);
+                    TipoContrato.TryParse(STipoContrato, out TipoContrato tipoContrato);
+
+                    Contrato nuevoContrato = new Contrato(IdContrato)
+                    {
+                        HorasTrabajo = HorasTrabajo,
+                        HorasDescanso = HorasDescanso,
+                        HoraEntrada = HoraEntrada,
+                        HoraSalida = HoraSalida,
+                        Salario = Salario,
+                        Puesto = Puesto,
+                        VacacionesMes = VacacionesMes,
+                        Duracion = Duracion,
+                        DocumentoPDF = DocumentoPDF,
+                        IdEmpleado = IdEmpleado,
+                        TipoContrato = tipoContrato
+                    };
+                    nuevoContrato.updateContrato(this.Usuario.IdEmpleado);
+                }
+            }
+            else
+            {
+                correcto = false;
+                MessageBox.Show("Rellene todos los campos necesarios");
+            }
+            return correcto;
+        }
 
         /// <summary>
         /// Llama al modelo para hacer el borrado lógico del contrato propocionado.

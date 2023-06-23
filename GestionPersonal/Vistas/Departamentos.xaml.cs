@@ -37,8 +37,12 @@ namespace GestionPersonal
         public Departamentos(DepartamentoControl controladorDepartamento)
         {
             this.controladorDepartamento = controladorDepartamento;
+
             InitializeComponent();
+
             cargarDTG(string.Empty);
+
+            departamentoActual = dtDepartamentos.NewRow();
         }
 
 
@@ -52,8 +56,6 @@ namespace GestionPersonal
             {
                 dtDepartamentos = controladorDepartamento.listaDepartamentos(filtro);
             }
-
-            departamentoActual = dtDepartamentos.NewRow(); //Sacamos el formato de la fila
 
             dtgDep.ItemsSource = null;
             dtgDep.ItemsSource = eliminarColumnas(dtDepartamentos).DefaultView;

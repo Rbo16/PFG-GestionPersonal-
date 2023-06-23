@@ -33,8 +33,13 @@ namespace GestionPersonal.Vistas
         public Empleados(EmpleadoControl controladorEmpleado)
         {
             this.controladorEmpleado = controladorEmpleado;
+
             InitializeComponent();
+
             cargarDTG(string.Empty);
+
+            empleadoActual = dtEmpleados.NewRow();
+
             cargarCombos();
         }
         private void cargarDTG(string filtro)
@@ -47,8 +52,6 @@ namespace GestionPersonal.Vistas
             {
                 dtEmpleados = controladorEmpleado.listaEmpleados(filtro);
             }
-
-            empleadoActual = dtEmpleados.NewRow(); //Sacamos el formato de la fila
 
             dtgEmpleados.ItemsSource = null;
             dtgEmpleados.ItemsSource = eliminarColumnas(dtEmpleados).DefaultView;

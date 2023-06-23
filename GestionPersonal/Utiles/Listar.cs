@@ -88,10 +88,8 @@ namespace GestionPersonal.Utiles
             try
             {
                 DataTable dtContratos = new DataTable();
-                string consulta = "SELECT Contrato.*,  Empleado.DNI, Empleado.NombreE, Empleado.Apellido, Empleado.IdEmpleado, " +
-                    "EnumTipoContrato.TipoContrato AS Tipo FROM Contrato LEFT JOIN Empleado ON Contrato.IdEmpleado = " +
-                    "Empleado.IdEmpleado LEFT JOIN EnumTipoContrato ON Contrato.TipoContrato = " +
-                    "EnumTipoContrato.IdTipoContrato";//WHERE Borrado = 0";
+                string consulta = "SELECT Contrato.*,  Empleado.DNI, Empleado.NombreE, Empleado.Apellido " +
+                    "FROM Contrato LEFT JOIN Empleado ON Contrato.IdEmpleado = Empleado.IdEmpleado";//WHERE Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
