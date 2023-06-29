@@ -31,7 +31,7 @@
             <TextBlock Text="Cliente" HorizontalAlignment="Right" Margin="0,18,0,0"/>
             <TextBlock Text="Estado del proyecto" HorizontalAlignment="Right" Margin="0,18,0,0"/>
             <TextBlock Text="Inicio a partir de" HorizontalAlignment="Right" Margin="0,18,0,0"/>
-            <TextBlock Text="Finalizado hasta" HorizontalAlignment="Right" Margin="0,18,0,0"/>
+            <TextBlock Text="Finalizado antes de" HorizontalAlignment="Right" Margin="0,18,0,0"/>
         </StackPanel>
 
         <StackPanel Grid.Column="2" Grid.Row="1" Grid.RowSpan="5" Grid.ColumnSpan="3" Margin="70,10,10,10">

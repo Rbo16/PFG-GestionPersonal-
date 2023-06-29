@@ -36,9 +36,34 @@ namespace GestionPersonal
 
             InitializeComponent();
 
-            cargarDTG(string.Empty);
+            cargarRol();
+
+            this.controladorProyecto.filtro = $"IdEmpleado = {this.controladorProyecto.Usuario.IdEmpleado}";
+
+            cargarDTG(this.controladorProyecto.filtro);
 
             proyectoActual = dtProyectos.NewRow();
+        }
+
+        private void cargarRol()
+        {
+            if(controladorProyecto.Usuario.rol == TipoEmpleado.Basico)
+            {
+                txbNombreP.IsReadOnly= true;
+                txbCliente.IsReadOnly= true;
+                txbDescripcionP.IsReadOnly= true;
+                txbFechaFinP.IsEnabled = false;
+                txbFechaInicioP.IsEnabled = false;
+                txbPresupuesto.IsReadOnly= true;
+                txbTiempo.IsReadOnly= true;
+                cmbDuracion.IsEnabled= false;
+                cmbPrioridad.IsEnabled= false;
+                btnAddE.Visibility= Visibility.Hidden;
+                btnCrear.Visibility= Visibility.Hidden;
+                btnEliminarE.Visibility= Visibility.Hidden;
+                btnGuardar.Visibility= Visibility.Hidden;
+                btnBorrar.Visibility= Visibility.Hidden;
+            }
         }
 
         /// <summary>

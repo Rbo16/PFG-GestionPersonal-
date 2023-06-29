@@ -28,7 +28,32 @@ namespace GestionPersonal.Vistas
         {
             this.controladorFiltroC= controladorFiltroC;
             InitializeComponent();
+
             cargarListas();
+
+            comprobarRol();
+        }
+
+        private void cmbTipoContrato_Loaded(object sender, RoutedEventArgs e)
+        {
+            List<string> lTipoContrato= new List<string>();
+
+            lTipoContrato.Add("Parcial Mañana");
+            lTipoContrato.Add("Parcial Tarde");
+            lTipoContrato.Add("Completa");
+            lTipoContrato.Add("Prácticas");
+            
+            cmbTipoContrato.ItemsSource= lTipoContrato;
+        }
+
+        private void comprobarRol()
+        {
+            if (this.controladorFiltroC.controladorContrato.Usuario.rol == TipoEmpleado.Basico)
+            {
+                txbPoseedor.Text = this.controladorFiltroC.controladorContrato.Usuario.DNI;
+                txbPoseedor.IsEnabled = false;
+                contenidoFiltro[0] = txbPoseedor.Text;
+            }
         }
 
         private void cargarListas()
@@ -79,7 +104,7 @@ namespace GestionPersonal.Vistas
 
         private void cmbTipoContrato_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            contenidoFiltro[1] = cmbTipoContrato.SelectedValue.ToString();
+            contenidoFiltro[1] = (cmbTipoContrato.SelectedIndex + 1).ToString();
         }
 
         private void dtpFechaDesde_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -91,5 +116,7 @@ namespace GestionPersonal.Vistas
         {
             contenidoFiltro[3] = dtpFechaHasta.SelectedDate.ToString();
         }
+
+
     }
 }

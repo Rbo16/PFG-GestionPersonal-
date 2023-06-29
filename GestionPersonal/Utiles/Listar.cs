@@ -121,7 +121,8 @@ namespace GestionPersonal.Utiles
             {
                 DataTable dtProyectos = new DataTable();
 
-                string consulta = "SELECT * FROM Proyecto ";//+WHERE Borrado = 0";
+                string consulta = "SELECT Proyecto.*, ParticipacionProyecto.IdEmpleado FROM Proyecto " +
+                    "LEFt JOIN ParticipacionProyecto on Proyecto.IdProyecto = ParticipacionProyecto.IdProyecto";//+WHERE Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();

@@ -93,11 +93,13 @@ namespace GestionPersonal
         /// </summary>
         private void cargarRol()
         {
-            if (controladorAusencia.Usuario.rol != TipoEmpleado.Basico)
+            if (controladorAusencia.Usuario.rol == TipoEmpleado.Basico)
             {
-                txbIdSolicitante.Visibility = Visibility.Visible;
-                lblSolicitante.Visibility = Visibility.Visible;
-                cmbEstadoAus.IsEnabled = true;
+                txbIdSolicitante.Visibility = Visibility.Hidden;
+                lblSolicitante.Visibility = Visibility.Hidden;
+                cmbEstadoAus.IsEnabled = false;
+                btnGuardar.Visibility = Visibility.Hidden;
+                btnBorrar.Visibility = Visibility.Hidden;
             }
         }
 

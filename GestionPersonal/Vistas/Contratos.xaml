@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
         <TextBlock Text="CONTRATOS" FontWeight="Bold" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" FontSize="40"
                    HorizontalAlignment="Center"/>
-        <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="35" Height="35" HorizontalAlignment="Left"
+        <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" HorizontalAlignment="Left"
                 VerticalAlignment="Top" Click="btnMenu_Click" >
             <Image Source="/Imagenes/Home.png"/>
             <Button.Effect>
@@ -47,14 +47,14 @@
             <TextBlock Text="Poseedor" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbNombreE" IsReadOnly="True" Height="30"/>
             <TextBlock Text="Puesto" FontSize="20" FontWeight="Bold" Margin="0,5,0,5" />
-            <TextBox x:Name="txbPuesto" Height="30" IsReadOnly="True" TextChanged="cambioContratoTxb"/>
+            <TextBox x:Name="txbPuesto" Height="30" TextChanged="cambioContratoTxb"/>
             <TextBlock Text="Salario" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
-            <TextBox x:Name="txbSalario" Height="30" IsReadOnly="True" TextChanged="cambioContratoTxb"/>
+            <TextBox x:Name="txbSalario" Height="30" TextChanged="cambioContratoTxb"/>
             <TextBlock Text="Duración" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name="txbDuracion" Width="40" Margin="0,0,10,0" Height="30" IsReadOnly="True" TextChanged="cambioContratoTxb"/>
+                <TextBox x:Name="txbDuracion" Width="40" Margin="0,0,10,0" Height="30"  TextChanged="cambioContratoTxb"/>
                 <ComboBox Loaded="cmbDuracion_Loaded" x:Name="cmbDuracion" Width="200" Height="30"
-                          SelectionChanged="cmbDuracion_SelectionChanged" IsEnabled="False"/>
+                          SelectionChanged="cmbDuracion_SelectionChanged"/>
             </StackPanel>
             <Grid>
                 <StackPanel Width="125" HorizontalAlignment="Left">
@@ -71,15 +71,15 @@
             <Grid>
                 <StackPanel Width="125" HorizontalAlignment="Left">
                     <TextBlock Text="Entrada" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbHoraEntrada" Margin="0,0,10,0" Height="30" IsReadOnly="True" TextChanged="cambioContratoTxb"/>
+                    <TextBox x:Name="txbHoraEntrada" Margin="0,0,10,0" Height="30" TextChanged="cambioContratoTxb"/>
                 </StackPanel>
                 <StackPanel Width="125" HorizontalAlignment="Right">
                     <TextBlock Text="Salida" FontSize="20" FontWeight="Bold" Margin="0,5,10,5"/>
-                    <TextBox x:Name="txbHoraSalida" Height="30" IsReadOnly="True" TextChanged="cambioContratoTxb"/>
+                    <TextBox x:Name="txbHoraSalida" Height="30" TextChanged="cambioContratoTxb"/>
                 </StackPanel>
             </Grid>
             <TextBlock Text="Tipo de contrato" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
-            <ComboBox x:Name="cmbTipoContrato" Height="30" Loaded="cmbTipoContrato_Loaded" IsEnabled="False"
+            <ComboBox x:Name="cmbTipoContrato" Height="30" Loaded="cmbTipoContrato_Loaded"
                       SelectionChanged="cmbTipoContrato_SelectionChanged"/>
             <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
                 <TextBlock Text="Horas de trabajo/mes" FontSize="19" FontWeight="Bold" Margin="0,5,15,5"/>

@@ -35,12 +35,6 @@
             <TextBox x:Name="txbDescripcionD" FontSize="16" MaxLength="50" TextWrapping="Wrap" Height="60" TextChanged="txb_TextChanged"/>
             <TextBlock Text="Jefe de Departamento" FontWeight="Bold" Margin="0,5,0,5"/>
             <TextBox x:Name="txbJefe" IsReadOnly="True"/>
-            <Button Height="30" Margin="0,15,0,0">
-                <TextBlock Text="Ver información Jefe"/>
-                <Button.Effect>
-                    <DropShadowEffect/>
-                </Button.Effect>
-            </Button>
         </StackPanel>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="70"
                 Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnCrear_Click">

@@ -41,7 +41,6 @@ namespace GestionPersonal
             cargarRol();
 
             txbNombreE.Text = this.controladorContrato.Usuario.Apellido + ", " + this.controladorContrato.Usuario.NombreE;
-            txbIdEmpleado.Text = this.controladorContrato.Usuario.IdEmpleado.ToString();
 
             cargarDTG(this.controladorContrato.filtro);
             contratoActual = dtContratos.NewRow();
@@ -97,15 +96,18 @@ namespace GestionPersonal
 
         private void cargarRol()
         {
-            if (controladorContrato.Usuario.rol != TipoEmpleado.Basico)
+            if (controladorContrato.Usuario.rol == TipoEmpleado.Basico)
             {
-                txbPuesto.IsReadOnly = false;
-                txbSalario.IsReadOnly = false;
-                txbDuracion.IsReadOnly = false;
-                cmbDuracion.IsEnabled = true;
-                txbHoraEntrada.IsReadOnly = false;
-                txbHoraSalida.IsReadOnly = false;
-                cmbTipoContrato.IsEnabled = true;
+                txbPuesto.IsReadOnly = true;
+                txbSalario.IsReadOnly = true;
+                txbDuracion.IsReadOnly = true;
+                cmbDuracion.IsEnabled = false;
+                txbHoraEntrada.IsReadOnly = true;
+                txbHoraSalida.IsReadOnly = true;
+                cmbTipoContrato.IsEnabled = false;
+                btnBorrar.Visibility = Visibility.Hidden;
+                btnCrear.Visibility = Visibility.Hidden;
+                btnGuardar.Visibility = Visibility.Hidden;
             }
         }
 
@@ -340,6 +342,11 @@ namespace GestionPersonal
             hayCambios = false;
 
             dtgContratos.SelectedItem = null;
+
+            if(controladorContrato.Usuario.rol == TipoEmpleado.Basico)
+                controladorContrato.filtro = $"IdEmpleado = {this.controladorContrato.Usuario.IdEmpleado}";
+            else
+                controladorContrato.filtro = string.Empty;
         }
 
         private void chkActivo_Checked(object sender, RoutedEventArgs e)
@@ -397,8 +404,8 @@ namespace GestionPersonal
 
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
-            cargarDTG(controladorContrato.filtro);
             vaciarCampos();
+            cargarDTG(controladorContrato.filtro);
         }
     }
 }

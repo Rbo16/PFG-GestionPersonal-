@@ -9,7 +9,7 @@ namespace GestionPersonal.Controladores.Filtros
 {
     public class FiltroContratoControl
     {
-        ContratoControl controladorContrato;
+        public ContratoControl controladorContrato;
 
         public FiltroContratoControl(ContratoControl controladorContrato)
         {

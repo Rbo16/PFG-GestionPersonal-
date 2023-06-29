@@ -28,7 +28,20 @@ namespace GestionPersonal.Vistas
         {
             this.controladorFiltroA = controladorFiltroA;
             InitializeComponent();
+
             cargarListas();
+
+            comprobarRol();
+        }
+
+        private void comprobarRol()
+        {
+            if (this.controladorFiltroA.controladorAusencia.Usuario.rol == TipoEmpleado.Basico)
+            {
+                txbDNI.Text = this.controladorFiltroA.controladorAusencia.Usuario.DNI;
+                txbDNI.IsEnabled = false;
+                contenidoFiltro[0] = txbDNI.Text;
+            }
         }
 
         private void cmbEstadoS_Loaded(object sender, RoutedEventArgs e)

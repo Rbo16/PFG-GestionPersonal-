@@ -9,7 +9,7 @@ namespace GestionPersonal.Controladores.Filtros
 {
     public class FiltroAusenciaControl
     {
-        AusenciaControl controladorAusencia;
+        public AusenciaControl controladorAusencia;
 
         public FiltroAusenciaControl(AusenciaControl controladorAusencia) 
         { 
@@ -25,6 +25,8 @@ namespace GestionPersonal.Controladores.Filtros
 
         public void volver()
         {
+            if (controladorAusencia.Usuario.rol == TipoEmpleado.Basico)
+                controladorAusencia.filtro = $"IdSolicitante = {controladorAusencia.Usuario.IdEmpleado}";
             controladorAusencia.cerrarFiltro();
         }
     }

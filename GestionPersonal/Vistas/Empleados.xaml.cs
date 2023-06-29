@@ -200,8 +200,6 @@ namespace GestionPersonal.Vistas
             hayCambios = false;
             dblClic = true;
 
-            empleadoActual = dtEmpleados.NewRow();
-
             txbNombreE.Text = empleadoActual["NombreE"].ToString();
             txbApellido.Text = empleadoActual["Apellido"].ToString();
             txbUsuario.Text = empleadoActual["Usuario"].ToString();
@@ -218,18 +216,6 @@ namespace GestionPersonal.Vistas
             dblClic = false;
         }
 
-        private bool dniCorrecto()
-        {
-            bool correcto = true;
-            if (txbDNI.Text.Length != 9) correcto = false;
-            return correcto;
-        }
-        private bool numssCorrecto()
-        {
-            bool correcto = true;
-            if (txbNumSS.Text.Length != 12) correcto = false;
-            return correcto;
-        }
 
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
@@ -240,6 +226,7 @@ namespace GestionPersonal.Vistas
         private void vaciarCampos()
         {
             dblClic = true;
+
             empleadoActual = dtEmpleados.NewRow();
 
             txbNombreE.Text = "";
