@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Departamentos" Height="720" Width="1280"
         FontFamily="Cambria"  WindowStartupLocation="CenterScreen"
-        FontSize="20" ResizeMode="CanMinimize">
+        FontSize="20" ResizeMode="CanMinimize" IsEnabledChanged="Window_IsEnabledChanged">
     <Grid Background="#FF949494">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="25"/>
@@ -80,21 +80,30 @@
                    VerticalAlignment="Top" Height="30" GotFocus="txbBucarDep_GotFocus"/>
         <DataGrid x:Name="dtgDep" Width="425" Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" Margin="10,40,0,0" 
                   SelectionMode="Single" IsReadOnly="True" MouseDoubleClick="dtgDep_MouseDoubleClick" 
-                  SelectionChanged="dtgDep_SelectionChanged"/>
+                  CanUserReorderColumns="False" CanUserSortColumns="False"/>
         <TextBlock Text="Integrantes" FontWeight="Bold" Grid.Column="3" Grid.Row="2" Margin="20,0,0,5"
                    VerticalAlignment="Bottom"/>
         <DataGrid x:Name="dtgEmpleadosDep" Grid.ColumnSpan="2" Grid.RowSpan="2" Grid.Column="3" Grid.Row="3"
-                  Height="440" Margin="20,0,0,0" VerticalAlignment="Top" SelectionMode="Single" IsReadOnly="True"/>
+                  Height="440" Margin="20,0,0,0" VerticalAlignment="Top" SelectionMode="Single" IsReadOnly="True"
+                  CanUserReorderColumns="False" CanUserSortColumns="False"/>
         <StackPanel Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Margin="20,170,0,0">
             <StackPanel.Effect>
                 <DropShadowEffect/>
             </StackPanel.Effect>
-            <Button x:Name="btnJefe" FontWeight="Bold" Content="Asignar como jefe" IsEnabled="False"/>
-            <Button x:Name="btnAddE" FontWeight="Bold" Content="Añadir nuevo empleado" Margin="0,10,0,0"/>
+            <Button x:Name="btnJefe" FontWeight="Bold" Content="Asignar como jefe" Click="btnJefe_Click"/>
+            <Button x:Name="btnAddE" FontWeight="Bold" Content="Añadir nuevo empleado" Margin="0,10,0,0" Click="btnAddE_Click"/>
         </StackPanel>
         <Button x:Name="btnMenu" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"
                 Width="40" Height="40" Click="btnMenu_Click">
             <Image Source="/Imagenes/Home.png" Width="40"/>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnVacio" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,0,0,0"
+                Click="btnVacio_Click">
+            <Image Source="/Imagenes/escoba.png" Width="40"/>
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

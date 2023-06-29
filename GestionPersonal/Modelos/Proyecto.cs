@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using GestionPersonal.Modelos;
+using System.Net;
 
 namespace GestionPersonal
 {
@@ -152,6 +153,74 @@ namespace GestionPersonal
             catch (Exception ex)
             {
                 ExceptionManager.Execute(ex, "ERROR[Participacion.Borrar]:");
+            }
+        }
+
+        public void addEmpleado(string DNI, int IdModif)
+        {
+            try
+            {
+                string consulta = "INSERT INTO ParticipacionProyecto (IdEmpleado, IdProyecto," + Auditoria.Insert_1 +
+                    "VALUES ((SELECT IdEmpleado From Empleado where DNI = @DNI), @IdProyecto," + Auditoria.Insert_2 + ")";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdProyecto", SqlDbType.Int);
+                comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
+                comando.Parameters["@DNI"].Value = DNI;
+
+                this.Auditoria = new Auditoria(IdModif);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.Aniadir]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public bool Participa(string DNI)
+        {
+            bool existe = true;
+
+            try
+            {
+                string consulta = "SELECT * FROM ParticipacionProyecto LEFT JOIN Empleado " +
+                    "ON ParticipacionProyecto.IdEmpleado = Empleado.IdEmpleado WHERE Empleado.DNI = @DNI AND " +
+                    "ParticipacionProyecto.IdProyecto = @IdProyecto";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdProyecto", SqlDbType.Int);
+                comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
+                comando.Parameters["@DNI"].Value = DNI;
+                
+                if(comando.ExecuteNonQuery() == -1)
+                    existe = false;
+
+                return existe;
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.Existe]:");
+                return true;
+            }
+            finally
+            {
+                conexionSQL.Close();
             }
         }
 

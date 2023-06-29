@@ -34,6 +34,14 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
+        <Button Name="btnVacio" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,0,0,0"
+                Click="btnVacio_Click">
+            <Image Source="/Imagenes/escoba.png" Width="40"/>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
         <TextBox Name="txbIdEmpleado" Visibility="Hidden"/>
         <StackPanel Grid.Column="1" Grid.Row="2" Width="250" Margin="0,20,10,0">
             <TextBlock Text="Poseedor" FontSize="20" FontWeight="Bold" Margin="0,5,0,5"/>
@@ -100,7 +108,8 @@
         <TextBlock Text="Histórico de contratos" FontWeight="Bold" Grid.Column="3" Grid.Row="2" Margin="0,20,10,5"
                    VerticalAlignment="Top" HorizontalAlignment="Left"/>
         <DataGrid x:Name="dtgContratos" Grid.Row="2" Grid.Column="3" Grid.RowSpan="3" Margin="0,50,0,0" SelectionMode="Single"
-                  IsReadOnly="True" MouseDoubleClick="dtgContratos_MouseDoubleClick" />
+                  IsReadOnly="True" MouseDoubleClick="dtgContratos_MouseDoubleClick" CanUserReorderColumns="False"
+                  CanUserSortColumns="False" />
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="4" Width="65"
                 Height="65" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="btnCrear_Click">
             <StackPanel>

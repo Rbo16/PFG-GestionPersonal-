@@ -63,9 +63,9 @@
             <TextBlock Text="Usuario" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbUsuario" Margin="0,0,10,0" Height="30" TextChanged="cambioEmpleadoTxb"/>
             <TextBlock Text="Estado" FontWeight="Bold" Margin="0,5,10,5"/>
-            <ComboBox Name="cmbEstadoE" Margin="0,0,10,0" Height="30"/>
+            <ComboBox Name="cmbEstadoE" Margin="0,0,10,0" Height="30" SelectionChanged="cmb_SelectionChanged"/>
             <TextBlock Text="Rol" FontWeight="Bold" Margin="0,5,10,5"/>
-            <ComboBox Name="cmbRol"  Margin="0,0,10,0" Height="30" />
+            <ComboBox Name="cmbRol"  Margin="0,0,10,0" Height="30" SelectionChanged="cmb_SelectionChanged"/>
             <TextBlock Text="Departamento" FontWeight="Bold" Margin="0,5,10,5"/>
             <TextBox Name="txbIdDepartamento" Margin="0,0,10,0" Height="30" IsReadOnly="True"/>
             <TextBlock Text="Correo Electrónico" FontWeight="Bold" Margin="0,5,10,5"/>
@@ -79,8 +79,9 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3" IsReadOnly="True"
-                  Grid.RowSpan="3" MouseDoubleClick="dtgEmpleados_MouseDoubleClick" SelectionMode="Single"/>
+        <DataGrid x:Name="dtgEmpleados" Grid.Row="3" Grid.Column="3" IsReadOnly="True" CanUserReorderColumns="False"
+                  Grid.RowSpan="3" MouseDoubleClick="dtgEmpleados_MouseDoubleClick" SelectionMode="Single"
+                  CanUserSortColumns="False"/>
         <Button Name="btnCrear" Grid.Column="1" Grid.Row="5"
                 Height="65" VerticalAlignment="Bottom" Margin="0,0,185,0" Click="btnCrear_Click">
             <StackPanel>

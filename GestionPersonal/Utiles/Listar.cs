@@ -148,13 +148,48 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        public static DataTable listarParticipacionProyectos()
+        {
+            try
+            {
+                DataTable dtParticipacion = new DataTable();
+
+                string consulta = "SELECT ParticipacionProyecto.IdProyecto, Empleado.* FROM ParticipacionProyecto " +
+                    "LEFT JOIN Empleado ON ParticipacionProyecto.IdEmpleado = Empleado.IdEmpleado";//+WHERE Borrado = 0";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
+                using (adaptadorSql)
+                {
+                    adaptadorSql.Fill(dtParticipacion);
+                }
+
+                return dtParticipacion;
+
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Participacion.Listar]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
         public static DataTable listarDepartamentos()
         {
             try
             {
                 DataTable dtDepas = new DataTable();
 
-                string consulta = "SELECT * FROM Departamento";//WHERE Borrado = 0";
+                string consulta = "SELECT Departamento.*, Empleado.IdEmpleado, Empleado.NombreE, Empleado.Apellido " +
+                    "FROM Departamento LEFT JOIN Empleado ON Departamento.IdJefeDep = Empleado.IdEmpleado";//WHERE Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();

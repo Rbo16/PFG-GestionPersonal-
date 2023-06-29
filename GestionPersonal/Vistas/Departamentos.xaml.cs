@@ -30,6 +30,7 @@ namespace GestionPersonal
         DataTable dtDepartamentos;
         DataTable dtEmpleadosDep;
         DataRow departamentoActual;
+        DataRow empleadoActual;
         bool dblClic;
         bool hayCambios;
         int contDepartamento;
@@ -58,19 +59,42 @@ namespace GestionPersonal
             }
 
             dtgDep.ItemsSource = null;
-            dtgDep.ItemsSource = eliminarColumnas(dtDepartamentos).DefaultView;
+            dtgDep.ItemsSource = eliminarColumnasDepartamento(dtDepartamentos).DefaultView;
         }
 
 
-        private DataTable eliminarColumnas(DataTable dt)
+        private DataTable eliminarColumnasDepartamento(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
 
             dtShow.Columns.Remove("IdDepartamento");
             dtShow.Columns.Remove("IdJefeDep");
+            dtShow.Columns.Remove("IdEmpleado");
+            dtShow.Columns.Remove("NombreE");
+            dtShow.Columns.Remove("Apellido");
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
             dtShow.Columns.Remove("Borrado");
+
+            return dtShow;
+        }
+
+        private DataTable eliminarColumnasEmpleado(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
+
+            dtShow.Columns.Remove("IdEmpleado");
+            dtShow.Columns.Remove("Contrasenia");
+            dtShow.Columns.Remove("NumSS");
+            dtShow.Columns.Remove("EstadoE");
+            dtShow.Columns.Remove("DNI");
+            dtShow.Columns.Remove("Rol");
+            dtShow.Columns.Remove("Estado");
+            dtShow.Columns.Remove("IdDepartamento");
+            dtShow.Columns.Remove("FechaUltModif");
+            dtShow.Columns.Remove("Borrado");
+            dtShow.Columns.Remove("IdModif");
+            dtShow.Columns.Remove("NombreD");
 
             return dtShow;
         }
@@ -81,6 +105,7 @@ namespace GestionPersonal
             {
                 MessageBox.Show("Departamento creado con éxito");
                 cargarDTG(string.Empty);
+                vaciarCampos();
             } 
         }
 
@@ -91,9 +116,10 @@ namespace GestionPersonal
                 if (hayCambios)
                 {
                     controladorDepartamento.modificarDepartamento(departamentoActual);
-                    hayCambios = false;
                     MessageBox.Show("Datos guardados correctamente");
                     cargarDTG(string.Empty);
+                    departamentoActual = dtDepartamentos.Copy().Rows[contDepartamento];
+                    hayCambios = false;
                 } 
             }
         }
@@ -111,6 +137,7 @@ namespace GestionPersonal
                     {
                         controladorDepartamento.eliminarDepartamento(dtDepartamentos.Rows[dtgDep.SelectedIndex]["IdDepartamento"].ToString());
                         cargarDTG(string.Empty);
+                        vaciarCampos();
                     }
                     else
                         return;
@@ -131,24 +158,33 @@ namespace GestionPersonal
         {
             if (dtgDep.SelectedItem != null)
             {
-                dblClic = true;
-                hayCambios = false;
-
                 contDepartamento = dtgDep.SelectedIndex;
                 departamentoActual = dtDepartamentos.Copy().Rows[contDepartamento];
                 cargarDepartamento();
+
+                cargarEmpleadosDepartamento();
             }
         }
 
         private void cargarDepartamento()
         {
+            hayCambios = false;
+            dblClic = true;
+
             txbNombreD.Text = departamentoActual["NombreD"].ToString();
             txbDescripcionD.Text = departamentoActual["DescripcionD"].ToString();
-            //txbJefe.Text = NOMBRE DEL JEFE y añadir botón para visitarlo en menú empleados
+            txbJefe.Text = departamentoActual["NombreE"].ToString() + " " + departamentoActual["Apellido"].ToString();
 
             dblClic = false;
         }
 
+        private void cargarEmpleadosDepartamento()
+        {
+            dtEmpleadosDep = controladorDepartamento.listaEmpleadosDepartamento(departamentoActual["IdDepartamento"].ToString());
+            empleadoActual = dtEmpleadosDep.NewRow();
+            dtgEmpleadosDep.ItemsSource = null;
+            dtgEmpleadosDep.ItemsSource = eliminarColumnasEmpleado(dtEmpleadosDep).DefaultView;
+        }
 
         /// <summary>
         /// Guarda los cambios del TextBox en la fila referente al departamento actual. El atributo Name del elemento
@@ -170,16 +206,6 @@ namespace GestionPersonal
             }
         }
 
-
-
-        private void dtgDep_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if(dtgDep.SelectedItem != null) 
-            {
-                
-            }
-        }
-
         private void txbBucarDep_GotFocus(object sender, RoutedEventArgs e)
         {
             txbBucarDep.Text= string.Empty;
@@ -193,5 +219,69 @@ namespace GestionPersonal
             cargarDTG(filtro);
         }
 
+        private void btnAddE_Click(object sender, RoutedEventArgs e)
+        {
+            controladorDepartamento.prepararFiltroEmpleado();
+        }
+
+        private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.IsEnabled)
+            {
+                controladorDepartamento.aniadirEmpleado(departamentoActual["IdDepartamento"].ToString());
+                cargarEmpleadosDepartamento();
+            }
+        }
+
+        private void btnJefe_Click(object sender, RoutedEventArgs e)
+        {
+            if (dtgEmpleadosDep.SelectedItem != null)
+            {
+                DialogResult dr = MessageBox.Show("¿Desea nombrar a " + dtEmpleadosDep.Rows[dtgEmpleadosDep.SelectedIndex]["NombreE"].ToString() +
+                    " " + dtEmpleadosDep.Rows[dtgEmpleadosDep.SelectedIndex]["Apellido"].ToString() + " como jefe del departamento " +
+                    departamentoActual["NombreD"].ToString() + "?", "Confirmación", MessageBoxButtons.YesNo);
+                if (dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    if(controladorDepartamento.asignarJefe(dtEmpleadosDep.Rows[dtgEmpleadosDep.SelectedIndex]["IdEmpleado"].ToString(),
+                        departamentoActual["IdDepartamento"].ToString()))
+                    {
+                        dblClic = true;
+                        cargarDTG(string.Empty);
+                        departamentoActual["NombreE"] = dtEmpleadosDep.Rows[dtgEmpleadosDep.SelectedIndex]["NombreE"].ToString();
+                        departamentoActual["Apellido"] = dtEmpleadosDep.Rows[dtgEmpleadosDep.SelectedIndex]["Apellido"].ToString();
+                        cargarDepartamento();
+                    }
+                        
+                }
+            }
+            else
+                MessageBox.Show("Debe seleccionar un empleado.");
+        }
+
+        private void btnVacio_Click(object sender, RoutedEventArgs e)
+        {
+            cargarDTG(string.Empty);
+            vaciarCampos();
+        }
+
+        private void vaciarCampos()
+        {
+            dblClic = true;
+            departamentoActual = dtDepartamentos.NewRow();
+            
+            txbBucarDep.Text = "Buscar departamento...";
+            txbBucarDep.GotFocus+= txbBucarDep_GotFocus;
+
+            txbDescripcionD.Text= string.Empty;
+            txbNombreD.Text= string.Empty;
+            txbJefe.Text= string.Empty;
+
+            dtgDep.SelectedItem = null;
+            dtgEmpleadosDep.SelectedItem= null;
+            dtgEmpleadosDep.ItemsSource = null;
+
+            dblClic = false;
+            hayCambios = false;
+        }
     }
 }

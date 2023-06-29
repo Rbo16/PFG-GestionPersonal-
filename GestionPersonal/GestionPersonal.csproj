@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controladores\BusquedaEmpleadoControlador.cs" />
     <Compile Include="Controladores\Controlador.cs" />
     <Compile Include="Controladores\Filtros\FiltroAusenciaControl.cs" />
     <Compile Include="Controladores\Filtros\FiltroContratoControl.cs" />
@@ -92,6 +93,9 @@
     <Compile Include="Utiles\ExceptionManager.cs" />
     <Compile Include="Utiles\Listar.cs" />
     <Compile Include="Utiles\Password.cs" />
+    <Compile Include="Vistas\BusquedaEmpleado.xaml.cs">
+      <DependentUpon>BusquedaEmpleado.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vistas\Contratos.xaml.cs">
       <DependentUpon>Contratos.xaml</DependentUpon>
     </Compile>
@@ -133,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Vistas\Ausencias.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Vistas\BusquedaEmpleado.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -210,7 +210,7 @@ namespace GestionPersonal
             {
                 string consulta = "UPDATE Empleado SET NombreE = @NombreE, Apellido = @Apellido, Usuario = @Usuario," +
                 " Rol = @Rol, EstadoE = @EstadoE, DNI = @DNI, NumSS = @NumSS, Tlf = @Tlf, CorreoE = @CorreoE, " +
-                "IdDepartamento = @IdDepartamento, " + Auditoria.Update + "WHERE IdEmpleado = @IdEmpleado";
+                " " + Auditoria.Update + "WHERE IdEmpleado = @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -258,7 +258,6 @@ namespace GestionPersonal
             comando.Parameters["@NombreE"].Value = this.NombreE;
             comando.Parameters["@Apellido"].Value = this.Apellido;
             comando.Parameters["@Usuario"].Value = this.Usuario;
-            //comando.Parameters["@password"].Value = Convert.ToBase64String(mySHA256.ComputeHash(Encoding.UTF8.GetBytes(password)));
             comando.Parameters["@Rol"].Value = this.rol.GetHashCode();
             comando.Parameters["@EstadoE"].Value = this.EstadoE.GetHashCode();
             comando.Parameters["@DNI"].Value = this.DNI;

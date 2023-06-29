@@ -13,6 +13,7 @@ namespace GestionPersonal
     public  class DepartamentoControl : Controlador
     {
         DataTable dtDepas;
+        BusquedaEmpleadoControlador controladorBusqueda;
 
         public DepartamentoControl(VentanaControlador ventanaControl) : base(ventanaControl) 
         {
@@ -43,6 +44,19 @@ namespace GestionPersonal
         public DataTable listaDepartamentos(string filtro)
         {
             return Listar.filtrarTabla(dtDepas, filtro);
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable con los Empleados pertenecientes al Departamento indicado
+        /// </summary>
+        /// <param name="SIdDepartamento">Id del Departamento en formato string</param>
+        /// <returns></returns>
+        public DataTable listaEmpleadosDepartamento(string SIdDepartamento)
+        {
+            int.TryParse(SIdDepartamento, out int IdDepartamento);
+            string filtro = $" IdDepartamento = {IdDepartamento}";
+            DataTable dtEmpleados = Listar.listarEmpleados();
+            return Listar.filtrarTabla(dtEmpleados, filtro);
         }
 
         public bool crearDepartamento(string NombreD, string DescripcionD)
@@ -97,5 +111,53 @@ namespace GestionPersonal
             departamentoBorrado.deleteDepartamento(this.Usuario.IdEmpleado);
         }
 
+        public bool asignarJefe(string SIdEmpleado, string SIdDepartamento)
+        {
+            bool exito = false;
+
+            int.TryParse(SIdEmpleado, out int IdEmpleado);
+            int.TryParse(SIdDepartamento, out int IdDepartamento);
+            Departamento departamento = new Departamento()
+            {
+                IdDepartamento = IdDepartamento
+            };
+
+            if (!departamento.comprobarJefe(IdEmpleado))
+            {
+                departamento.asignarJefe(IdEmpleado, this.Usuario.IdEmpleado);
+                exito = true;
+                MessageBox.Show("Jefe de Departamento asignado con éxito");
+            }
+            else
+                MessageBox.Show("El empleado seleccionado ya ejerce como jefe de otro departamento.");
+
+            return exito;
+        }
+
+        public void prepararFiltroEmpleado()
+        {
+            ventanaControl.bloquearVActual();
+            controladorBusqueda = new BusquedaEmpleadoControlador(this)
+            {
+                dniBusqueda = string.Empty
+            };
+        }
+        
+        public void aniadirEmpleado(string SIdDepartamento)
+        {
+            if(controladorBusqueda.dniBusqueda != string.Empty)
+            {
+                int.TryParse(SIdDepartamento, out int IdDepartamento);
+
+                Departamento departamento = new Departamento()
+                {
+                    IdDepartamento = IdDepartamento
+                };
+
+                departamento.addEmpleado(controladorBusqueda.dniBusqueda, this.Usuario.IdEmpleado);
+
+                MessageBox.Show("Empleado añadido correctamente.");
+            }
+        }
     }
 }

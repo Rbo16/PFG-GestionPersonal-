@@ -14,7 +14,7 @@ namespace GestionPersonal.Controladores
         protected VentanaControlador ventanaControl;
         public Empleado Usuario { get; set; } = null; //Usuario manejando la app
 
-        public string filtro;
+        public string filtro = string.Empty;
 
         protected Controlador(VentanaControlador ventanaControl) 
         { 

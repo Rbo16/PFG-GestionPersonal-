@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -99,7 +100,7 @@ namespace GestionPersonal
             }
         }
 
-    public void deleteDepartamento(int IdModif)
+        public void deleteDepartamento(int IdModif)
         {
             try
             {
@@ -121,6 +122,101 @@ namespace GestionPersonal
             catch (Exception ex)
             {
                 ExceptionManager.Execute(ex, "ERROR[Departamento.Borrar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public void addEmpleado(string DNI, int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Empleado SET IdDepartamento = @IdDepartamento," + Auditoria.Update + "WHERE DNI = @DNI";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdDepartamento", SqlDbType.Int);
+                comando.Parameters["@IdDepartamento"].Value = this.IdDepartamento;
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
+                comando.Parameters["@DNI"].Value = DNI;
+
+                this.Auditoria = new Auditoria(IdModif);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Departamento.Aniadir]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public void asignarJefe(int IdEmpleado, int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Departamento SET IdJefeDep = @IdJefeDep," + Auditoria.Update +
+                    "WHERE IdDepartamento = @IdDepartamento";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdJefeDep", SqlDbType.Int);
+                comando.Parameters["@IdJefeDep"].Value = IdEmpleado;
+                comando.Parameters.Add("@IdDepartamento", SqlDbType.Int);
+                comando.Parameters["@IdDepartamento"].Value = this.IdDepartamento;
+
+                this.Auditoria = new Auditoria(IdModif);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Departamento.AsignarJefe]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public bool comprobarJefe(int IdEmpleado)
+        {
+            bool esJefe = true;
+
+            try
+            {
+                string consulta = "SELECT * FROM Departamento WHERE IdJefeDep = @IdJefeDep";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdJefeDep", SqlDbType.Int);
+                comando.Parameters["@IdJefeDep"].Value = IdEmpleado;
+
+                if (comando.ExecuteNonQuery() == -1)
+                    esJefe = false;
+
+                return esJefe;
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Departamento.ComprobarJefe]:");
+                return true;
             }
             finally
             {

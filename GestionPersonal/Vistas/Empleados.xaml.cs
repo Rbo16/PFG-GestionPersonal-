@@ -106,6 +106,7 @@ namespace GestionPersonal.Vistas
                 {
                     MessageBox.Show("Empleado creado correctamente.");
                     cargarDTG(string.Empty);
+                    vaciarCampos();
                 }
             }
             else
@@ -117,19 +118,11 @@ namespace GestionPersonal.Vistas
         {
             if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)//Condicion explicada en cambioEmpleadoTxb
             {
-                if (dniCorrecto())
-                {
-                    if (numssCorrecto())
-                    {
-                        controladorEmpleado.modificarEmpleado(empleadoActual);
-                        hayCambios = false;
-                        cargarDTG(string.Empty);
-                    }
-                    else System.Windows.MessageBox.Show("El número de la seguridad social ha de tener 12 dígitos.");
-                }
-                else System.Windows.MessageBox.Show("El DNI ha de tener 9 caracteres.");
+                controladorEmpleado.modificarEmpleado(empleadoActual);
+                hayCambios = false;
+                cargarDTG(string.Empty);
+                empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];
             }
-
         }
 
         /// <summary>
@@ -147,8 +140,23 @@ namespace GestionPersonal.Vistas
                 {
                     string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
                     empleadoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
+                    hayCambios = true;
                 }
-                hayCambios = true;
+            }
+        }
+
+
+        private void cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!dblClic)
+            {
+                if (empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Cmb después del dtg dobleclick, no haga esto.
+                                                                            //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
+                {
+                    string columna = ((System.Windows.Controls.ComboBox)sender).Name.Substring(3);
+                    empleadoActual[columna] = ((System.Windows.Controls.ComboBox)sender).SelectedIndex + 1;
+                    hayCambios = true;
+                } 
             }
         }
 
@@ -163,6 +171,7 @@ namespace GestionPersonal.Vistas
                 {
                     controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString());
                     cargarDTG(string.Empty);
+                    vaciarCampos();
                     MessageBox.Show("Empleado eliminado correctamente.");
                 }
                 else
@@ -173,19 +182,12 @@ namespace GestionPersonal.Vistas
                 System.Windows.MessageBox.Show("Seleccione un empleado en la tabla");
         }
 
-
-
-
-
         private void dtgEmpleados_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgEmpleados.SelectedItem == null)
                 return;
             else
             {
-                dblClic = true;
-                hayCambios = false;
-
                 contEmpleado = dtgEmpleados.SelectedIndex; //Guardamos la fila por si luego queremos visualizar el siguiente empleado
                 empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];//Lo hago con un copy para que no actualize el dtg a medida que cambias los datos y no se pueda interpretar que se están guardando los cambios
                 cargarEmpleado();
@@ -195,6 +197,11 @@ namespace GestionPersonal.Vistas
         //Metodo para cargar los datos del empleado a partir de su índice en la tabla
         private void cargarEmpleado()
         {
+            hayCambios = false;
+            dblClic = true;
+
+            empleadoActual = dtEmpleados.NewRow();
+
             txbNombreE.Text = empleadoActual["NombreE"].ToString();
             txbApellido.Text = empleadoActual["Apellido"].ToString();
             txbUsuario.Text = empleadoActual["Usuario"].ToString();
@@ -205,6 +212,8 @@ namespace GestionPersonal.Vistas
             txbIdDepartamento.Text = empleadoActual["NombreD"].ToString();
             cmbRol.SelectedIndex = Convert.ToInt32(empleadoActual["Rol"]) - 1;
             cmbEstadoE.SelectedIndex = Convert.ToInt32(empleadoActual["EstadoE"]) - 1;
+
+            dtgEmpleados.SelectedItem = null;
 
             dblClic = false;
         }
@@ -225,10 +234,12 @@ namespace GestionPersonal.Vistas
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();
+            cargarDTG(string.Empty);
         }
 
         private void vaciarCampos()
         {
+            dblClic = true;
             empleadoActual = dtEmpleados.NewRow();
 
             txbNombreE.Text = "";
@@ -244,8 +255,8 @@ namespace GestionPersonal.Vistas
 
             dtgEmpleados.SelectedItem = null;
             hayCambios = false;
+            dblClic = false;
 
-            cargarDTG(string.Empty);
         }
 
         private void btnFiltrarE_Click(object sender, RoutedEventArgs e)
@@ -261,5 +272,7 @@ namespace GestionPersonal.Vistas
                 vaciarCampos();
             }
         }
+
+
     }
 }

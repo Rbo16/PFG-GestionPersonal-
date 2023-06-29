@@ -1,0 +1,52 @@
+﻿<Window x:Class="GestionPersonal.Vistas.BusquedaEmpleado"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GestionPersonal.Vistas"
+        mc:Ignorable="d"
+        Title="BusquedaEmpleado" Height="465" Width="800" FontSize="20" FontFamily="Cambria" 
+        WindowStartupLocation="CenterScreen" Closing="Window_Closing">
+    <Grid Background="#FF949494" Margin="0,0,0,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1"  Grid.ColumnSpan="3">
+            <TextBlock Text="DNI" FontWeight="Bold" Margin="0,0,10,0"/>
+            <TextBox x:Name="txbDNI" Width="150" Margin="0,0,10,0" TextChanged="txb_TextChanged"/>
+            <TextBlock Text="Nombre" FontWeight="Bold" Margin="0,0,10,0"/>
+            <TextBox x:Name="txbNombreE" Width="170" Margin="0,0,10,0" TextChanged="txb_TextChanged"/>
+            <TextBlock Text="Apellido" FontWeight="Bold" Margin="0,0,10,0"/>
+            <TextBox x:Name="txbApellido" Width="170" Margin="0,0,10,0" TextChanged="txb_TextChanged"/>
+        </StackPanel>
+        <DataGrid Name="dtgEmpleados" Grid.Column="1" Grid.Row="2" Margin="0,10,0,10" Grid.ColumnSpan="3" Grid.RowSpan="2"
+                  Height="270" SelectionMode="Single" Loaded="dtgEmpleados_Loaded" IsReadOnly="True"
+                  CanUserReorderColumns="False" CanUserSortColumns="False"/>
+        <Button Name="btnCancelar" Height="40" Content="Cancelar" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2"
+                HorizontalAlignment="Center" Margin="100,0,0,20" Width="100" Click="btnCancelar_Click" 
+                VerticalAlignment="Top">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnConfirmar" Content="Confirmar" Grid.Column="3" Grid.Row="4" Width="100" HorizontalAlignment="Right"
+                Margin="0,0,10,20" Click="btnConfirmar_Click" VerticalAlignment="Top" Height="40">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+    </Grid>
+</Window>

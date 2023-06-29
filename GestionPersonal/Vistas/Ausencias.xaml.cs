@@ -88,10 +88,10 @@ namespace GestionPersonal
             return dtShow;
         }
 
-            /// <summary>
-            /// Carga los elementos en función del rol del Usuario
-            /// </summary>
-            private void cargarRol()
+        /// <summary>
+        /// Carga los elementos en función del rol del Usuario
+        /// </summary>
+        private void cargarRol()
         {
             if (controladorAusencia.Usuario.rol != TipoEmpleado.Basico)
             {
@@ -124,7 +124,7 @@ namespace GestionPersonal
                     txbDescripcionAus.Text, txbJustificantePDF.Text))
                 {
                     vaciarCampos();
-                    cargarDTG($"IdSolicitante = {controladorAusencia.Usuario.IdEmpleado}");
+                    cargarDTG(controladorAusencia.filtro);
                 }
             }
         }
@@ -149,6 +149,7 @@ namespace GestionPersonal
                     cambioEstado = false;
                 }
                 cargarDTG(string.Empty);
+                ausenciaActual = dtAusencias.Copy().Rows[contAusencia];
                 MessageBox.Show("Datos guardados correctamente");
             }
 
@@ -166,6 +167,7 @@ namespace GestionPersonal
                 {
                     controladorAusencia.borrarAusencia(dtAusencias.Rows[dtgListaAus.SelectedIndex]["IdAusencia"].ToString());
                     cargarDTG(string.Empty);
+                    vaciarCampos();
                 }
                 else
                     return;
@@ -227,7 +229,6 @@ namespace GestionPersonal
         {
             if (dtgListaAus.SelectedItem != null)
             {
-                dblClic = true;
                 hayCambiostxt = false;
                 cambioEstado = false;
 
@@ -239,6 +240,7 @@ namespace GestionPersonal
 
         private void cargarAusencia()
         {
+            dblClic = true;
             CultureInfo culturaEspañola = new CultureInfo("es-ES");
 
             txbRazon.Text = ausenciaActual["Razon"].ToString();
@@ -259,19 +261,24 @@ namespace GestionPersonal
         /// </summary>
         private void vaciarCampos()
         {
+            dblClic = true;
             ausenciaActual = dtAusencias.NewRow();
 
             txbRazon.Text = string.Empty;
             dtpFechaInicioA.Text = string.Empty;
             dtpFechaFinA.Text = string.Empty;
-            cmbEstadoAus.SelectedIndex = 0;
+            cmbEstadoAus.SelectedIndex = -1;
             txbIdSolicitante.Text = string.Empty;
             txbDescripcionAus.Text = string.Empty;
             txbJustificantePDF.Text = string.Empty;
             txbIdAutorizador.Text = string.Empty;
 
+            dtgListaAus.SelectedItem = null;
+
             hayCambiostxt = false;
             cambioEstado = false;
+
+            dblClic = false;
         }
 
         private void btnFiltrarAus_Click(object sender, RoutedEventArgs e)
@@ -286,6 +293,12 @@ namespace GestionPersonal
                 cargarDTG(controladorAusencia.filtro);
                 vaciarCampos();
             }
+        }
+
+        private void btnVacio_Click(object sender, RoutedEventArgs e)
+        {
+            vaciarCampos();
+            cargarDTG(string.Empty);
         }
     }
 }

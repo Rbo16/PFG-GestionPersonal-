@@ -10,23 +10,23 @@ namespace GestionPersonal.Controladores
 {
     public class FiltroEmpleadoControl
     {
-        EmpleadoControl controladorEmpleado;
+        Controlador controlador;
 
-        public FiltroEmpleadoControl(EmpleadoControl controladorEmpleado) 
+        public FiltroEmpleadoControl(Controlador controlador) 
         {
-            this.controladorEmpleado= controladorEmpleado;
+            this.controlador= controlador;
             FiltroEmpleado ventanaFiltroE = new FiltroEmpleado(this);
             ventanaFiltroE.Show();
         }
 
         public void asignarFiltro(string filtro)
         {
-            controladorEmpleado.filtro = filtro;
+            controlador.filtro = filtro;
         }
         
         public void volver()
         {
-            controladorEmpleado.cerrarFiltro();
+            controlador.cerrarFiltro();
         }
     }
 }

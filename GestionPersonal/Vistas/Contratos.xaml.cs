@@ -28,6 +28,7 @@ namespace GestionPersonal
         private DataRow contratoActual;
         private bool dblClic;
         private bool hayCambios;
+        int contContrato;
 
         public Contratos(ContratoControl controladorContrato)
         {
@@ -176,11 +177,15 @@ namespace GestionPersonal
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-            //¿Que solo se pueda después del clear?
             if (controladorContrato.crearContrato(txbHorasTrabajo.Text, txbHorasDescanso.Text, txbHoraEntrada.Text,
                 txbHoraSalida.Text, txbSalario.Text, txbPuesto.Text, txbVacacionesMes.Text, txbDuracion.Text + " "
                 + cmbDuracion.Text, txbIdEmpleado.Text, cmbTipoContrato.Text))
+            {
                 MessageBox.Show("Contrato creado con éxito.");
+                cargarDTG(controladorContrato.filtro);
+                vaciarCampos();
+            }
+                
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -191,9 +196,9 @@ namespace GestionPersonal
                 {
                     if (controladorContrato.modificarContrato(contratoActual))
                     {
-                        hayCambios = false;
-                        cargarDTG(string.Empty);
                         cargarDTG(controladorContrato.filtro);
+                        contratoActual = dtContratos.Copy().Rows[contContrato];
+                        hayCambios = false;
                         MessageBox.Show("Datos guardados correctamente");
                     }
                 }
@@ -212,6 +217,7 @@ namespace GestionPersonal
                 {
                     controladorContrato.eliminarContrato(dtContratos.Rows[dtgContratos.SelectedIndex]["IdContrato"].ToString());
                     cargarDTG(controladorContrato.filtro);
+                    vaciarCampos();
                 }
                 else
                     return;
@@ -305,11 +311,36 @@ namespace GestionPersonal
             if (this.IsEnabled)
             {
                 cargarDTG(controladorContrato.filtro);
-                //vaciarCampos();
+                vaciarCampos();
             }
         }
 
+        private void vaciarCampos()
+        {
+            dblClic= true;
 
+            contratoActual = dtContratos.NewRow();
+
+            txbNombreE.Text = string.Empty;
+            txbPuesto.Text = string.Empty;
+            txbSalario.Text = string.Empty;
+            cmbDuracion.SelectedValue = -1;
+            txbDuracion.Text = string.Empty;
+            txbFechaAlta.Text = string.Empty;
+            txbFechaBaja.Text = string.Empty;
+            txbHoraEntrada.Text = string.Empty;
+            txbHoraSalida.Text = string.Empty;
+            txbHorasTrabajo.Text = string.Empty;
+            txbHorasDescanso.Text = string.Empty;
+            txbIdEmpleado.Text = string.Empty;
+            txbVacacionesMes.Text = string.Empty;
+            cmbTipoContrato.SelectedIndex = - 1;
+
+            dblClic = false;
+            hayCambios = false;
+
+            dtgContratos.SelectedItem = null;
+        }
 
         private void chkActivo_Checked(object sender, RoutedEventArgs e)
         {
@@ -329,16 +360,17 @@ namespace GestionPersonal
         {
             if (dtgContratos.SelectedItem != null)
             {
-                dblClic = true;
-                hayCambios = false;
-
-                contratoActual = dtContratos.Copy().Rows[dtgContratos.SelectedIndex];
-                cargarAusencia();
+                contContrato = dtgContratos.SelectedIndex;
+                contratoActual = dtContratos.Copy().Rows[contContrato];
+                cargarContrato();
             }
         }
 
-        private void cargarAusencia()
+        private void cargarContrato()
         {
+            hayCambios= false;
+            dblClic= true;
+
             txbNombreE.Text = contratoActual["Apellido"].ToString() + ", " + contratoActual["NombreE"].ToString();
             txbPuesto.Text = contratoActual["Puesto"].ToString();
             txbSalario.Text = contratoActual["Salario"].ToString();
@@ -361,6 +393,12 @@ namespace GestionPersonal
             cmbTipoContrato.SelectedIndex = Convert.ToInt32(contratoActual["TipoContrato"].ToString()) - 1;
 
             dblClic = false;
+        }
+
+        private void btnVacio_Click(object sender, RoutedEventArgs e)
+        {
+            cargarDTG(controladorContrato.filtro);
+            vaciarCampos();
         }
     }
 }

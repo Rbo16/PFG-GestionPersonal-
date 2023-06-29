@@ -28,6 +28,14 @@
         </Grid.RowDefinitions>
         <TextBlock Text="AUSENCIAS" FontSize="40" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"
                    Grid.ColumnSpan="4" Margin="0,0,0,10"/>
+        <Button Name="btnVacio" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,5,0,0"
+                Click="btnVacio_Click">
+            <Image Source="/Imagenes/escoba.png" Width="40"/>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
         <Button Name="btnMenu" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5"
                 Click="btnMenu_Click">
@@ -107,6 +115,7 @@
             </Button.Effect>
         </Button>
         <DataGrid Name="dtgListaAus" Grid.Row="2" Grid.Column="3"  Grid.RowSpan="5" Margin="0,55,0,0" 
-                  MouseDoubleClick="dtgListaAus_MouseDoubleClick" IsReadOnly="True" SelectionMode="Single"/>
+                  MouseDoubleClick="dtgListaAus_MouseDoubleClick" IsReadOnly="True" SelectionMode="Single"
+                  CanUserReorderColumns="False" CanUserSortColumns="False"/>
     </Grid>
 </Window>

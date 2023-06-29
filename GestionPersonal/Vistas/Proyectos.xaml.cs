@@ -24,6 +24,7 @@ namespace GestionPersonal
     {
         private readonly ProyectoControl controladorProyecto;
         DataTable dtProyectos;
+        DataTable dtEmpleadosProyecto;
         DataRow proyectoActual;
         bool hayCambios;
         bool dblClic;
@@ -57,11 +58,11 @@ namespace GestionPersonal
             }
 
             dtgPro.ItemsSource = null;
-            dtgPro.ItemsSource = eliminarColumnas(dtProyectos).DefaultView;
+            dtgPro.ItemsSource = eliminarColumnasProyecto(dtProyectos).DefaultView;
 
         }
 
-        private DataTable eliminarColumnas(DataTable dt)
+        private DataTable eliminarColumnasProyecto(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
 
@@ -72,6 +73,25 @@ namespace GestionPersonal
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
             dtShow.Columns.Remove("Borrado");
+
+            return dtShow;
+        }
+
+        private DataTable eliminarColumnasEmpleado(DataTable dt)
+        {
+            DataTable dtShow = dt.Copy();
+
+            dtShow.Columns.Remove("IdProyecto");
+            dtShow.Columns.Remove("IdEmpleado");
+            dtShow.Columns.Remove("Contrasenia");
+            dtShow.Columns.Remove("NumSS");
+            dtShow.Columns.Remove("EstadoE");
+            dtShow.Columns.Remove("DNI");
+            dtShow.Columns.Remove("Rol");
+            dtShow.Columns.Remove("IdDepartamento");
+            dtShow.Columns.Remove("FechaUltModif");
+            dtShow.Columns.Remove("Borrado");
+            dtShow.Columns.Remove("IdModif");
 
             return dtShow;
         }
@@ -104,12 +124,13 @@ namespace GestionPersonal
 
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
-            //Clear¿?
             if (controladorProyecto.crearProyecto(txbNombreP.Text, txbCliente.Text, txbFechaInicioP.Text, txbTiempo.Text, "Meses",
-                txbPresupuesto.Text, cmbPrioridad.Text, txbDescripcionP.Text))
+            txbPresupuesto.Text, cmbPrioridad.Text, txbDescripcionP.Text))
             {
                 MessageBox.Show("Proyecto creado córrectamente");
-            }
+                cargarDTG(string.Empty);
+                vaciarCampos();
+            } 
         }
 
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
@@ -121,7 +142,8 @@ namespace GestionPersonal
                     controladorProyecto.modificarProyecto(proyectoActual);
                     hayCambios = false;
                     MessageBox.Show("Datos guardados correctamente");
-                    cargarDTG(string.Empty);
+                    cargarDTG(controladorProyecto.filtro);
+                    proyectoActual = dtProyectos.Copy().Rows[contPro];
                 }
             }
         }
@@ -143,8 +165,8 @@ namespace GestionPersonal
                     proyectoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
                     if (columna == "Tiempo")
                         proyectoActual[columna] += " " + cmbDuracion.Text;
-                }
-                hayCambios = true;
+                    hayCambios = true;
+                }   
             }
         }
         /// <summary>
@@ -168,8 +190,8 @@ namespace GestionPersonal
                         txbTiempo.IsEnabled = true;
                         proyectoActual["Tiempo"] = txbTiempo.Text + " " + cmbDuracion.SelectedValue.ToString();
                     }
-                }
-                hayCambios = true;
+                    hayCambios = true;
+                }            
             }
         }
 
@@ -186,8 +208,9 @@ namespace GestionPersonal
                 {
                     string columna = ((System.Windows.Controls.DatePicker)sender).Name.Substring(3);
                     proyectoActual[columna] = ((System.Windows.Controls.DatePicker)sender).SelectedDate;
+                    hayCambios = true;
                 }
-                hayCambios = true;
+                
             }
         }
 
@@ -202,9 +225,9 @@ namespace GestionPersonal
             {
                 if (proyectoActual["IdProyecto"].ToString() != string.Empty)
                 {
-                    proyectoActual["Prioridad"] = cmbPrioridad.SelectedValue.ToString();
+                    proyectoActual["Prioridad"] = cmbPrioridad.SelectedValue.ToString(); 
+                    hayCambios = true;
                 }
-                hayCambios = true;
             }
         }
 
@@ -218,9 +241,8 @@ namespace GestionPersonal
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     controladorProyecto.borrarProyecto(dtProyectos.Rows[dtgPro.SelectedIndex]["IdProyecto"].ToString());
-                    cargarDTG(string.Empty);
-
-                    //Carga el filtro del controlador??
+                    cargarDTG(controladorProyecto.filtro);
+                    vaciarCampos();
                 }
                 else
                     return;
@@ -235,17 +257,19 @@ namespace GestionPersonal
             }
             else
             {
-                dblClic = true;
-                hayCambios = false;
-
                 contPro = dtgPro.SelectedIndex;
                 proyectoActual = dtProyectos.Copy().Rows[contPro];
                 cargarProyecto();
+
+                cargarEmpleadosProyecto();
             }
         }
 
         private void cargarProyecto()
         {
+            dblClic = true;
+            hayCambios = false;
+
             txbNombreP.Text = proyectoActual["NombreP"].ToString();
             txbCliente.Text = proyectoActual["Cliente"].ToString();
             txbFechaInicioP.Text = proyectoActual["FechaInicioP"].ToString();
@@ -256,8 +280,14 @@ namespace GestionPersonal
             cmbPrioridad.SelectedIndex = Convert.ToInt32(proyectoActual["Presupuesto"].ToString()) - 1;
             txbDescripcionP.Text = proyectoActual["DescripcionP"].ToString();
 
-
             dblClic = false;
+        }
+
+        private void cargarEmpleadosProyecto()
+        {
+            dtEmpleadosProyecto = controladorProyecto.listaEmpleadosProyecto(proyectoActual["IdProyecto"].ToString());
+            dtgEmpleadosPro.ItemsSource = null;
+            dtgEmpleadosPro.ItemsSource = eliminarColumnasEmpleado(dtEmpleadosProyecto).DefaultView;
         }
 
         private void btnFiltrarPro_Click(object sender, RoutedEventArgs e)
@@ -270,8 +300,49 @@ namespace GestionPersonal
             if (this.IsEnabled)
             {
                 cargarDTG(controladorProyecto.filtro);
-                //vaciarCampos();
+
+                if (controladorProyecto.controladorBusqueda != null)
+                    controladorProyecto.aniadirEmpleado(proyectoActual["IdProyecto"].ToString());
+                else
+                    vaciarCampos();
             }
+        }
+
+        private void btnAddE_Click(object sender, RoutedEventArgs e)
+        {
+            controladorProyecto.prepararFiltroEmpleado();
+        }
+
+        private void vaciarCampos()
+        {
+            dblClic = true;
+            hayCambios = false;
+
+            proyectoActual = dtProyectos.NewRow();
+
+            txbNombreP.Text = string.Empty;
+            txbCliente.Text = string.Empty;
+            txbFechaInicioP.Text = string.Empty;
+            txbFechaFinP.Text = string.Empty;
+            txbTiempo.Text = string.Empty;
+            cmbDuracion.SelectedIndex = -1;
+            txbPresupuesto.Text = string.Empty;
+            cmbPrioridad.SelectedIndex = -1;
+            txbDescripcionP.Text = string.Empty;
+
+            controladorProyecto.controladorBusqueda = null;
+
+            dtgEmpleadosPro.ItemsSource = null;
+            dtgPro.SelectedItem= null;
+
+            dblClic = false;
+
+        }
+
+        private void btnVacio_Click(object sender, RoutedEventArgs e)
+        {
+            vaciarCampos();
+            cargarDTG(string.Empty);
         }
     }
 }

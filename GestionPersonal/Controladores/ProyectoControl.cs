@@ -15,6 +15,7 @@ namespace GestionPersonal
     public class ProyectoControl : Controlador
     {
         DataTable dtProyectos;
+        public BusquedaEmpleadoControlador controladorBusqueda;
 
         public ProyectoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
@@ -47,6 +48,19 @@ namespace GestionPersonal
         public DataTable listaProyectos(string filtro)
         {
             return Listar.filtrarTabla(dtProyectos, filtro);
+        }
+
+        /// <summary>
+        /// Devuelve un DataTable con los Empleados que participan en el Proyecto indicado
+        /// </summary>
+        /// <param name="SIdProyecto">Id del Proyecto en formato string</param>
+        /// <returns></returns>
+        public DataTable listaEmpleadosProyecto(string SIdProyecto)
+        {
+            int.TryParse(SIdProyecto, out int IdProyecto);
+            string filtro = $" IdProyecto = {IdProyecto}";
+            DataTable dtEmpleados = Listar.listarParticipacionProyectos();
+            return Listar.filtrarTabla(dtEmpleados, filtro);
         }
 
         public bool crearProyecto(string NombreP, string Cliente, string SFechaInicioP, string SNTiempo, string Tiempo, string SPresupuesto,
@@ -144,6 +158,34 @@ namespace GestionPersonal
             this.filtro = string.Empty;
             ventanaControl.bloquearVActual();
             FiltroProyectoControl controladorFiltroP = new FiltroProyectoControl(this);
+        }
+
+        public void prepararFiltroEmpleado()
+        {
+            ventanaControl.bloquearVActual();
+            controladorBusqueda = new BusquedaEmpleadoControlador(this)
+            {
+                dniBusqueda = string.Empty
+            };
+        }
+
+        public void aniadirEmpleado(string SIdProyecto)
+        {
+            if (controladorBusqueda.dniBusqueda != string.Empty)
+            {
+                int.TryParse(SIdProyecto, out int IdProyecto);
+
+                Proyecto proyecto = new Proyecto(IdProyecto);
+
+                if (!proyecto.Participa(controladorBusqueda.dniBusqueda))
+                {
+                    proyecto.addEmpleado(controladorBusqueda.dniBusqueda, this.Usuario.IdEmpleado);
+                    
+                    MessageBox.Show("Empleado añadido correctamente.");
+                }
+                else
+                    MessageBox.Show("El empleado seleccionado ya participa en ese proyecto");
+            }
         }
     }
 }

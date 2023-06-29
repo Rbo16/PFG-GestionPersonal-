@@ -87,7 +87,6 @@ namespace GestionPersonal
             {
                 if (comprobarCaracteres(DNI,NumSS))
                 { 
-                    //int.TryParse(SIdDepartamento, out int IdDepartamento);
                     Empleado nuevoEmpleado = new Empleado(0)
                     {
                         NombreE = NombreE,
@@ -138,14 +137,13 @@ namespace GestionPersonal
                 int.TryParse(empleadoModif["IdEmpleado"].ToString(), out int IdEmpleado);
                 string NombreE = empleadoModif["NombreE"].ToString();
                 string Apellido = empleadoModif["Apellido"].ToString();
-                string Usuario = empleadoModif["IdEmpleado"].ToString();
+                string Usuario = empleadoModif["Usuario"].ToString();
                 TipoEmpleado.TryParse(empleadoModif["Rol"].ToString(), out TipoEmpleado rol);
                 EstadoEmpleado.TryParse(empleadoModif["EstadoE"].ToString(), out EstadoEmpleado EstadoE);
                 string DNI = empleadoModif["DNI"].ToString();
                 string NumSS = empleadoModif["NumSS"].ToString();
                 string Tlf = empleadoModif["Tlf"].ToString();
                 string CorreoE = empleadoModif["CorreoE"].ToString();
-                int.TryParse(empleadoModif["IdDepartamento"].ToString(), out int IdDepartamento);
 
                 if (comprobarCaracteres(DNI, NumSS))
                 {
@@ -159,8 +157,7 @@ namespace GestionPersonal
                         DNI = DNI,
                         NumSS = NumSS,
                         Tlf = Tlf,
-                        CorreoE = CorreoE,
-                        IdDepartamento = IdDepartamento,
+                        CorreoE = CorreoE
                     };
 
                     empleadoModificado.updateEmpleado(this.Usuario.IdEmpleado);
