@@ -9,10 +9,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace GestionPersonal
 {
@@ -68,6 +70,20 @@ namespace GestionPersonal
         private void btnAuditorias_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void btnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("¿Cerrar sesión?", "Logout", MessageBoxButtons.YesNo);
+            if(dr == System.Windows.Forms.DialogResult.Yes)
+            {
+                this.controladorMenu.logout();
+            }
+        }
+
+        private void btnPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            this.controladorMenu.abrirPerfil();
         }
     }
 }

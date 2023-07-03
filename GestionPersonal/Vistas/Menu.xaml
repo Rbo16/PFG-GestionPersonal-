@@ -28,8 +28,25 @@
         </Grid.RowDefinitions>
         <TextBlock Text="MENÚ PRINCIPAL" FontSize="40"
                    Grid.Column="1" Grid.ColumnSpan="4" HorizontalAlignment="Center" Grid.Row="1" />
-        <Frame Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Source="/Paginas/OpcionesMenu.xaml" Width="610" 
-               Height="100"/>
+        <Button Name="btnPerfil" Grid.Column="1" Grid.Row="2" Height="40" Width="100" Margin="100,20,10,20" Click="btnPerfil_Click">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Imagenes/perfil.png" Height="30"/>
+                <TextBlock Text="Perfil" FontSize="20" VerticalAlignment="Center"/>
+            </StackPanel>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="btnLogout" Grid.Column="3" Grid.Row="2" Height="40" Width="100" HorizontalAlignment="Right" 
+                Margin="0,20,100,20" Click="btnLogout_Click">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/Imagenes/logout.png" Height="30"/>
+                <TextBlock Text="Logout" FontSize="20"/>
+            </StackPanel>
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
         <Button Name="btnEmpleados" Content="Empleados" FontSize="22"  Width="150" Height="70" 
                 Margin="30,30,30,30" Grid.Column="2" Grid.Row="3" Click="btnEmpleados_Click" Visibility="Hidden">
             <Button.Effect>

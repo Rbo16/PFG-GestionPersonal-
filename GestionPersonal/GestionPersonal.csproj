@@ -80,20 +80,20 @@
     <Compile Include="Controladores\Filtros\FiltroProyectoControl.cs" />
     <Compile Include="Controladores\LoginControlador.cs" />
     <Compile Include="Controladores\MenuControl.cs" />
+    <Compile Include="Controladores\PerfilControl.cs" />
+    <Compile Include="Controladores\RecuperacionControl.cs" />
     <Compile Include="Controladores\VentanaControlador.cs" />
     <Compile Include="Modelos\Auditoria.cs" />
     <Compile Include="Modelos\Ausencia.cs" />
     <Compile Include="Controladores\AusenciaControl.cs" />
     <Compile Include="Modelos\Contrato.cs" />
     <Compile Include="Controladores\ContratoControl.cs" />
-    <Compile Include="Paginas\OpcionesMenu.xaml.cs">
-      <DependentUpon>OpcionesMenu.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Utiles\ConvertidorHASH.cs" />
     <Compile Include="Utiles\EnviarMail.cs" />
     <Compile Include="Utiles\ExceptionManager.cs" />
     <Compile Include="Utiles\Listar.cs" />
     <Compile Include="Utiles\Password.cs" />
+    <Compile Include="Utiles\Querys.cs" />
     <Compile Include="Vistas\BusquedaEmpleado.xaml.cs">
       <DependentUpon>BusquedaEmpleado.xaml</DependentUpon>
     </Compile>
@@ -130,13 +130,15 @@
     <Compile Include="Vistas\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Vistas\Perfil.xaml.cs">
+      <DependentUpon>Perfil.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vistas\Proyectos.xaml.cs">
       <DependentUpon>Proyectos.xaml</DependentUpon>
     </Compile>
-    <Page Include="Paginas\OpcionesMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Compile Include="Vistas\Recuperacion.xaml.cs">
+      <DependentUpon>Recuperacion.xaml</DependentUpon>
+    </Compile>
     <Page Include="Vistas\Ausencias.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -191,7 +193,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Vistas\Perfil.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Vistas\Proyectos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Vistas\Recuperacion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -271,6 +281,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Imagenes\lupa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Paginas\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

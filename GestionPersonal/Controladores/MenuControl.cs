@@ -34,5 +34,14 @@ namespace GestionPersonal.Controladores
         {
             ventanaControl.ventanaDepartamentos();
         }
+
+        public void logout()
+        {
+            ventanaControl.logout();
+        }
+        public void abrirPerfil()
+        {
+            ventanaControl.ventanaPerfil();
+        }
     }
 }

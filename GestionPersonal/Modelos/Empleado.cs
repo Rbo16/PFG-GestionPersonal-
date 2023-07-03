@@ -272,12 +272,42 @@ namespace GestionPersonal
             }
         }
 
-        /// <summary>
-        /// Introduce todos los parámetros del empleado al comando indicado, a excepción de la Contrasenia 
-        /// y el IdEmpleado.
-        /// </summary>
-        /// <param name="comando"></param>
-        /// <returns></returns>
+        internal void updateContrasenia()
+        {
+            try
+            {
+                string consulta = "UPDATE Empleado SET Contrasenia = @Contrasenia WHERE CorreoE = @CorreoE ";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@Contrasenia", SqlDbType.NVarChar);
+                comando.Parameters["@Contrasenia"].Value = this.Contrasenia;
+
+                comando.Parameters.Add("@CorreoE", SqlDbType.NVarChar);
+                comando.Parameters["@CorreoE"].Value = this.CorreoE;
+
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Empleado.CambiarContrasenia]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+            /// <summary>
+            /// Introduce todos los parámetros del empleado al comando indicado, a excepción de la Contrasenia 
+            /// y el IdEmpleado.
+            /// </summary>
+            /// <param name="comando"></param>
+            /// <returns></returns>
         private SqlCommand introducirParametros(SqlCommand comando)
         {
             comando.Parameters.Add("@NombreE", SqlDbType.NVarChar);

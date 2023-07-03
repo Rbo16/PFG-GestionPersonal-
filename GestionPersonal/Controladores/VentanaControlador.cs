@@ -56,7 +56,23 @@ namespace GestionPersonal.Controladores
             ventanaActual.Close();
             this.ventanaActual = controladorPDepartamento.devolverVActiva();
         }
-        
+
+        public void logout()
+        {
+            LoginControlador loginControl = new LoginControlador(this);
+            ventanaActual.Close();
+            this.ventanaActual = loginControl.devolverVActiva();
+        }
+
+        public void ventanaPerfil()
+        {
+            PerfilControl controladorPerfil = new PerfilControl(this);
+        }
+        public void ventanaRecuperacion()
+        {
+            RecuperacionControl controladorRecuperacion = new RecuperacionControl(this);
+        }
+
         public void bloquearVActual()
         {
             ventanaActual.IsEnabled= false;

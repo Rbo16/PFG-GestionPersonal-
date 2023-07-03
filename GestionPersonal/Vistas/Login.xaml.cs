@@ -32,5 +32,10 @@ namespace GestionPersonal.Vistas
         {
             controladorLogin.iniciarSesion(txbUsuario.Text, txbContraseña.Password);
         }
+
+        private void btnCContra_Click(object sender, RoutedEventArgs e)
+        {
+            controladorLogin.abrirRecuperacion();
+        }
     }
 }

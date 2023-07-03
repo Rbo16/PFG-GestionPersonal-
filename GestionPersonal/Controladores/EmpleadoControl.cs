@@ -99,6 +99,8 @@ namespace GestionPersonal
                         CorreoE = CorreoE,
                     };
 
+                    EnviarMail.nuevoEmpleado(CorreoE, Usuario, nuevoEmpleado.Contrasenia);
+
                     //Hay que mandar el correo con la contraseña
                     nuevoEmpleado.Contrasenia = ConvertidorHASH.GetHashString(nuevoEmpleado.Contrasenia);
 

@@ -35,7 +35,7 @@
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <Button Name="btnCContra" Content="Recordar Contraseña" Grid.Column="1" Grid.Row="3" Margin="0,30,7,0" FontSize="16">
+        <Button Name="btnCContra" Content="Recordar Contraseña" Grid.Column="1" Grid.Row="3" Margin="0,30,7,0" FontSize="16" Click="btnCContra_Click">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

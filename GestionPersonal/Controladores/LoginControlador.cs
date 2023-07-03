@@ -47,5 +47,10 @@ namespace GestionPersonal.Controladores
                 }
             }
         }
+        
+        public void abrirRecuperacion()
+        {
+            ventanaControl.ventanaRecuperacion();
+        }
     }
 }

@@ -345,6 +345,39 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        public static async void nuevoEmpleado(string mailTo, string Usuario, string Contrasenia)
+        {
+            // Configuración del cliente SMTP
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(mail, pass);
+
+
+            // Crear el mensaje de correo
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
+            mailMessage.To.Add(mailTo);
+            mailMessage.Subject = "Credenciales";
+            mailMessage.Body = "Se ha creado su usuario para acceder al sistema. \n\nUsuario: " + Usuario +
+                "\nContraseña: "+ Contrasenia +"\n\nPróximamente le llegará un mail con informándole si ha sido autorizado o no.";
+
+            try
+            {
+                // Enviar el correo
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al enviar el correo: " + ex.Message);
+            }
+            finally
+            {
+                // Clean up.
+                mailMessage.Dispose();
+            }
+        }
+
         public static async void altaEmpleado(string mailTo, string EstadoE)
         {
             // Configuración del cliente SMTP
@@ -376,5 +409,38 @@ namespace GestionPersonal.Utiles
                 mailMessage.Dispose();
             }
         }
+
+        public static async void recuperarContrasenia(string mailTo,string Usuario, string Contrasenia)
+        {
+            // Configuración del cliente SMTP
+            SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential(mail, pass);
+
+
+            // Crear el mensaje de correo
+            MailMessage mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
+            mailMessage.To.Add(mailTo);
+            mailMessage.Subject = "Nueva contraseña";
+            mailMessage.Body = "Sus nuevas credenciales son:\n\n\tUsuario: " + Usuario + "\n\tContraseña:" + Contrasenia;
+
+            try
+            {
+                // Enviar el correo
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al enviar el correo: " + ex.Message);
+            }
+            finally
+            {
+                // Clean up.
+                mailMessage.Dispose();
+            }
+        }
+
     }
 }
