@@ -50,7 +50,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Método para crear la ausencia e insertarla en la BBDD
+        /// Método para crear la ausencia e insertarla en la BBDD con estado "Pendiente" a informar a los Gestores
         /// </summary>
         /// <param name="Razon">Razón de la ausencia</param>
         /// <param name="FechaInicioA">Fecha de inicio de la ausencia</param>
@@ -85,6 +85,8 @@ namespace GestionPersonal
 
                     MessageBox.Show("Ausencia solicitada correctamente.");
                     creado = true;
+
+                    informarGestores();
                 }
                 else
                 {
@@ -138,6 +140,8 @@ namespace GestionPersonal
             };
             
             ausenciaGestion.updateAutorizador();
+
+            informarAutorizacion(IdAusencia);
         }
 
 
@@ -146,6 +150,29 @@ namespace GestionPersonal
             int IdAusencia = Convert.ToInt32(SIdAusencia);
             Ausencia ausenciaBorrada = new Ausencia(IdAusencia);
             ausenciaBorrada.deleteAusencia(this.Usuario.IdEmpleado);
+        }
+
+        private void informarAutorizacion(int IdAusencia)
+        {
+            DataTable ausencia = Listar.filtrarTabla(dtAusencias, $"IdAusencia = {IdAusencia}");
+
+            string mail = EnviarMail.obtenerMail(Convert.ToInt32(ausencia.Rows[0]["IdSolicitante"].ToString()));
+
+            EnviarMail.altaAusencia(mail, ausencia.Rows[0]["Razon"].ToString(),
+                ausencia.Rows[0]["FechaInicioA"].ToString(), ausencia.Rows[0]["FechaFinA"].ToString(),
+                ausencia.Rows[0]["EstadoA"].ToString());
+        }
+
+        private void informarGestores()
+        {
+            DataTable dtEmpleados = Listar.listarEmpleados();
+            DataTable dtGestores = Listar.filtrarTabla(dtEmpleados, "rol = 2");
+
+            foreach(DataRow dr in dtGestores.Rows)
+            {
+                string correo = dr["CorreoE"].ToString();
+                EnviarMail.solicitudAusencia(correo);
+            }
         }
 
         /// <summary>
@@ -162,5 +189,6 @@ namespace GestionPersonal
             ventanaControl.bloquearVActual();
             FiltroAusenciaControl controladorFiltroA = new FiltroAusenciaControl(this);
         }
+
     }
 }

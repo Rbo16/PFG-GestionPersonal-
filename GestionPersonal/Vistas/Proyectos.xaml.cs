@@ -38,8 +38,6 @@ namespace GestionPersonal
 
             cargarRol();
 
-            this.controladorProyecto.filtro = $"IdEmpleado = {this.controladorProyecto.Usuario.IdEmpleado}";
-
             cargarDTG(this.controladorProyecto.filtro);
 
             proyectoActual = dtProyectos.NewRow();
@@ -49,6 +47,8 @@ namespace GestionPersonal
         {
             if(controladorProyecto.Usuario.rol == TipoEmpleado.Basico)
             {
+                this.controladorProyecto.filtro = $"IdEmpleado = {this.controladorProyecto.Usuario.IdEmpleado}";
+
                 txbNombreP.IsReadOnly= true;
                 txbCliente.IsReadOnly= true;
                 txbDescripcionP.IsReadOnly= true;
@@ -86,6 +86,7 @@ namespace GestionPersonal
             dtgPro.ItemsSource = eliminarColumnasProyecto(dtProyectos).DefaultView;
 
         }
+
 
         private DataTable eliminarColumnasProyecto(DataTable dt)
         {
@@ -325,9 +326,14 @@ namespace GestionPersonal
             if (this.IsEnabled)
             {
                 cargarDTG(controladorProyecto.filtro);
+                if(dtProyectos.Rows.Count != 0)
+                    proyectoActual = dtProyectos.Copy().Rows[contPro];
 
                 if (controladorProyecto.controladorBusqueda != null)
-                    controladorProyecto.aniadirEmpleado(proyectoActual["IdProyecto"].ToString());
+                {
+                    controladorProyecto.aniadirEmpleado(proyectoActual["IdProyecto"].ToString(), proyectoActual["NombreP"].ToString());
+                    cargarEmpleadosProyecto();
+                }
                 else
                     vaciarCampos();
             }
@@ -340,8 +346,7 @@ namespace GestionPersonal
 
         private void vaciarCampos()
         {
-            dblClic = true;
-            hayCambios = false;
+            dblClic = true;  
 
             proyectoActual = dtProyectos.NewRow();
 
@@ -360,6 +365,7 @@ namespace GestionPersonal
             dtgEmpleadosPro.ItemsSource = null;
             dtgPro.SelectedItem= null;
 
+            hayCambios = false;
             dblClic = false;
 
         }
@@ -367,7 +373,22 @@ namespace GestionPersonal
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();
-            cargarDTG(string.Empty);
+            cargarDTG(controladorProyecto.filtro);
+        }
+
+        private void btnEliminarE_Click(object sender, RoutedEventArgs e)
+        {
+            if(dtgEmpleadosPro.SelectedItem != null)
+            {
+                DialogResult dr = MessageBox.Show("Eliminar a " + dtEmpleadosProyecto.Rows[dtgEmpleadosPro.SelectedIndex]["NombreE"]
+                   + " " + dtEmpleadosProyecto.Rows[dtgEmpleadosPro.SelectedIndex]["Apellido"] + " del proyecto",
+                   "Eliminar empleado de proyecto", MessageBoxButtons.YesNo);
+                if(dr == System.Windows.Forms.DialogResult.Yes)
+                {
+                    controladorProyecto.eliminarEmpleado(dtEmpleadosProyecto.Rows[dtgEmpleadosPro.SelectedIndex]["IdEmpleado"].ToString(),
+                        dtProyectos.Rows[dtgPro.SelectedIndex]["IdProyecto"].ToString(), dtProyectos.Rows[dtgPro.SelectedIndex]["NombreP"].ToString());
+                }
+            }
         }
     }
 }

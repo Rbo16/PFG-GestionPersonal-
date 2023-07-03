@@ -121,6 +121,39 @@ namespace GestionPersonal.Utiles
             {
                 DataTable dtProyectos = new DataTable();
 
+                string consulta = "SELECT Proyecto.* FROM Proyecto";//+WHERE Borrado = 0";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
+                using (adaptadorSql)
+                {
+                    adaptadorSql.Fill(dtProyectos);
+                }
+
+                return dtProyectos;
+
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.Listar]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public static DataTable listarProyectosEmpleado()
+        {
+            try
+            {
+                DataTable dtProyectos = new DataTable();
+
                 string consulta = "SELECT Proyecto.*, ParticipacionProyecto.IdEmpleado FROM Proyecto " +
                     "LEFt JOIN ParticipacionProyecto on Proyecto.IdProyecto = ParticipacionProyecto.IdProyecto";//+WHERE Borrado = 0";
 
@@ -140,7 +173,7 @@ namespace GestionPersonal.Utiles
             }
             catch (Exception ex)
             {
-                ExceptionManager.Execute(ex, "ERROR[Proyecto.Listar]:");
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.ListarPorEmpleado]:");
                 return null;
             }
             finally

@@ -115,7 +115,7 @@
                 <DropShadowEffect/>
             </StackPanel.Effect>
             <Button x:Name="btnAddE" FontWeight="Bold" Content="Añadir nuevo participante" Click="btnAddE_Click"/>
-            <Button x:Name="btnEliminarE" FontWeight="Bold" Content="Eliminar participante" Margin="0,10,0,0"/>
+            <Button x:Name="btnEliminarE" FontWeight="Bold" Content="Eliminar participante" Margin="0,10,0,0" Click="btnEliminarE_Click"/>
         </StackPanel>
         <Button Name="btnVacio" Grid.Column="1" Grid.Row="1" Width="40" Height="40" 
                 HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,0,0,0"

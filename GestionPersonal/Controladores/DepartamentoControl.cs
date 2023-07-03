@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -111,7 +112,7 @@ namespace GestionPersonal
             departamentoBorrado.deleteDepartamento(this.Usuario.IdEmpleado);
         }
 
-        public bool asignarJefe(string SIdEmpleado, string SIdDepartamento)
+        public bool asignarJefe(string SIdEmpleado, string SIdDepartamento, string NombreD)
         {
             bool exito = false;
 
@@ -127,11 +128,18 @@ namespace GestionPersonal
                 departamento.asignarJefe(IdEmpleado, this.Usuario.IdEmpleado);
                 exito = true;
                 MessageBox.Show("Jefe de Departamento asignado con éxito");
+                informarAsignacion(IdEmpleado, NombreD);
             }
             else
                 MessageBox.Show("El empleado seleccionado ya ejerce como jefe de otro departamento.");
 
             return exito;
+        }
+
+        private void informarAsignacion(int IdEmpleado, string NombreD)
+        {
+            string correo = EnviarMail.obtenerMail(IdEmpleado);
+            EnviarMail.nuevoJefe(correo, NombreD);
         }
 
         public void prepararFiltroEmpleado()
@@ -143,7 +151,7 @@ namespace GestionPersonal
             };
         }
         
-        public void aniadirEmpleado(string SIdDepartamento)
+        public void aniadirEmpleado(string SIdDepartamento, string NombreD)
         {
             if(controladorBusqueda.dniBusqueda != string.Empty)
             {
@@ -157,7 +165,15 @@ namespace GestionPersonal
                 departamento.addEmpleado(controladorBusqueda.dniBusqueda, this.Usuario.IdEmpleado);
 
                 MessageBox.Show("Empleado añadido correctamente.");
+
+                informarAdicion(controladorBusqueda.dniBusqueda, NombreD);
             }
+        }
+
+        private void informarAdicion(string DNI, string NombreD)
+        {
+            string correo = EnviarMail.obtenerMail(DNI);
+            EnviarMail.nuevoDepartamento(correo, NombreD);
         }
     }
 }

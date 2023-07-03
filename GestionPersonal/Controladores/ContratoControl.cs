@@ -125,6 +125,8 @@ namespace GestionPersonal
                         TipoContrato = tipoContrato
                     };
                     nuevoContrato.insertContrato(this.Usuario.IdEmpleado);
+
+                    informarAlta(IdEmpleado);
                 }
             }
             else
@@ -211,6 +213,8 @@ namespace GestionPersonal
                         TipoContrato = tipoContrato
                     };
                     nuevoContrato.updateContrato(this.Usuario.IdEmpleado);
+
+                    informarAuditoria(IdContrato, "CAMBIO");
                 }
             }
             else
@@ -230,6 +234,7 @@ namespace GestionPersonal
             int.TryParse(SIdContrato, out int IdContrato);
             Contrato contratoEliminar = new Contrato(IdContrato);
             contratoEliminar.deleteContrato(this.Usuario.IdEmpleado);
+            informarAuditoria(IdContrato, "BORRADO");
         }
 
         public void prepararFiltro()
@@ -238,5 +243,20 @@ namespace GestionPersonal
             FiltroContratoControl controladorFiltroC = new FiltroContratoControl(this);
         }
 
+        private void informarAlta(int IdEmpleado)
+        {
+            string correo = EnviarMail.obtenerMail(IdEmpleado);
+            EnviarMail.altaContrato(correo);
+        }
+
+        private void informarAuditoria(int IdContrato, string tipoAuditoria)
+        {
+            DataTable contrato = Listar.filtrarTabla(dtContratos, $"IdContrato = {IdContrato}");
+
+            string mail = EnviarMail.obtenerMail(Convert.ToInt32(contrato.Rows[0]["IdEmpleado"].ToString()));
+
+            EnviarMail.auditoriaContrato(mail, tipoAuditoria, contrato.Rows[0]["FechaAlta"].ToString(),
+                contrato.Rows[0]["FechaBaja"].ToString());
+        }
     }
 }

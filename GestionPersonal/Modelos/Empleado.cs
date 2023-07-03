@@ -56,10 +56,11 @@ namespace GestionPersonal
             bool inicio = false;
 
             string contrasenia;
+            int estado;
 
             try
             {
-                string consulta = "SELECT Contrasenia FROM Empleado WHERE Usuario = @Usuario"; //vrJ;!W|.#84q
+                string consulta = "SELECT Contrasenia, EstadoE FROM Empleado WHERE Usuario = @Usuario"; //vrJ;!W|.#84q
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -74,7 +75,8 @@ namespace GestionPersonal
                     while(reader.Read())
                     {
                         contrasenia = reader.GetString(0);
-                        if(contrasenia == this.Contrasenia)
+                        estado = reader.GetInt32(1);
+                        if(contrasenia == this.Contrasenia && estado == 1)
                         {
                             cargarUsuario(this.Usuario);
                             inicio = true;
@@ -237,6 +239,39 @@ namespace GestionPersonal
             }
         }
 
+        internal void updateEstado(int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE Empleado SET EstadoE = @EstadoE , " + Auditoria.Update +
+                    " WHERE IdEmpleado = @IdEmpleado";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@EstadoE", SqlDbType.Int);
+                comando.Parameters["@EstadoE"].Value = this.EstadoE.GetHashCode();
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
+
+                this.Auditoria = new Auditoria(IdModif);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Empleado.Estado]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
         /// <summary>
         /// Introduce todos los parámetros del empleado al comando indicado, a excepción de la Contrasenia 
         /// y el IdEmpleado.
@@ -282,6 +317,7 @@ namespace GestionPersonal
             return comando;
 
         }
+
 
     }
 

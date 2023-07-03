@@ -90,6 +90,7 @@
       <DependentUpon>OpcionesMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utiles\ConvertidorHASH.cs" />
+    <Compile Include="Utiles\EnviarMail.cs" />
     <Compile Include="Utiles\ExceptionManager.cs" />
     <Compile Include="Utiles\Listar.cs" />
     <Compile Include="Utiles\Password.cs" />

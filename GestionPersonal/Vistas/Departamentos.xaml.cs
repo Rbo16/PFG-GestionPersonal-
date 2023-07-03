@@ -228,7 +228,7 @@ namespace GestionPersonal
         {
             if (this.IsEnabled)
             {
-                controladorDepartamento.aniadirEmpleado(departamentoActual["IdDepartamento"].ToString());
+                controladorDepartamento.aniadirEmpleado(departamentoActual["IdDepartamento"].ToString(), departamentoActual["NombreD"].ToString());
                 cargarEmpleadosDepartamento();
             }
         }
@@ -243,7 +243,7 @@ namespace GestionPersonal
                 if (dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     if(controladorDepartamento.asignarJefe(dtEmpleadosDep.Rows[dtgEmpleadosDep.SelectedIndex]["IdEmpleado"].ToString(),
-                        departamentoActual["IdDepartamento"].ToString()))
+                        departamentoActual["IdDepartamento"].ToString(), departamentoActual["NombreD"].ToString()))
                     {
                         dblClic = true;
                         cargarDTG(string.Empty);

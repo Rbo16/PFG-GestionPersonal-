@@ -171,6 +171,27 @@ namespace GestionPersonal
             }
         }
 
+        public void gestionarEmpleado(string SIdEmpleado, string SEstadoE)
+        {
+            int EstadoE = Convert.ToInt32(SEstadoE);
+            int IdEmpleado = Convert.ToInt32(SIdEmpleado);
+
+            Empleado empleadoGestion = new Empleado(IdEmpleado)
+            {
+                EstadoE = (EstadoEmpleado)EstadoE,
+            };
+
+            empleadoGestion.updateEstado(this.Usuario.IdEmpleado);
+
+            informarAutorizacion(IdEmpleado, empleadoGestion.EstadoE.ToString());
+        }
+
+        private void informarAutorizacion(int IdEmpleado, string EstadoE)
+        {
+            string correo = EnviarMail.obtenerMail(IdEmpleado);
+            EnviarMail.altaEmpleado(correo, EstadoE);
+        }
+
         private bool comprobarCaracteres(string DNI, string NumSS)
         {
             bool result = true;

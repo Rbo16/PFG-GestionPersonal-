@@ -55,7 +55,7 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
                 comando = introducirParametros(comando);
-                this.Auditoria = new Auditoria(IdModif, true);
+                this.Auditoria = new Auditoria(IdModif);
                 comando = Auditoria.introducirParametros(comando);
 
                 comando.ExecuteNonQuery();
@@ -160,7 +160,7 @@ namespace GestionPersonal
         {
             try
             {
-                string consulta = "INSERT INTO ParticipacionProyecto (IdEmpleado, IdProyecto," + Auditoria.Insert_1 +
+                string consulta = "INSERT INTO ParticipacionProyecto (IdEmpleado, IdProyecto," + Auditoria.Insert_1 + ")" +
                     "VALUES ((SELECT IdEmpleado From Empleado where DNI = @DNI), @IdProyecto," + Auditoria.Insert_2 + ")";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
@@ -180,7 +180,39 @@ namespace GestionPersonal
             }
             catch (Exception ex)
             {
-                ExceptionManager.Execute(ex, "ERROR[Proyecto.Aniadir]:");
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.AniadirEmpleado]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public void removeEmpleado(int IdEmpleado, int IdModif)
+        {
+            try
+            {
+                string consulta = "UPDATE ParticipacionProyecto SET " + Auditoria.Update + "WHERE IdProyecto = @IdProyecto " +
+                    "AND IdEmpleado = @IdEmpleado";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdProyecto", SqlDbType.Int);
+                comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = IdEmpleado;
+
+                this.Auditoria = new Auditoria(IdModif);
+                comando = Auditoria.introducirParametros(comando);
+
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Proyecto.EliminarEmpleado]:");
             }
             finally
             {

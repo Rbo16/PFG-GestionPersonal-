@@ -19,7 +19,7 @@ namespace GestionPersonal
 
         public ProyectoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
-            cargarProyectos();
+            listaProyectos();
             ventanaActiva = new Proyectos(this);
             ventanaActiva.Show();
         }
@@ -29,6 +29,10 @@ namespace GestionPersonal
             dtProyectos = Listar.listarProyectos();
         }
 
+        private void cargarProyectosEmpleado()
+        {
+            dtProyectos = Listar.listarProyectosEmpleado();
+        }
 
         /// <summary>
         /// Devuelve el DataTable de Proyectos sin filtro
@@ -36,9 +40,17 @@ namespace GestionPersonal
         /// <returns></returns>
         public DataTable listaProyectos()
         {
-            cargarProyectos();
+            if(Usuario.rol == TipoEmpleado.Basico)
+            {
+                cargarProyectosEmpleado();
+            }
+            else
+            {
+                cargarProyectos();
+            }   
             return dtProyectos;
         }
+
 
         /// <summary>
         /// Devuelve un DataTable que filtra el DataTable principal de Proyectos
@@ -49,6 +61,9 @@ namespace GestionPersonal
         {
             return Listar.filtrarTabla(dtProyectos, filtro);
         }
+
+
+
 
         /// <summary>
         /// Devuelve un DataTable con los Empleados que participan en el Proyecto indicado
@@ -169,7 +184,7 @@ namespace GestionPersonal
             };
         }
 
-        public void aniadirEmpleado(string SIdProyecto)
+        public void aniadirEmpleado(string SIdProyecto, string NombreP)
         {
             if (controladorBusqueda.dniBusqueda != string.Empty)
             {
@@ -182,10 +197,36 @@ namespace GestionPersonal
                     proyecto.addEmpleado(controladorBusqueda.dniBusqueda, this.Usuario.IdEmpleado);
                     
                     MessageBox.Show("Empleado añadido correctamente.");
+
+                    informarAdicion(controladorBusqueda.dniBusqueda, NombreP);
                 }
                 else
                     MessageBox.Show("El empleado seleccionado ya participa en ese proyecto");
             }
+        }
+        public void eliminarEmpleado(string SIdEmpleado, string SIdProyecto, string NombreP)
+        {
+            int.TryParse(SIdProyecto, out int IdProyecto);
+            int.TryParse(SIdEmpleado, out int IdEmpleado);
+
+            Proyecto proyecto = new Proyecto(IdProyecto);
+            proyecto.removeEmpleado(IdEmpleado, this.Usuario.IdEmpleado);
+            MessageBox.Show("Empleado retirado del proyecto con éxtio.");
+
+            informarEliminacion(IdEmpleado, NombreP);
+
+        }
+
+        private void informarEliminacion(int IdEmpleado, string NombreP)
+        {
+            string correo = EnviarMail.obtenerMail(IdEmpleado);
+            EnviarMail.retiroParticipacion(correo, NombreP);
+        }
+
+        private void informarAdicion(string DNI, string NombreP)
+        {
+            string correo = EnviarMail.obtenerMail(DNI);
+            EnviarMail.nuevaParticipacion(correo, NombreP);
         }
     }
 }
