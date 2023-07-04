@@ -52,9 +52,16 @@ namespace GestionPersonal.Controladores
         }
         public void ventanaDepartamentos()
         {
-            DepartamentoControl controladorPDepartamento = new DepartamentoControl(this);
+            DepartamentoControl controladorDepartamento = new DepartamentoControl(this);
             ventanaActual.Close();
-            this.ventanaActual = controladorPDepartamento.devolverVActiva();
+            this.ventanaActual = controladorDepartamento.devolverVActiva();
+        }
+
+        public void ventanaAuditorias()
+        {
+            AuditoriaControl controladorAuditoria = new AuditoriaControl(this);
+            ventanaActual.Close();
+            this.ventanaActual = controladorAuditoria.devolverVActiva();
         }
 
         public void logout()

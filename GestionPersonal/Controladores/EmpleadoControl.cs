@@ -99,16 +99,33 @@ namespace GestionPersonal
                         CorreoE = CorreoE,
                     };
 
-                    EnviarMail.nuevoEmpleado(CorreoE, Usuario, nuevoEmpleado.Contrasenia);
+                    if (nuevoEmpleado.existeDNI())
+                    {
+                        MessageBox.Show("Ya existe un empleado con ese DNI.");
+                    }
+                    else if (nuevoEmpleado.existeNumSS())
+                    {
+                        MessageBox.Show("Ya existe un empleado con ese Número de Seguridad Social.");
+                    }
+                    else if (nuevoEmpleado.existeUsuario())
+                    {
+                        MessageBox.Show("Ya existe un empleado con ese Usuario.");
+                    }
+                    else if (nuevoEmpleado.existeCorreo())
+                    {
+                        MessageBox.Show("Ya existe un empleado con ese Correo Electrónico.");
+                    }
+                    else
+                    {
+                        EnviarMail.nuevoEmpleado(CorreoE, Usuario, nuevoEmpleado.Contrasenia);
 
-                    //Hay que mandar el correo con la contraseña
-                    nuevoEmpleado.Contrasenia = ConvertidorHASH.GetHashString(nuevoEmpleado.Contrasenia);
+                        nuevoEmpleado.Contrasenia = ConvertidorHASH.GetHashString(nuevoEmpleado.Contrasenia);
 
-                    nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
+                        nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
 
-                    creado = true;
-                }
-               
+                        creado = true;
+                    }
+                }   
             }
             else
             {

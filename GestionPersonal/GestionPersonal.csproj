@@ -72,6 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controladores\AuditoriaControl.cs" />
     <Compile Include="Controladores\BusquedaEmpleadoControlador.cs" />
     <Compile Include="Controladores\Controlador.cs" />
     <Compile Include="Controladores\Filtros\FiltroAusenciaControl.cs" />
@@ -94,6 +95,9 @@
     <Compile Include="Utiles\Listar.cs" />
     <Compile Include="Utiles\Password.cs" />
     <Compile Include="Utiles\Querys.cs" />
+    <Compile Include="Vistas\Auditorias.xaml.cs">
+      <DependentUpon>Auditorias.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Vistas\BusquedaEmpleado.xaml.cs">
       <DependentUpon>BusquedaEmpleado.xaml</DependentUpon>
     </Compile>
@@ -139,6 +143,10 @@
     <Compile Include="Vistas\Recuperacion.xaml.cs">
       <DependentUpon>Recuperacion.xaml</DependentUpon>
     </Compile>
+    <Page Include="Vistas\Auditorias.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Vistas\Ausencias.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

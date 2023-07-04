@@ -250,6 +250,40 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        public static DataTable listarAuditorias(string Tabla)
+        {
+            try
+            {
+                DataTable dtAuditorias = new DataTable();
+
+                string consulta = "SELECT Id" + Tabla + ", FechaUltModif, IdModif, Borrado FROM " + Tabla + 
+                    " ORDER BY FechaUltModif DESC";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                SqlDataAdapter adaptadorSql = new SqlDataAdapter(comando);
+                using (adaptadorSql)
+                {
+                    adaptadorSql.Fill(dtAuditorias);
+                }
+
+                return dtAuditorias;
+
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Auditorias.Listar]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
         /// <summary>
         /// Devuelve la tabla dada filtrada según la cadena porporcionada
         /// </summary>

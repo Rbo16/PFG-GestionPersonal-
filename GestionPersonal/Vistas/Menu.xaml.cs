@@ -69,7 +69,7 @@ namespace GestionPersonal
 
         private void btnAuditorias_Click(object sender, RoutedEventArgs e)
         {
-
+            this.controladorMenu.abrirAuditorias();
         }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)

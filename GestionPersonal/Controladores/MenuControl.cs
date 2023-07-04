@@ -34,7 +34,10 @@ namespace GestionPersonal.Controladores
         {
             ventanaControl.ventanaDepartamentos();
         }
-
+        public void abrirAuditorias()
+        {
+            ventanaControl.ventanaAuditorias();
+        }
         public void logout()
         {
             ventanaControl.logout();

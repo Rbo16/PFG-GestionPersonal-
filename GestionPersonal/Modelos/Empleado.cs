@@ -175,6 +175,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el borrado lógico del Empleado que llama al método.
+        /// </summary>
+        /// <param name="IdModif"></param>
         public void deleteEmpleado(int IdModif)
         {
             try
@@ -203,9 +207,12 @@ namespace GestionPersonal
             {
                 conexionSQL.Close();
             }
-
-            //!!LUEGO HAY QUE ELIMINARLO DEL DEPARTAMENTO, PROYECTOS, SUS CONTRATOS, AUSENCIAS 
         }
+
+        /// <summary>
+        /// Modifica la información en el sistema del Empleado que llama al método.
+        /// </summary>
+        /// <param name="IdModif">Id de la persona que actualiza los datos</param>
         public void updateEmpleado(int IdModif)
         {
             try
@@ -239,6 +246,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Actualiza en el sistema el EstadoE del Empleado que llama al método.
+        /// </summary>
+        /// <param name="IdModif">Id de la persona que actualiza el estado</param>
         internal void updateEstado(int IdModif)
         {
             try
@@ -265,6 +276,154 @@ namespace GestionPersonal
             catch (Exception e)
             {
                 ExceptionManager.Execute(e, " ERROR[Empleado.Estado]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Comprueba si existe en el sistema el Correo del objeto Empleado que llama al método
+        /// </summary>
+        /// <returns></returns>
+        internal bool existeCorreo()
+        {
+            bool existe = false;
+            try
+            {
+                string consulta = "SELECT * FROM Empleado WHERE CorreoE = @CorreoE ";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@CorreoE", SqlDbType.NVarChar);
+                comando.Parameters["@CorreoE"].Value = this.CorreoE;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    existe= true;
+                }
+                return existe;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Empleado.ExisteCorreo]:");
+                return true;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Comprueba si existe en el sistema el DNI del objeto Empleado que llama al método
+        /// </summary>
+        /// <returns></returns>
+        internal bool existeDNI()
+        {
+            bool existe = false;
+            try
+            {
+                string consulta = "SELECT * FROM Empleado WHERE DNI = @DNI ";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
+                comando.Parameters["@DNI"].Value = this.DNI;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    existe = true;
+                }
+                return existe;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Empleado.ExisteDNI]:");
+                return true;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Comprueba si existe en el sistema el Usuario del objeto Empleado que llama al método
+        /// </summary>
+        /// <returns></returns>
+        internal bool existeUsuario()
+        {
+            bool existe = false;
+            try
+            {
+                string consulta = "SELECT * FROM Empleado WHERE Usuario = @Usuario ";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
+                comando.Parameters["@Usuario"].Value = this.Usuario;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    existe = true;
+                }
+                return existe;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Empleado.ExisteUsuario]:");
+                return true;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Comprueba si existe en el sistema el Número de seguridad social del objeto Empleado que llama al método
+        /// </summary>
+        /// <returns></returns>
+        internal bool existeNumSS()
+        {
+            bool existe = false;
+            try
+            {
+                string consulta = "SELECT * FROM Empleado WHERE NumSS = @NumSS ";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@NumSS", SqlDbType.NVarChar);
+                comando.Parameters["@NumSS"].Value = this.NumSS;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    existe = true;
+                }
+                return existe;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, " ERROR[Empleado.ExisteNumSS]:");
+                return true;
             }
             finally
             {
