@@ -18,6 +18,12 @@ namespace GestionPersonal.Controladores
             ventanaActiva.Show();
         }
 
+        /// <summary>
+        /// Comprueba que los campos usuario y contraseña estén rellenos y, si lo están, llama al modelo Empleado
+        /// para que compruebe las credenciales de inicio de sesión con la BBDD.
+        /// </summary>
+        /// <param name="usuario"></param>
+        /// <param name="contrasenia"></param>
         public void iniciarSesion(string usuario, string contrasenia)
         {
             
@@ -48,6 +54,9 @@ namespace GestionPersonal.Controladores
             }
         }
         
+        /// <summary>
+        /// Llama al controlador de ventanas para que abra la ventana de recuperación de contraseña.
+        /// </summary>
         public void abrirRecuperacion()
         {
             ventanaControl.ventanaRecuperacion();

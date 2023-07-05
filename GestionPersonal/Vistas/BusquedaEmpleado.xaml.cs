@@ -34,6 +34,10 @@ namespace GestionPersonal.Vistas
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Llama al controlador para obtener una lista de empleados filtrada.
+        /// </summary>
+        /// <param name="filtro"></param>
         private void cargarDTG(string filtro)
         {
 
@@ -43,11 +47,21 @@ namespace GestionPersonal.Vistas
             dtgEmpleados.ItemsSource = eliminarColumnas(dtEmpleados).DefaultView;
         }
 
+        /// <summary>
+        /// Carga el DataGrid con los empleados cuyo estado sea 'Autorizado'.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgEmpleados_Loaded(object sender, RoutedEventArgs e)
         {
             cargarDTG("Estado = 'Autorizado'");
         }
 
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de empleados que cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnas(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -67,6 +81,12 @@ namespace GestionPersonal.Vistas
             return dtShow;
         }
 
+        /// <summary>
+        /// cambia el valor del filtro cada vez que el texto de un Textbox es cambiado y carga el DataGrid en base a
+        /// ese filtro.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txb_TextChanged(object sender, TextChangedEventArgs e)
         {
             string filtro = string.Empty;
@@ -89,11 +109,21 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// Cierra la ventana de búsqueda.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCancelar_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Si hay un empleado seleccionado, guarda su DNI en el controlador que ha abierto la ventana.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnConfirmar_Click(object sender, RoutedEventArgs e)
         {
             if(dtgEmpleados.SelectedItem != null)
@@ -107,6 +137,11 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// LLama al método de vuelta del controlador.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             controladorBusqueda.volver();

@@ -42,6 +42,10 @@ namespace GestionPersonal
             this.DescripcionP= string.Empty;
         }
 
+        /// <summary>
+        /// Hace el Insert del proyecto que invoca el método en la BBDD.
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que crea el proyecto.</param>
         public void insertarProyecto(int IdModif)
         {
             try
@@ -70,6 +74,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el Update del proyecto que invoca al método en la BBDD.
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que ha realizado los cambios.</param>
         public void updateProyecto(int IdModif)
         {
             try
@@ -102,6 +110,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el borrado lógico del proyecto que llama al método en la BBDD.
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que realiza el borrado.</param>
         public void deleteProyecto(int IdModif)
         {
             try
@@ -134,6 +146,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el borrado lógico de todas las participaciones del proyecto que invoca al método en la BBDD.
+        /// </summary>
         private void deleteParticipacion()
         {
             try 
@@ -156,6 +171,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Hace el Insert del empleado cuyo DNI se indica en la tabla de ParticipacionProyecto con el proyecto que
+        /// invoca al método en la BBDD.
+        /// </summary>
+        /// <param name="DNI">DNI del empleado que se desea añadir.</param>
+        /// <param name="IdModif">Id del empleado que añade al empleado indicado en el proyecto.</param>
         public void addEmpleado(string DNI, int IdModif)
         {
             try
@@ -188,6 +209,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Hace el borrado lógico de la ParticipacionProyecto con el empleado indicado y el proyecto que llama al
+        /// método en la BBDD.
+        /// </summary>
+        /// <param name="IdEmpleado">Id del empleado cuya participación se desea eliminar.</param>
+        /// <param name="IdModif">Id del empleado que elimina la participación.</param>
         public void removeEmpleado(int IdEmpleado, int IdModif)
         {
             try
@@ -220,6 +247,11 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Comprueba con la BBDD si el empleado indicado participa en el proyecto que invoca al método.
+        /// </summary>
+        /// <param name="DNI">DNI del empleado cuya participación se desea comprobar.</param>
+        /// <returns>True si participa, false si no.</returns>
         public bool Participa(string DNI)
         {
             bool existe = true;
@@ -256,6 +288,11 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Devuelve el comando con los parámetros necesarios para insertar una Ausencia especificados.
+        /// </summary>
+        /// <param name="comando">Comando sql que se desea completar.</param>
+        /// <returns></returns>
         private SqlCommand introducirParametros(SqlCommand comando)
         {
             comando.Parameters.Add("@NombreP", SqlDbType.NVarChar);

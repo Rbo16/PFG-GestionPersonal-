@@ -69,6 +69,11 @@ namespace GestionPersonal
             
         }
 
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de Ausencias cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnas(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -83,13 +88,13 @@ namespace GestionPersonal
             dtShow.Columns.Remove("DNI");
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
-            //dtShow.Columns.Remove("Borrado");
+            dtShow.Columns.Remove("Borrado");
 
             return dtShow;
         }
 
         /// <summary>
-        /// Carga los elementos en función del rol del Usuario
+        /// Carga los elementos del formulario en función del rol del Usuario.
         /// </summary>
         private void cargarRol()
         {
@@ -103,33 +108,47 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Carga el ComboBox con los diferentes Estados de una Ausencia.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoAus_Loaded(object sender, RoutedEventArgs e)
         {
-            cmbEstadoAus.ItemsSource = controladorAusencia.devolverEstadosA();
+            cmbEstadoAus.ItemsSource = Enum.GetValues(typeof(EstadoAusencia));
         }
 
+        /// <summary>
+        /// Llama al método de vuelta al menú del controlador.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorAusencia.volverMenu();
         }
 
         /// <summary>
-        /// comprueba que las fechas tengan el formato correcto y, si lo tiene, 
+        /// Llama al controlador para que cree una ausencia con los datos del formulario y, si lo hace correctamente, resetea el formulario.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnSolicitar_Click(object sender, RoutedEventArgs e)
         {
-            if (dtgListaAus.SelectedItem == null)
-            {
+
                 if (controladorAusencia.crearAusencia(txbRazon.Text, dtpFechaInicioA.SelectedDate, dtpFechaFinA.SelectedDate,
                     txbDescripcionAus.Text, txbJustificantePDF.Text))
                 {
                     vaciarCampos();
                     cargarDTG(controladorAusencia.filtro);
                 }
-            }
         }
+
+        /// <summary>
+        /// Si hay una ausencia cargada y se ha modificado, llama al controlador para que actualice los cambios.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (ausenciaActual["IdAusencia"].ToString() != string.Empty)
@@ -158,6 +177,12 @@ namespace GestionPersonal
 
         }
 
+        /// <summary>
+        /// Si hay una ausencia cargada/seleccionada llama al controlador para que la elimine tras pedir una
+        /// confirmación y resetea el formulario si es así.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgListaAus.SelectedItem != null)
@@ -181,7 +206,7 @@ namespace GestionPersonal
 
 
         /// <summary>
-        /// Guarda los cambios del Textbox. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// Guarda los cambios del Textbox localmente. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
         /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
         /// </summary>
         /// <param name="sender"></param>
@@ -199,7 +224,11 @@ namespace GestionPersonal
             }
         }
 
-
+        /// <summary>
+        /// Guarda los cambios del ComboBox EstadoAus localmente.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoAus_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!dblClic)
@@ -212,7 +241,11 @@ namespace GestionPersonal
             }
         }
 
-
+        /// <summary>
+        /// Guarda las fechas localmente cuando estas se cambian.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFecha_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!dblClic)
@@ -226,7 +259,11 @@ namespace GestionPersonal
             }
         }
 
-
+        /// <summary>
+        /// Al hacer doble clic en un elemento del DataGrid, carga dicho elemento.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgListaAus_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgListaAus.SelectedItem != null)
@@ -240,6 +277,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Carga los elementos del formulario con la ausencia actual.
+        /// </summary>
         private void cargarAusencia()
         {
             dblClic = true;
@@ -259,7 +299,7 @@ namespace GestionPersonal
 
 
         /// <summary>
-        /// Vacía el contenido de los elementos de la vista
+        /// Vacía el contenido de los elementos de la vista.
         /// </summary>
         private void vaciarCampos()
         {
@@ -283,11 +323,21 @@ namespace GestionPersonal
             dblClic = false;
         }
 
+        /// <summary>
+        /// Llama al controlador para que abra la ventana FiltroAusencia.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFiltrarAus_Click(object sender, RoutedEventArgs e)
         {
             controladorAusencia.prepararFiltro();
         }
 
+        /// <summary>
+        /// Carga el DataGrid en base al filtro del controlador cada vez que la ventana se activa.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.IsEnabled)
@@ -297,6 +347,11 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();

@@ -17,6 +17,13 @@ namespace GestionPersonal.Controladores
             ventanaRecuperacion.Show();
         }
 
+        /// <summary>
+        /// Genera una nueva contraseña para el empleado que tenga el correo indicado, si este existe, llama al 
+        /// modelo Empleado para que actualice la contraseña en el sistema y llama a la clase EnviarMail para que
+        /// esta informe de las nuevas credenciales al usuario via mail.
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <returns></returns>
         public bool enviarContraseña(string correo)
         {
             bool exito = false;

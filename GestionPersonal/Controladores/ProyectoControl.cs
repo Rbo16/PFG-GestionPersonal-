@@ -24,18 +24,25 @@ namespace GestionPersonal
             ventanaActiva.Show();
         }
 
+        /// <summary>
+        /// Carga la lista de Proyectos llamando a su método correspondiente de la clase Listar.
+        /// </summary>
         private void cargarProyectos()
         {
             dtProyectos = Listar.listarProyectos();
         }
 
+        /// <summary>
+        /// Carga la lista de Empleados que participan en al menos un proyecto llamando a su método correspondiente de la clase Listar.
+        /// </summary>
         private void cargarProyectosEmpleado()
         {
             dtProyectos = Listar.listarProyectosEmpleado();
         }
 
         /// <summary>
-        /// Devuelve el DataTable de Proyectos sin filtro
+        /// Devuelve el DataTable de Proyectos sin filtro. Si el rol del usuario es básico, devuelve los proyectos
+        /// los que participa el mismo. Si no, devuelve todas las participaciones de empleados en proyectos.
         /// </summary>
         /// <returns></returns>
         public DataTable listaProyectos()
@@ -53,7 +60,7 @@ namespace GestionPersonal
 
 
         /// <summary>
-        /// Devuelve un DataTable que filtra el DataTable principal de Proyectos
+        /// Devuelve un DataTable que filtra el DataTable principal de Proyectos mediante la clase Listar.
         /// </summary>
         /// <param name="filtro">string con el filtro que se quiere aplicar</param>
         /// <returns></returns>
@@ -66,7 +73,7 @@ namespace GestionPersonal
 
 
         /// <summary>
-        /// Devuelve un DataTable con los Empleados que participan en el Proyecto indicado
+        /// Devuelve un DataTable con los Empleados que participan en el Proyecto indicado.
         /// </summary>
         /// <param name="SIdProyecto">Id del Proyecto en formato string</param>
         /// <returns></returns>
@@ -78,6 +85,19 @@ namespace GestionPersonal
             return Listar.filtrarTabla(dtEmpleados, filtro);
         }
 
+        /// <summary>
+        /// Comprueba que los campos necesarios para la creación de un proyecto estén completos y correctos y, si es
+        /// así, llama al modelo Proyecto para que lo inserte en la BBDD.
+        /// </summary>
+        /// <param name="NombreP">Nombre del proyecto</param>
+        /// <param name="Cliente">Cliente del proyecto</param>
+        /// <param name="SFechaInicioP">string de la fecha de inicio del proyecto</param>
+        /// <param name="SNTiempo">Número para indicar las unidades de tiempo destinadas al proyecto</param>
+        /// <param name="Tiempo">Unidad de tiempo</param>
+        /// <param name="SPresupuesto">Presupuesto dedicado al proyecto</param>
+        /// <param name="SPrioridad">Prioridad del proyecto</param>
+        /// <param name="DescripcionP">Descripción del proyecto</param>
+        /// <returns></returns>
         public bool crearProyecto(string NombreP, string Cliente, string SFechaInicioP, string SNTiempo, string Tiempo, string SPresupuesto,
             string SPrioridad, string DescripcionP)
         {
@@ -88,6 +108,7 @@ namespace GestionPersonal
             lCampos.Add(Cliente);
             lCampos.Add(SFechaInicioP);
             lCampos.Add(SNTiempo);
+            lCampos.Add(Tiempo);
             lCampos.Add(SPresupuesto);
             lCampos.Add(DescripcionP);
             lCampos.Add(SPrioridad);
@@ -121,7 +142,10 @@ namespace GestionPersonal
                         Prioridad = Prioridad,
                         DescripcionP = DescripcionP
                     };
+
                     nuevoProyecto.insertarProyecto(this.Usuario.IdEmpleado);
+
+                    MessageBox.Show("Proyecto creado correctamente");
                 }
             }
             else
@@ -134,40 +158,89 @@ namespace GestionPersonal
 
         }
 
+
+        /// <summary>
+        /// Comprueba que los datso de un proyecto estén correctos y completos y, si es así, llama al modelo Proyecto
+        /// para que actualice los datos en la BBDD.
+        /// </summary>
+        /// <param name="proyectoModif">DataRow con la información del proyecto a modificar.</param>
         public void modificarProyecto(DataRow proyectoModif)
         {
-            //LO MEJOR VA A SER CONTROLAR SI ESTÁN VACIOS EN LAS VISTAS
 
             int.TryParse(proyectoModif["IdProyecto"].ToString(), out int IdProyecto);
             string NombreP = proyectoModif["NombreP"].ToString();
             string Cliente = proyectoModif["Cliente"].ToString();
-            DateTime.TryParse(proyectoModif["FechaInicioP"].ToString(), out DateTime FechaInicioP);
-            string Tiempo = proyectoModif["Tiempo"].ToString();
-            int.TryParse(proyectoModif["Presupuesto"].ToString(), out int Presupuesto);
-            TipoPrioridad.TryParse(proyectoModif["Prioridad"].ToString(), out TipoPrioridad Prioridad);
+            string SFechaInicioP = proyectoModif["FechaInicioP"].ToString();
+            string SNTiempo = proyectoModif["Tiempo"].ToString().Split(' ')[0];
+            string Tiempo = proyectoModif["Tiempo"].ToString().Split(' ')[1];
+            string SPresupuesto = proyectoModif["Presupuesto"].ToString();
+            string SPrioridad= proyectoModif["Prioridad"].ToString();
             string DescripcionP = proyectoModif["DescripcionP"].ToString();
 
-            Proyecto proyectoModificado = new Proyecto(IdProyecto)
-            {
-                NombreP= NombreP,
-                Cliente= Cliente,
-                FechaInicioP= FechaInicioP,
-                Tiempo= Tiempo,
-                Presupuesto= Presupuesto,
-                Prioridad= Prioridad,
-                DescripcionP= DescripcionP
-            };
+            List<string> lCampos = new List<string>();
+            lCampos.Add(NombreP);
+            lCampos.Add(Cliente);
+            lCampos.Add(SFechaInicioP);
+            lCampos.Add(SNTiempo);
+            lCampos.Add(SPresupuesto);
+            lCampos.Add(DescripcionP);
+            lCampos.Add(SPrioridad);
 
-            proyectoModificado.updateProyecto(this.Usuario.IdEmpleado);
+            if (!camposVacios(lCampos))
+            {
+                if (!int.TryParse(SNTiempo, out int NTiempo))
+                {
+                    MessageBox.Show("Introduzca el tiempo como un entero");
+                }
+                else if (!int.TryParse(SPresupuesto, out int Presupuesto))
+                {
+                    MessageBox.Show("Introduzca el presupuesto como un entero");
+                }
+                else
+                {
+                    Tiempo = NTiempo + " " + Tiempo;
+                    DateTime.TryParse(SFechaInicioP, out DateTime FechaInicioP);
+                    TipoPrioridad.TryParse(SPrioridad, out TipoPrioridad Prioridad);
+
+                    Proyecto proyectoModificado = new Proyecto(IdProyecto)
+                    {
+                        NombreP = NombreP,
+                        Cliente = Cliente,
+                        FechaInicioP = FechaInicioP,
+                        Tiempo = Tiempo,
+                        Presupuesto = Presupuesto,
+                        Prioridad = Prioridad,
+                        DescripcionP = DescripcionP
+                    };
+
+                    proyectoModificado.updateProyecto(this.Usuario.IdEmpleado);
+
+                    MessageBox.Show("Cambios guardados correctamente.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Rellene todos los campos necesarios.");
+            }
+
         }
 
+        /// <summary>
+        /// Convierte el SIdProyecto a int y se lo proporciona al modelo para que este lo elimine del sistema.
+        /// </summary>
+        /// <param name="SIdProyecto"></param>
         public void borrarProyecto(string SIdProyecto)
         {
             int IdProyecto = Convert.ToInt32(SIdProyecto);
             Proyecto proyectoBorrado = new Proyecto(IdProyecto);
             proyectoBorrado.deleteProyecto(this.Usuario.IdEmpleado);
+            MessageBox.Show("Proyecto eliminado correctamente");
         }
 
+        /// <summary>
+        /// Llama al controlador de ventanas para que bloquee la ventana activa, mientras que invoca un contructor del
+        /// controlador de la ventana FiltroProyecto para abrir una de estas.
+        /// </summary>
         public void prepararFiltro()
         {
             this.filtro = string.Empty;
@@ -175,6 +248,10 @@ namespace GestionPersonal
             FiltroProyectoControl controladorFiltroP = new FiltroProyectoControl(this);
         }
 
+        /// <summary>
+        /// Llama al controlador de ventanas para que bloquee la ventana activa, mientras que invoca un contructor del
+        /// controlador de la ventana BusquedaEmpleado para abrir una de estas.
+        /// </summary>
         public void prepararFiltroEmpleado()
         {
             ventanaControl.bloquearVActual();
@@ -184,6 +261,12 @@ namespace GestionPersonal
             };
         }
 
+        /// <summary>
+        /// Añade el emlpeado indicado en la ventana de BusquedaEmpleado al proyecto indicado si no participa ya en él
+        /// e invoca al método que informa de su adición.
+        /// </summary>
+        /// <param name="SIdProyecto">String del id del proyecto al que queremos añadir el empleado.</param>
+        /// <param name="NombreP">Nombre del proyecto.</param>
         public void aniadirEmpleado(string SIdProyecto, string NombreP)
         {
             if (controladorBusqueda.dniBusqueda != string.Empty)
@@ -204,6 +287,15 @@ namespace GestionPersonal
                     MessageBox.Show("El empleado seleccionado ya participa en ese proyecto");
             }
         }
+
+        /// <summary>
+        /// Convierte los ids proporcionados a int para proporcionárselos al modelo Proyecto y que este elimine la
+        /// participación del empleado indicado en el proyecto indicado. Además, invoca al método que informa de 
+        /// la eliminación.
+        /// </summary>
+        /// <param name="SIdEmpleado">String del id del empleado cuya participación queremos eliminar.</param>
+        /// <param name="SIdProyecto">String del id del proyecto del cual queremos eliminar la participación.</param>
+        /// <param name="NombreP">Nombre del proyecto.</param>
         public void eliminarEmpleado(string SIdEmpleado, string SIdProyecto, string NombreP)
         {
             int.TryParse(SIdProyecto, out int IdProyecto);
@@ -217,12 +309,24 @@ namespace GestionPersonal
 
         }
 
+        /// <summary>
+        /// Obtiene el mail del empleado cuya participación ha sido eliminada y llama a la clase Enviar mail para informarle
+        /// de su eliminación via mail.
+        /// </summary>
+        /// <param name="IdEmpleado">Id del empleado cuya participación se quiere eliminar.</param>
+        /// <param name="NombreP">Nombre del proyecto.</param>
         private void informarEliminacion(int IdEmpleado, string NombreP)
         {
             string correo = EnviarMail.obtenerMail(IdEmpleado);
             EnviarMail.retiroParticipacion(correo, NombreP);
         }
 
+        /// <summary>
+        /// Obtiene el mail del empleado añadido al proyecto y llama a la clase Enviar mail para informarle
+        /// de su adición via mail.
+        /// </summary>
+        /// <param name="DNI">DNI del empleado cuya participación ha sido creada.</param>
+        /// <param name="NombreP">Nombre del proyecto.</param>
         private void informarAdicion(string DNI, string NombreP)
         {
             string correo = EnviarMail.obtenerMail(DNI);

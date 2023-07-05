@@ -30,6 +30,11 @@ namespace GestionPersonal.Vistas
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Carga el DataGrid de la tabla cuyo botón haya sido presionado.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btn_Click(object sender, RoutedEventArgs e)
         {
             string nombreTabla = ((Button)sender).Name.Substring(3);
@@ -40,6 +45,11 @@ namespace GestionPersonal.Vistas
             dtgAuditorias.ItemsSource = dtAuditoria.DefaultView;
         }
 
+        /// <summary>
+        /// Llama al controlador para que vuelva al menú.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorAuditoria.volverMenu();

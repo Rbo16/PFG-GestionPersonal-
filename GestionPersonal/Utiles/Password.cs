@@ -11,6 +11,15 @@ namespace GestionPersonal.Utiles
     {
             private static readonly char[] Punctuations = "!@#$%^&*()_-+=[{]};:>|./?".ToCharArray();
 
+            /// <summary>
+            /// Genera una contraseña aleatori tan larga como se indique y con tantos caracteres especiales como 
+            /// se indique.
+            /// </summary>
+            /// <param name="length">Longitud deseada de la contraseña a generar. Entre 1 y 128.</param>
+            /// <param name="numberOfNonAlphanumericCharacters">Número de caracteres especiales que deseamos
+            /// incluir en la contraseña. No puede superar la longitud de la contraseña.</param>
+            /// <returns>La nueva contraseña generada en fortamo string.</returns>
+            /// <exception cref="ArgumentException"></exception>
             public static string Generate(int length, int numberOfNonAlphanumericCharacters)
             {
                 if (length < 1 || length > 128)

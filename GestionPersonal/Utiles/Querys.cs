@@ -14,7 +14,11 @@ namespace GestionPersonal.Utiles
         private static SqlConnection conexionSQL;
         private static string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
-
+        /// <summary>
+        /// Comprueba si el correo proporcionado existe en el sistema sin necesidad de crear antes un objeto Empleado.
+        /// </summary>
+        /// <param name="correo">Correo cuya existencia se desea comprobar.</param>
+        /// <returns></returns>
         public static string existeCorreo(string correo)
         {
             string usuario = string.Empty;

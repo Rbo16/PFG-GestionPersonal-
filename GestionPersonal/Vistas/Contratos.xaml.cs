@@ -68,6 +68,11 @@ namespace GestionPersonal
 
         }
 
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de Contratos cuyas columanas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnas(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -93,7 +98,9 @@ namespace GestionPersonal
             return dtShow;
         }
 
-
+        /// <summary>
+        /// Carga los elementos del formulario en función del rol del Usuario.
+        /// </summary>
         private void cargarRol()
         {
             if (controladorContrato.Usuario.rol == TipoEmpleado.Basico)
@@ -112,7 +119,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Carga los elementos del ComboBox TipoContrato
+        /// Carga los elementos del ComboBox TipoContrato.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -130,7 +137,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Carga las distinatas unidades de tiempo que tendrá el ComboBox
+        /// Carga las distinatas unidades de tiempo que tendrá el ComboBox.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -146,7 +153,8 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Guarda en el DataRow actual cada vez que se cambia la unidad de duración. Y si es indefinido, bloquea la parte numérica
+        /// Guarda en el DataRow actual cada vez que se cambia la unidad de duración. Y si es indefinido, 
+        /// bloquea la parte numérica.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -172,11 +180,22 @@ namespace GestionPersonal
 
         }
 
+        /// <summary>
+        /// Al hacer clic, llama al controlador para que vuelva al menú.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorContrato.volverMenu();
         }
 
+        /// <summary>
+        /// Al haer clic, llama al controlador para que cree el contrato con los datos del formulario y, si lo hace correctamente, resetea el
+        /// formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             if (controladorContrato.crearContrato(txbHorasTrabajo.Text, txbHorasDescanso.Text, txbHoraEntrada.Text,
@@ -190,6 +209,12 @@ namespace GestionPersonal
                 
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay un contrato cargado cuyos datos se han modificado, llama al controlador para
+        /// que guarde los cambios.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (contratoActual["IdContrato"].ToString() != string.Empty)
@@ -208,6 +233,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay un contrato cargado/seleccionado, llama al controlador para que elimine tras
+        /// pedir una confirmación y resetea el formulario si es así.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgContratos.SelectedItem != null)
@@ -230,7 +261,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Carga las Horas de trabajo, de descanso, y las vacaciones por mes según el tipo de contrato
+        /// Carga las Horas de trabajo, de descanso, y las vacaciones por mes según el tipo de contrato.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -267,8 +298,8 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Guarda los cambios del Textbox. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
-        /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
+        /// Guarda los cambios del Textbox localmente. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -286,28 +317,22 @@ namespace GestionPersonal
                 }
             }
         }
-        private void cmbDuracion_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            if (!dblClic)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
-            {
-                if (contratoActual["IdContrato"].ToString() != string.Empty)
-                {
-                    string columna = ((System.Windows.Controls.ComboBox)sender).Name.Substring(3);
-                    string valor = ((System.Windows.Controls.ComboBox)sender).SelectedValue.ToString();
-                    if (valor == "Indefinido")
-                        contratoActual[columna] = valor;
-                    else
-                        contratoActual[columna] = txbDuracion.Text + " " + valor;
-                    hayCambios = true;
-                }
-            }
-        }
 
+        /// <summary>
+        /// Llama al controlador para que abra una ventana Filtro Contratos.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFiltrarCont_Click(object sender, RoutedEventArgs e)
         {
             controladorContrato.prepararFiltro();
         }
 
+        /// <summary>
+        /// Carga el DataGrid en base al filtro del controlador cada vez que la ventana se activa.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.IsEnabled)
@@ -317,6 +342,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Vacía los campos del formulario.
+        /// </summary>
         private void vaciarCampos()
         {
             dblClic= true;
@@ -349,6 +377,11 @@ namespace GestionPersonal
                 controladorContrato.filtro = string.Empty;
         }
 
+        /// <summary>
+        /// Filtra los contratos que estén activos dentro de la lista mostrada.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chkActivo_Checked(object sender, RoutedEventArgs e)
         {
             string filtroActivo = controladorContrato.filtro;
@@ -358,11 +391,21 @@ namespace GestionPersonal
             cargarDTG(filtroActivo);
         }
 
+        /// <summary>
+        /// Carga el DataGrid en base al filtro del controlador.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void chkActivo_Unchecked(object sender, RoutedEventArgs e)
         {
             cargarDTG(controladorContrato.filtro);
         }
 
+        /// <summary>
+        /// Al hacer doble clic en un elemento del DataGrid, se cargan sus datos en el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgContratos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgContratos.SelectedItem != null)
@@ -373,6 +416,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Carga los datos del Contrato actual.
+        /// </summary>
         private void cargarContrato()
         {
             hayCambios= false;
@@ -402,6 +448,11 @@ namespace GestionPersonal
             dblClic = false;
         }
 
+        /// <summary>
+        /// Resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();

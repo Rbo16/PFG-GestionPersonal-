@@ -30,6 +30,11 @@ namespace GestionPersonal.Vistas
             cargarListas();
         }
 
+        /// <summary>
+        /// Carga el ComboBox de Estado Proyecto.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoP_Loaded(object sender, RoutedEventArgs e)
         {
             List<string> lEstadoS = new List<string>();
@@ -41,6 +46,10 @@ namespace GestionPersonal.Vistas
             cmbEstadoP.ItemsSource = lEstadoS;
         }
 
+        /// <summary>
+        /// Carga como vacío el contenido de la lista que contendrá los filtros de cada elemento por el que se
+        /// puede filtrar.
+        /// </summary>
         private void cargarListas()
         {
             contenidoFiltro[0] = "";
@@ -50,6 +59,12 @@ namespace GestionPersonal.Vistas
             contenidoFiltro[4] = "";
         }
 
+        /// <summary>
+        /// Comprueba que se haya especificado al menos un campo, forma la cadena que servirá como filtro
+        /// y se la asigna al controlador. Después, cierra la ventana.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             string filtro = string.Empty;
@@ -96,31 +111,61 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// Al cerrar la ventana, invoca al controlador para que lo gestione.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             controladorFiltroP.volver();
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbProyecto_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[0] = txbProyecto.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbCiente_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[1] = txbCiente.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoP_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[2] = cmbEstadoP.SelectedValue.ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del DatePicker en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFechaDesde_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[3] = dtpFechaDesde.SelectedDate.ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del DatePicker en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFechaHasta_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[4] = dtpFechaHasta.SelectedDate.ToString();

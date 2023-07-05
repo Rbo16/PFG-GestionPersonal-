@@ -21,6 +21,12 @@ namespace GestionPersonal.Controladores
             this.ventanaControl = ventanaControl;
             this.Usuario= ventanaControl.Usuario;
         }
+
+        /// <summary>
+        /// Devuelve la ventanaActiva actual
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Window devolverVActiva()
         {
             if (ventanaActiva == null)
@@ -31,7 +37,7 @@ namespace GestionPersonal.Controladores
         }
 
         /// <summary>
-        /// Método para que el controlador de ventanas genere la ventana de menú principal
+        /// Método para que el controlador de ventanas genere la ventana de menú principal de nuevo
         /// </summary>
         public void volverMenu()
         {

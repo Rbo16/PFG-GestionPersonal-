@@ -23,15 +23,18 @@ namespace GestionPersonal.Controladores
             ventanaBusqueda.Show();
         }
 
+        /// <summary>
+        /// Llama a la clase Listar para obtener un DataTable con los empleados del sistema, lo asigna al DataTable
+        /// principal del controlador y le quita la contraseña.
+        /// </summary>
         private void cargarEmpleados()
         {
-            //Mostramos una tabla en la que no se muestren las contaseñas
             dtEmpleados = Listar.listarEmpleados();
             dtEmpleados.Columns.Remove("Contrasenia");
         }
 
         /// <summary>
-        /// Devuelve un DataTable que filtra el DataTable principal de Empleados
+        /// Devuelve un DataTable que filtra el DataTable principal de empleados a partir de la clase Listar
         /// </summary>
         /// <param name="filtro">string con el filtro que se quiere aplicar</param>
         /// <returns></returns>
@@ -40,7 +43,9 @@ namespace GestionPersonal.Controladores
             return Listar.filtrarTabla(dtEmpleados, filtro);
         }
 
-
+        /// <summary>
+        /// Invoca el método de la clase Controlador que cierra los filtros.
+        /// </summary>
         public void volver()
         {
             controlador.cerrarFiltro();

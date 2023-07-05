@@ -34,6 +34,10 @@ namespace GestionPersonal.Vistas
             cargarListas();
         }
 
+        /// <summary>
+        /// Carga como vacío el contenido de la lista que contendrá los filtros de cada elemento por el que se
+        /// puede filtrar y carga otra lista con los nombres del campo que filtra cada uno de esos elementos.
+        /// </summary>
         private void cargarListas() 
         {
             nombresFiltro.Add("NombreE");
@@ -53,6 +57,12 @@ namespace GestionPersonal.Vistas
             contenidoFiltro[6] = "";
         }
 
+        /// <summary>
+        /// Comprueba que se haya especificado al menos un campo, forma la cadena que servirá como filtro
+        /// y se la asigna al controlador. Después, cierra la ventana.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             string filtro = string.Empty;
@@ -76,41 +86,81 @@ namespace GestionPersonal.Vistas
             }
         }
 
-
+        /// <summary>
+        /// Al cerrar la ventana, invoca al controlador para que lo gestione.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             controladorFiltroE.volver();
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbNombreE_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[0] = txbNombreE.Text;
         }
+
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbApellido_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[1] = txbApellido.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbDNI_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[2] = txbDNI.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbUsuario_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[3] = txbUsuario.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoE_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[4] = cmbEstadoE.SelectedValue.ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbDepartamento_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[5] = cmbDepartamento.SelectedValue.ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbRol_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[6] = cmbRol.SelectedValue.ToString();

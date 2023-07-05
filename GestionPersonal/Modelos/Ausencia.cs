@@ -40,14 +40,14 @@ namespace GestionPersonal
             this.FechaFinA = DateTime.MinValue;
             this.DescripcionAus = string.Empty;
             this.JustificantePDF = string.Empty;
-            this.EstadoA = EstadoAusencia.Rechazada;
+            this.EstadoA = EstadoAusencia.Pendiente;
             this.IdSolicitante = 0;
             this.IdAutorizador = 0;
         }
 
 
         /// <summary>
-        /// Inserta una ausencia creada.
+        /// Hace el Insert de la ausencia que invocaal método a la BBDD.
         /// </summary>
         public void insertAusencia()
         {
@@ -79,8 +79,9 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Actualiza la ausencia que llama al método en la Base de Datos.
+        /// Realiza el Update de la ausencia que invoca al método en la BBDD.
         /// </summary>
+        /// <param name="IdModif">Id del empleado que ha relizado la modificación.</param>
         public void updateAusencia(int IdModif)
         {
             try
@@ -112,6 +113,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el Update relativo a la gestión de la ausencia que invoca al método en la BBDD.
+        /// </summary>
         public void updateAutorizador()
         {
             try
@@ -148,6 +152,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el borrado lógico de la ausencia que lo invoca en la BBDD.
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que ha relizado el borrado.</param>
         public void deleteAusencia(int IdModif)
         {
             try
@@ -180,7 +188,7 @@ namespace GestionPersonal
         /// <summary>
         /// Devuelve el comando con los parámetros necesarios para insertar una Ausencia especificados.
         /// </summary>
-        /// <param name="comando">Comando con los parámetros sin especificar</param>
+        /// <param name="comando">Comando sql que se desea completar.</param>
         /// <returns></returns>
         private SqlCommand introducirParametros(SqlCommand comando)
         {

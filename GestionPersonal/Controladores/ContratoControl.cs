@@ -22,6 +22,11 @@ namespace GestionPersonal
             ventanaActiva = new Contratos(this);
             ventanaActiva.Show();
         }
+
+        /// <summary>
+        /// Llama a la clase listar para obtener un DataTable de los contratos del sistema y lo asigna al DataTable
+        /// principal del controlador.
+        /// </summary>
         private void cargarContratos()
         {
             dtContratos = Listar.listarContratos();
@@ -29,7 +34,7 @@ namespace GestionPersonal
 
 
         /// <summary>
-        /// Devuelve el DataTable de Contratos sin filtro
+        /// Devuelve el DataTable de contratos sin filtro.
         /// </summary>
         /// <returns></returns>
         public DataTable listaContratos()
@@ -39,9 +44,9 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve un DataTable que filtra el DataTable principal de Contratos
+        /// Devuelve un DataTable que filtra el DataTable principal de Contratos a partir de la clase Listar.
         /// </summary>
-        /// <param name="filtro">string con el filtro que se quiere aplicar</param>
+        /// <param name="filtro">string con el filtro que se quiere aplicar.</param>
         /// <returns></returns>
         public DataTable listaContratos(string filtro)
         {
@@ -50,18 +55,18 @@ namespace GestionPersonal
 
         /// <summary>
         /// Recibe los strings con la información necesaria para la creación de un contrato, comprueba que estén correctos,
-        /// y llama al modelo para insertarlo en la Base de Datos
+        /// y llama al modelo para insertarlo en la Base de Datos. Además, invoca al método que avisa del alta del contrato.
         /// </summary>
-        /// <param name="SHorasTrabajo">Horas diarias trabajadas</param>
-        /// <param name="SHorasDescanso">Horas diarias de descanso</param>
-        /// <param name="SHoraEntrada"> Hora de entrada diaria</param>
-        /// <param name="SHoraSalida">Hora de salida diaria</param>
-        /// <param name="SSalario">Salario anual</param>
-        /// <param name="Puesto">Nombre del puesto dentro de la empresa</param>
-        /// <param name="SVacacionesMes">Días de vacaciones por mes</param>
-        /// <param name="Duracion">Duración del contrato</param>
-        /// <param name="SIdEmpleado">Id del empleado poseedor del contrato</param>
-        /// <param name="STipoContrato">Tipo de contrato</param>
+        /// <param name="SHorasTrabajo">Horas diarias trabajadas.</param>
+        /// <param name="SHorasDescanso">Horas diarias de descanso.</param>
+        /// <param name="SHoraEntrada"> Hora de entrada diaria.</param>
+        /// <param name="SHoraSalida">Hora de salida diaria.</param>
+        /// <param name="SSalario">Salario anual.</param>
+        /// <param name="Puesto">Nombre del puesto dentro de la empresa.</param>
+        /// <param name="SVacacionesMes">Días de vacaciones por mes.</param>
+        /// <param name="Duracion">Duración del contrato.</param>
+        /// <param name="SIdEmpleado">Id del empleado poseedor del contrato.</param>
+        /// <param name="STipoContrato">Tipo de contrato.</param>
         public bool crearContrato(string SHorasTrabajo, string SHorasDescanso, string SHoraEntrada, string SHoraSalida,
             string SSalario, string Puesto, string SVacacionesMes, string Duracion, string SIdEmpleado, string STipoContrato)
         {
@@ -138,7 +143,12 @@ namespace GestionPersonal
             return correcto;
         }
 
-
+        /// <summary>
+        /// Comprueba que los nuevos datos del contrato estén completos y correctos, y llama al modelo Contrato
+        /// para que actualice los datos en la BBDD. Además, invoca al método que avisa via mail de los cambios.
+        /// </summary>
+        /// <param name="contratoModif"></param>
+        /// <returns></returns>
         public bool modificarContrato(DataRow contratoModif)
         {
             bool correcto = true;
@@ -237,18 +247,33 @@ namespace GestionPersonal
             informarAuditoria(IdContrato, "BORRADO");
         }
 
+        /// <summary>
+        /// Llama al controlador de ventanas para que bloquee la ventana activa, mientras que invoca un contructor del
+        /// controlador de la ventana FiltroContrato para abrir una de estas.
+        /// </summary>
         public void prepararFiltro()
         {
             ventanaControl.bloquearVActual();
             FiltroContratoControl controladorFiltroC = new FiltroContratoControl(this);
         }
 
+        /// <summary>
+        /// Obtiene el correo del usuario cuyo contrato ha sido dado de alta y llama a la clase EnviarMail
+        /// para que envíe un mail informando de dicho alta.
+        /// </summary>
+        /// <param name="IdEmpleado">Id del empleado cuyo contrato ha sido dado de alta.</param>
         private void informarAlta(int IdEmpleado)
         {
             string correo = EnviarMail.obtenerMail(IdEmpleado);
             EnviarMail.altaContrato(correo);
         }
 
+        /// <summary>
+        /// Obtiene el mail de la persona cuyo contrato ha sido alterado, así como las fechas del contrato
+        /// para pasárseloa a la clase EnviarMail y que esta envíe un mail informando del cambio que ha ocurrido 
+        /// </summary>
+        /// <param name="IdContrato">Id del contrato afectado</param>
+        /// <param name="tipoAuditoria">indica el tipo de cmabio, y por tanto de mail a enviar</param>
         private void informarAuditoria(int IdContrato, string tipoAuditoria)
         {
             DataTable contrato = Listar.filtrarTabla(dtContratos, $"IdContrato = {IdContrato}");

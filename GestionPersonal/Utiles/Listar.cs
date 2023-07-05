@@ -15,6 +15,10 @@ namespace GestionPersonal.Utiles
         private static SqlConnection conexionSQL;
         private static string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de los empleados del sistema.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarEmpleados()
         {
             try
@@ -49,6 +53,10 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de las ausencias del sistema.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarAusencias()
         {
             try
@@ -83,6 +91,10 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de los contratos del sistema.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarContratos()
         {
             try
@@ -115,6 +127,10 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de los proyectos del sistema.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarProyectos()
         {
             try
@@ -148,6 +164,11 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de los proyectos del sistema
+        /// y los empleados que participan en ellos.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarProyectosEmpleado()
         {
             try
@@ -182,6 +203,10 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de los empleados del sistema y en qué proyectos participan.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarParticipacionProyectos()
         {
             try
@@ -216,6 +241,10 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de los departamentos del sistema.
+        /// </summary>
+        /// <returns></returns>
         public static DataTable listarDepartamentos()
         {
             try
@@ -250,6 +279,12 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD un DataTable compuesto por los datos de las auditorías de la tabla del sistema
+        /// ordenador por fecha de más reciente a más antiguo.
+        /// </summary>
+        /// <param name="Tabla"></param>
+        /// <returns></returns>
         public static DataTable listarAuditorias(string Tabla)
         {
             try
@@ -285,7 +320,7 @@ namespace GestionPersonal.Utiles
         }
 
         /// <summary>
-        /// Devuelve la tabla dada filtrada según la cadena porporcionada
+        /// Devuelve la tabla dada filtrada según el filtro porporcionado.
         /// </summary>
         /// <param name="dtAux">Tabla a filtrar</param>
         /// <param name="filtro">Cadena con el filtro que se quiere aplicar</param>

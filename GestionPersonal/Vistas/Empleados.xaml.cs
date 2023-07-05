@@ -25,10 +25,11 @@ namespace GestionPersonal.Vistas
     {
         private readonly EmpleadoControl controladorEmpleado;
         DataTable dtEmpleados = new DataTable();
-        int contEmpleado;//para indicar el registro del empleado en el datatable. SIGUIENTE-ANTERIOR
+        int contEmpleado;
         DataRow empleadoActual;
-        bool hayCambios = false; //con esta variable controlamos si ha habido cambios
-        bool dblClic = false;//Solo se me ocurre esto para que controlar que haycambios no se active al cargar desde dtg
+        bool hayCambios = false;
+        bool dblClic = false;
+        bool cambioEstado = false;
 
         public Empleados(EmpleadoControl controladorEmpleado)
         {
@@ -42,6 +43,12 @@ namespace GestionPersonal.Vistas
 
             cargarCombos();
         }
+
+        /// <summary>
+        /// Carga el listado de empleados en función del filtro que se le indique. Si el filtro = string.Empty,
+        /// carga un listado de todos los empleados del sistema
+        /// </summary>
+        /// <param name="filtro"></param>
         private void cargarDTG(string filtro)
         {
             if (filtro == string.Empty)
@@ -57,7 +64,11 @@ namespace GestionPersonal.Vistas
             dtgEmpleados.ItemsSource = eliminarColumnas(dtEmpleados).DefaultView;
         }
 
-
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de Empleados cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnas(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -76,17 +87,30 @@ namespace GestionPersonal.Vistas
             return dtShow;
         }
 
+        /// <summary>
+        /// Carga los ComboBox de Rol y Estado.
+        /// </summary>
         private void cargarCombos()
         {
-            cmbRol.ItemsSource = controladorEmpleado.devolverEnum("TipoEmpleado");
-            cmbEstadoE.ItemsSource = controladorEmpleado.devolverEnum("EstadoEmpleado");
+            cmbRol.ItemsSource = Enum.GetValues(typeof(TipoEmpleado));
+            cmbEstadoE.ItemsSource = Enum.GetValues(typeof(EstadoEmpleado));
         }
 
+        /// <summary>
+        /// Llama al método de vuelta al menú del controlador.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorEmpleado.volverMenu();
         }
 
+        /// <summary>
+        /// Si, al querer cerrar la ventana, hay cambios pendientes, pide una confirmación de salida.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (hayCambios)
@@ -97,6 +121,12 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// Al hacer clic, si no hay un empleado cargado, llama al controlador para crear un nuevo empleado con
+        /// los datos del formulario y, si se crea correctamente, resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             if (dtgEmpleados.SelectedItem == null)
@@ -104,7 +134,6 @@ namespace GestionPersonal.Vistas
                 if (controladorEmpleado.crearEmpleado(txbNombreE.Text, txbApellido.Text, txbUsuario.Text, txbDNI.Text,
                     txbNumSS.Text, txbTlf.Text, txbCorreoE.Text))
                 {
-                    MessageBox.Show("Empleado creado correctamente.");
                     cargarDTG(string.Empty);
                     vaciarCampos();
                 }
@@ -114,19 +143,33 @@ namespace GestionPersonal.Vistas
 
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay una ausencia cargada cuyos datos han sido modificados, llama al controlador para
+        /// que la actualice.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)//Condicion explicada en cambioEmpleadoTxb
+            if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)/
             {
                 controladorEmpleado.modificarEmpleado(empleadoActual);
                 hayCambios = false;
                 cargarDTG(string.Empty);
                 empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];
             }
+
+            if (cambioEstado && empleadoActual["IdEmpleado"].ToString() != string.Empty)
+            {
+                controladorEmpleado.gestionarEmpleado(empleadoActual["IdEmpeleado"].ToString(), empleadoActual["EstadoE"].ToString());
+                cambioEstado= false;
+                cargarDTG(string.Empty);
+                empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];
+            }
         }
 
         /// <summary>
-        /// Guarda los cambios del Textbox. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// Guarda los cambios del Textbox localmente. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
         /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
         /// </summary>
         /// <param name="sender"></param>
@@ -135,8 +178,8 @@ namespace GestionPersonal.Vistas
         {
             if (!dblClic)
             {
-                if (empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
-                                                                            //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
+                if (empleadoActual["IdEmpleado"].ToString() != string.Empty)
+                                                                           
                 {
                     string columna = ((System.Windows.Controls.TextBox)sender).Name.Substring(3);
                     empleadoActual[columna] = ((System.Windows.Controls.TextBox)sender).Text;
@@ -145,21 +188,35 @@ namespace GestionPersonal.Vistas
             }
         }
 
-
+        /// <summary>
+        /// Guarda los cambios del ComboBox localmente. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!dblClic)
             {
-                if (empleadoActual["IdEmpleado"].ToString() != string.Empty)//Esto es para que al cargar los Cmb después del dtg dobleclick, no haga esto.
-                                                                            //Y para que solo lo haga cuando un empleado ha sido cargado, es decir, hay Id en el datarow
+                if (empleadoActual["IdEmpleado"].ToString() != string.Empty)
+                                                                            
                 {
                     string columna = ((System.Windows.Controls.ComboBox)sender).Name.Substring(3);
                     empleadoActual[columna] = ((System.Windows.Controls.ComboBox)sender).SelectedIndex + 1;
-                    hayCambios = true;
+                    if (columna == "EstadoE")
+                        cambioEstado = true;
+                    else
+                        hayCambios = true;
                 } 
             }
         }
 
+        /// <summary>
+        /// Si hay un empleado cargado/seleccionado, llama al controlador para que lo elimine tras pedir una
+        /// confirmación y resetea el formulario si es así.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgEmpleados.SelectedItem != null)
@@ -182,22 +239,29 @@ namespace GestionPersonal.Vistas
                 System.Windows.MessageBox.Show("Seleccione un empleado en la tabla");
         }
 
+        /// <summary>
+        /// Al hacer doble clic en algún elemento del DataGrid, carga el empleado en el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgEmpleados_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgEmpleados.SelectedItem == null)
                 return;
             else
             {
-                contEmpleado = dtgEmpleados.SelectedIndex; //Guardamos la fila por si luego queremos visualizar el siguiente empleado
-                empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];//Lo hago con un copy para que no actualize el dtg a medida que cambias los datos y no se pueda interpretar que se están guardando los cambios
+                contEmpleado = dtgEmpleados.SelectedIndex; 
+                empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];
                 cargarEmpleado();
             }
         }
 
-        //Metodo para cargar los datos del empleado a partir de su índice en la tabla
+        /// <summary>
+        /// Carga los datos del empleado actual en el formulario.
+        /// </summary>
         private void cargarEmpleado()
         {
-            hayCambios = false;
+
             dblClic = true;
 
             txbNombreE.Text = empleadoActual["NombreE"].ToString();
@@ -212,17 +276,25 @@ namespace GestionPersonal.Vistas
             cmbEstadoE.SelectedIndex = Convert.ToInt32(empleadoActual["EstadoE"]) - 1;
 
             dtgEmpleados.SelectedItem = null;
-
+            hayCambios = false;
+            cambioEstado = false;
             dblClic = false;
         }
 
-
+        /// <summary>
+        /// Resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();
             cargarDTG(string.Empty);
         }
 
+        /// <summary>
+        /// Vacía los elementos del formulario.
+        /// </summary>
         private void vaciarCampos()
         {
             dblClic = true;
@@ -242,15 +314,26 @@ namespace GestionPersonal.Vistas
 
             dtgEmpleados.SelectedItem = null;
             hayCambios = false;
+            cambioEstado = false;
             dblClic = false;
 
         }
 
+        /// <summary>
+        /// Al hacer clic, llama al controlador para que abra la ventana Filtro Empleado.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFiltrarE_Click(object sender, RoutedEventArgs e)
         {
             controladorEmpleado.prepararFiltro();
         }
 
+        /// <summary>
+        /// Carga el DataGrid en base al filtro del controlador cada vez que la ventana se activa.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.IsEnabled)

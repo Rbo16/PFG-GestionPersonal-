@@ -30,7 +30,6 @@ namespace GestionPersonal
         DataTable dtDepartamentos;
         DataTable dtEmpleadosDep;
         DataRow departamentoActual;
-        DataRow empleadoActual;
         bool dblClic;
         bool hayCambios;
         int contDepartamento;
@@ -46,7 +45,11 @@ namespace GestionPersonal
             departamentoActual = dtDepartamentos.NewRow();
         }
 
-
+        /// <summary>
+        /// Carga el DataGrid de departamentos en base al filtro proporcionado. Si este= string.Empty, carga todos
+        /// los departamentos del sistema.
+        /// </summary>
+        /// <param name="filtro"></param>
         private void cargarDTG(string filtro)
         {
             if (filtro == string.Empty)
@@ -62,7 +65,11 @@ namespace GestionPersonal
             dtgDep.ItemsSource = eliminarColumnasDepartamento(dtDepartamentos).DefaultView;
         }
 
-
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de departamento cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnasDepartamento(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -78,7 +85,11 @@ namespace GestionPersonal
 
             return dtShow;
         }
-
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de empleados cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnasEmpleado(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -99,16 +110,28 @@ namespace GestionPersonal
             return dtShow;
         }
 
+        /// <summary>
+        /// Al hacer clis, llama al controlador para que cree un departamento con los datos del formulario, si se
+        /// crea exitosamente, se resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             if (controladorDepartamento.crearDepartamento(txbNombreD.Text, txbDescripcionD.Text) == true)
             {
-                MessageBox.Show("Departamento creado con éxito");
+                
                 cargarDTG(string.Empty);
                 vaciarCampos();
             } 
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay un departamento cargado cuyos datos se han modificado, llama al controlador para
+        /// que actualice los cambios.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (departamentoActual["IdDepartamento"].ToString() != string.Empty)
@@ -116,7 +139,6 @@ namespace GestionPersonal
                 if (hayCambios)
                 {
                     controladorDepartamento.modificarDepartamento(departamentoActual);
-                    MessageBox.Show("Datos guardados correctamente");
                     cargarDTG(string.Empty);
                     departamentoActual = dtDepartamentos.Copy().Rows[contDepartamento];
                     hayCambios = false;
@@ -124,6 +146,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay algún departamento cargado/seleccionado, llama al controlador para que lo
+        /// elimine tras pedir una confirmación y resetea el formulario si es así.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgDep.SelectedItem != null)
@@ -149,11 +177,21 @@ namespace GestionPersonal
                 System.Windows.MessageBox.Show("Seleccione un departamento de la tabla");
         }
 
+        /// <summary>
+        /// Llama al método de vuelta al menú del controlador.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorDepartamento.volverMenu();
         }
 
+        /// <summary>
+        /// al hacer doble clic en un elemento del DataGrid de departamentos, este se carga en el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgDep_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgDep.SelectedItem != null)
@@ -166,6 +204,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Carga los datos del departamento actual en el formulario.
+        /// </summary>
         private void cargarDepartamento()
         {
             hayCambios = false;
@@ -178,10 +219,12 @@ namespace GestionPersonal
             dblClic = false;
         }
 
+        /// <summary>
+        /// Carga el DataGrid de empleados de un departamento.
+        /// </summary>
         private void cargarEmpleadosDepartamento()
         {
             dtEmpleadosDep = controladorDepartamento.listaEmpleadosDepartamento(departamentoActual["IdDepartamento"].ToString());
-            empleadoActual = dtEmpleadosDep.NewRow();
             dtgEmpleadosDep.ItemsSource = null;
             dtgEmpleadosDep.ItemsSource = eliminarColumnasEmpleado(dtEmpleadosDep).DefaultView;
         }
@@ -206,6 +249,11 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Cuando el Textbox obtiene el foco, se elimina su contenido. Esto solo ocurre la primera vez que recibe el foco.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbBucarDep_GotFocus(object sender, RoutedEventArgs e)
         {
             txbBucarDep.Text= string.Empty;
@@ -213,17 +261,33 @@ namespace GestionPersonal
             txbBucarDep.TextChanged += txbBucarDep_TextChanged;
         }
 
+        /// <summary>
+        /// Muestra en el DataGrid los departamentos cuyo nombre coincida con el contenido del Textbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbBucarDep_TextChanged(object sender, TextChangedEventArgs e)
         {
             string filtro = $"NombreD like '%{txbBucarDep.Text}%'";
             cargarDTG(filtro);
         }
 
+        /// <summary>
+        /// Llama al controlador para que abra la ventana Busqueda Empleado.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAddE_Click(object sender, RoutedEventArgs e)
         {
-            controladorDepartamento.prepararFiltroEmpleado();
+            controladorDepartamento.prepararBusquedaEmpleado();
         }
 
+        /// <summary>
+        /// Cada vez que la ventana se activa, se añade el empleado seleccionado en la ventana Busqueda Empleado, si
+        /// es que lo hay.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.IsEnabled)
@@ -233,6 +297,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Si hay un empleado seleccionado, pregunta si se desea asignar dicho empleado como jefe. Si la respuesta
+        /// es "Sí", llama al controlador para que actualice el jefe de departamento, y también lo actualiza localmente.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnJefe_Click(object sender, RoutedEventArgs e)
         {
             if (dtgEmpleadosDep.SelectedItem != null)
@@ -258,12 +328,20 @@ namespace GestionPersonal
                 MessageBox.Show("Debe seleccionar un empleado.");
         }
 
+        /// <summary>
+        /// Resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             cargarDTG(string.Empty);
             vaciarCampos();
         }
 
+        /// <summary>
+        /// Vacía los elementos del formulario.
+        /// </summary>
         private void vaciarCampos()
         {
             dblClic = true;

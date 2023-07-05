@@ -43,6 +43,9 @@ namespace GestionPersonal
             proyectoActual = dtProyectos.NewRow();
         }
 
+        /// <summary>
+        /// Carga los elementos del formulario en función del rol del Usuario.
+        /// </summary>
         private void cargarRol()
         {
             if(controladorProyecto.Usuario.rol == TipoEmpleado.Basico)
@@ -87,7 +90,11 @@ namespace GestionPersonal
 
         }
 
-
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de Proyectos cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnasProyecto(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -103,6 +110,11 @@ namespace GestionPersonal
             return dtShow;
         }
 
+        /// <summary>
+        /// Devuelve un DataTable compuesto solamente por las columnas relevantes para el usuario.
+        /// </summary>
+        /// <param name="dt">DataTable de Empleados cuyas columnas se quieren reducir.</param>
+        /// <returns></returns>
         private DataTable eliminarColumnasEmpleado(DataTable dt)
         {
             DataTable dtShow = dt.Copy();
@@ -138,27 +150,49 @@ namespace GestionPersonal
 
             cmbDuracion.ItemsSource = lDuracion;
         }
+
+        /// <summary>
+        /// carga el ComboBox de prioridades.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbPrioridad_Loaded(object sender, RoutedEventArgs e)
         {
             cmbPrioridad.ItemsSource = Enum.GetValues(typeof(TipoPrioridad));
         }
-
+        
+        /// <summary>
+        /// Llama al método de vuelta al menú del controlador.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
             controladorProyecto.volverMenu();
         }
 
+        /// <summary>
+        /// Al hacer clic, si no hay un proyecto cargado, llama al controlador para que cree el proyecto y, si
+        /// se crea correctamente, resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCrear_Click(object sender, RoutedEventArgs e)
         {
             if (controladorProyecto.crearProyecto(txbNombreP.Text, txbCliente.Text, txbFechaInicioP.Text, txbTiempo.Text, "Meses",
             txbPresupuesto.Text, cmbPrioridad.Text, txbDescripcionP.Text))
             {
-                MessageBox.Show("Proyecto creado córrectamente");
                 cargarDTG(string.Empty);
                 vaciarCampos();
             } 
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay un proyecto cargado cuyos datos han sido modificados, llama al controlador para
+        /// que actualice dicho proyecto.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
             if (proyectoActual["IdProyecto"].ToString() != string.Empty)
@@ -167,7 +201,6 @@ namespace GestionPersonal
                 {
                     controladorProyecto.modificarProyecto(proyectoActual);
                     hayCambios = false;
-                    MessageBox.Show("Datos guardados correctamente");
                     cargarDTG(controladorProyecto.filtro);
                     proyectoActual = dtProyectos.Copy().Rows[contPro];
                 }
@@ -175,7 +208,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Guarda los cambios del Textbox. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// Guarda los cambios del Textbox localmente. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
         /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
         /// </summary>
         /// <param name="sender"></param>
@@ -196,7 +229,8 @@ namespace GestionPersonal
             }
         }
         /// <summary>
-        /// Guarda en el DataRow actual cada vez que se cambia la unidad de Tiempo. Y si es indefinido, bloquea la parte numérica
+        /// Guarda localmente cada vez que se cambia la unidad de Tiempo. Y si es indefinido, bloquea la parte
+        /// numérica
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -222,13 +256,14 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Guarda en el DataRow actual cada vez que se cambian las fechas
+        /// Guarda localmente cada vez que se cambian las fechas. El atributo Name del elemento cambiado ha de tener sus 3 primeras letras
+        /// descartables y lo demás ha de coincidir con el nombre del atributo en el datatable
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void txbFecha_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!dblClic)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
+            if (!dblClic)
             {
                 if (proyectoActual["IdProyecto"].ToString() != string.Empty)
                 {
@@ -241,13 +276,13 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Guarda en el DataRow actual cada vez que se cambia la Prioridad
+        /// Guarda localmente cada vez que se cambia la Prioridad.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void cmbPrioridad_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!dblClic)//Esto es para que al cargar los Txb después del dtg dobleclick, no haga esto.
+            if (!dblClic)
             {
                 if (proyectoActual["IdProyecto"].ToString() != string.Empty)
                 {
@@ -257,6 +292,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Al hacer clic, si hay un proyecto cargado/seleccionado, llama al controlador para que lo elimine tras
+        /// pedir confirmación y resetea el formulario si es así.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBorrar_Click(object sender, RoutedEventArgs e)
         {
             if (dtgPro.SelectedItem != null)
@@ -275,6 +316,11 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Al hacer doble clic en algún elemento del DataGrid, se carga el proyecto en el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtgPro_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (dtgPro.SelectedItem == null)
@@ -291,6 +337,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// carga los datos del proyecto actual en el formulario.
+        /// </summary>
         private void cargarProyecto()
         {
             dblClic = true;
@@ -309,6 +358,9 @@ namespace GestionPersonal
             dblClic = false;
         }
 
+        /// <summary>
+        /// Caraga los empleados partícipes del proyecto actual.
+        /// </summary>
         private void cargarEmpleadosProyecto()
         {
             dtEmpleadosProyecto = controladorProyecto.listaEmpleadosProyecto(proyectoActual["IdProyecto"].ToString());
@@ -316,11 +368,23 @@ namespace GestionPersonal
             dtgEmpleadosPro.ItemsSource = eliminarColumnasEmpleado(dtEmpleadosProyecto).DefaultView;
         }
 
+        /// <summary>
+        /// Llama al controlador para que abra la ventana Filtro Proyectos.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFiltrarPro_Click(object sender, RoutedEventArgs e)
         {
             controladorProyecto.prepararFiltro();
         }
 
+        /// <summary>
+        /// Carga el DataGrid de proyectos en base al filtro del controlador cada vez que la ventana se activa, 
+        ///  además de llamar al controlador para que añada al proyecto actual el empleado seleccionado en la 
+        ///  ventana Busqueda Empleado si lo hay.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (this.IsEnabled)
@@ -339,11 +403,19 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Llama al controlador para que abra la ventana de Busqueda Empleado.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAddE_Click(object sender, RoutedEventArgs e)
         {
             controladorProyecto.prepararFiltroEmpleado();
         }
 
+        /// <summary>
+        /// Vacía los elementos del formulario.
+        /// </summary>
         private void vaciarCampos()
         {
             dblClic = true;  
@@ -370,12 +442,23 @@ namespace GestionPersonal
 
         }
 
+        /// <summary>
+        /// Resetea el formulario.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();
             cargarDTG(controladorProyecto.filtro);
         }
-
+        
+        /// <summary>
+        /// Al hacer clic, si hay un empleado seleccionado, llama al controlador para que elimine su participación
+        /// en el proyecto actual tras pedir confirmación.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnEliminarE_Click(object sender, RoutedEventArgs e)
         {
             if(dtgEmpleadosPro.SelectedItem != null)
@@ -387,6 +470,7 @@ namespace GestionPersonal
                 {
                     controladorProyecto.eliminarEmpleado(dtEmpleadosProyecto.Rows[dtgEmpleadosPro.SelectedIndex]["IdEmpleado"].ToString(),
                         dtProyectos.Rows[dtgPro.SelectedIndex]["IdProyecto"].ToString(), dtProyectos.Rows[dtgPro.SelectedIndex]["NombreP"].ToString());
+                    cargarEmpleadosProyecto();
                 }
             }
         }

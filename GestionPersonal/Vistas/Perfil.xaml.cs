@@ -34,6 +34,9 @@ namespace GestionPersonal.Vistas
             cargarUsuario();
         }
 
+        /// <summary>
+        /// Carga los elementos del formulario con los datos del usuario que maneja la aplicación.
+        /// </summary>
         private void cargarUsuario()
         {
             txbNombreE.Text = controladorPerfil.Usuario.NombreE;

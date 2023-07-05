@@ -51,6 +51,10 @@ namespace GestionPersonal
             this.IdDepartamento = 0;
         }
 
+        /// <summary>
+        /// Comprueba con la BBDD si la contraseña del objeto empleado actual es correcta basándose en usuario del mismo.
+        /// </summary>
+        /// <returns>True si coincide, false si no.</returns>
         public bool iniciarSesion()
         {
             bool inicio = false;
@@ -60,7 +64,7 @@ namespace GestionPersonal
 
             try
             {
-                string consulta = "SELECT Contrasenia, EstadoE FROM Empleado WHERE Usuario = @Usuario"; //vrJ;!W|.#84q
+                string consulta = "SELECT Contrasenia, EstadoE FROM Empleado WHERE Usuario = @Usuario";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -93,7 +97,11 @@ namespace GestionPersonal
             }
 
         }
-
+        
+        /// <summary>
+        /// Carga los datos del empleado cuyo usuario se ha proporcionado.
+        /// </summary>
+        /// <param name="Usuario">Usuario cuyos datos queremos.</param>
         private void cargarUsuario(string Usuario)
         {
             DataTable dtEmpleado = obtenerEmpleado(Usuario);
@@ -117,6 +125,11 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Obtiene los datos de la BBDD del empleado cuyo usuario se ha proporcionado.
+        /// </summary>
+        /// <param name="Usuario">Usuario del cual se desea obtener los datos.</param>
+        /// <returns></returns>
         private DataTable obtenerEmpleado(string Usuario)//casi igual que el listado pero todavía no se me ocurre cómo hacer varias inserciones. creo que lo mejor será separar la clase
         {
             try
@@ -144,6 +157,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Hace el Insert del empleado que invoca al método en la BBDD.
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que crea el nuevo empleado.</param>
         public void insertEmpleado(int IdModif)
         {
             try
@@ -157,8 +174,10 @@ namespace GestionPersonal
                 conexionSQL.Open();
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
                 comando = introducirParametros(comando);
-                comando = introducirParametroContraseña(comando);
+                comando.Parameters.Add("@Contrasenia", SqlDbType.NVarChar);
+                comando.Parameters["@Contrasenia"].Value = this.Contrasenia;
 
                 this.Auditoria = new Auditoria(IdModif);
                 comando = Auditoria.introducirParametros(comando);
@@ -176,9 +195,9 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Realiza el borrado lógico del Empleado que llama al método.
+        /// Realiza el borrado lógico del empleado que invoca al método.
         /// </summary>
-        /// <param name="IdModif"></param>
+        /// <param name="IdModif">Id del empleado que realiza el borrado.</param>
         public void deleteEmpleado(int IdModif)
         {
             try
@@ -210,9 +229,9 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Modifica la información en el sistema del Empleado que llama al método.
+        /// Realiza el Update de la información del empleado que invoca al método en la BBDD.
         /// </summary>
-        /// <param name="IdModif">Id de la persona que actualiza los datos</param>
+        /// <param name="IdModif">Id de la persona que realiza los cambios.</param>
         public void updateEmpleado(int IdModif)
         {
             try
@@ -247,7 +266,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Actualiza en el sistema el EstadoE del Empleado que llama al método.
+        /// realiza el Update relativo a la actualización del estado del empleado que invvoca al método en la BBDD.
         /// </summary>
         /// <param name="IdModif">Id de la persona que actualiza el estado</param>
         internal void updateEstado(int IdModif)
@@ -286,7 +305,7 @@ namespace GestionPersonal
         /// <summary>
         /// Comprueba si existe en el sistema el Correo del objeto Empleado que llama al método
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True si existe, false si no.</returns>
         internal bool existeCorreo()
         {
             bool existe = false;
@@ -323,7 +342,7 @@ namespace GestionPersonal
         /// <summary>
         /// Comprueba si existe en el sistema el DNI del objeto Empleado que llama al método
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True si existe, false si no.</returns>
         internal bool existeDNI()
         {
             bool existe = false;
@@ -360,7 +379,7 @@ namespace GestionPersonal
         /// <summary>
         /// Comprueba si existe en el sistema el Usuario del objeto Empleado que llama al método
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True si existe, false si no.</returns>
         internal bool existeUsuario()
         {
             bool existe = false;
@@ -397,7 +416,7 @@ namespace GestionPersonal
         /// <summary>
         /// Comprueba si existe en el sistema el Número de seguridad social del objeto Empleado que llama al método
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True si existe, false si no.</returns>
         internal bool existeNumSS()
         {
             bool existe = false;
@@ -431,6 +450,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el Update relativo al cambio de contraseña del usuario que invoca al método
+        /// </summary>
         internal void updateContrasenia()
         {
             try
@@ -461,12 +483,12 @@ namespace GestionPersonal
             }
         }
 
-            /// <summary>
-            /// Introduce todos los parámetros del empleado al comando indicado, a excepción de la Contrasenia 
-            /// y el IdEmpleado.
-            /// </summary>
-            /// <param name="comando"></param>
-            /// <returns></returns>
+        /// <summary>
+        /// Introduce todos los parámetros del empleado al comando indicado, a excepción de la Contrasenia 
+        /// y el IdEmpleado.
+        /// </summary>
+        /// <param name="comando">Comando sql que se desea completar.</param>
+        /// <returns></returns>
         private SqlCommand introducirParametros(SqlCommand comando)
         {
             comando.Parameters.Add("@NombreE", SqlDbType.NVarChar);
@@ -489,24 +511,8 @@ namespace GestionPersonal
             comando.Parameters["@Tlf"].Value = this.Tlf;
             comando.Parameters["@CorreoE"].Value = this.CorreoE;
 
-
             return comando;
         }
-
-        /// <summary>
-        /// Introduce el parámetro Contrasenia y su valor en el comando indicado.
-        /// </summary>
-        /// <param name="comando"></param>
-        /// <returns></returns>
-        private SqlCommand introducirParametroContraseña(SqlCommand comando)
-        {
-            comando.Parameters.Add("@Contrasenia", SqlDbType.NVarChar);
-            comando.Parameters["@Contrasenia"].Value = this.Contrasenia;
-
-            return comando;
-
-        }
-
 
     }
 

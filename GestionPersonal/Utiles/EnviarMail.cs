@@ -23,6 +23,11 @@ namespace GestionPersonal.Utiles
         static string mail = "tfg.demorob@gmail.com";
         static string pass = "euxhqfvgayiuleam";
 
+        /// <summary>
+        /// Obtiene de la BBDD el correo electrónico del empleado indicado.
+        /// </summary>
+        /// <param name="IdEmpleado">Id del empleado cuyo correo se desea obtener.</param>
+        /// <returns>Correo electrónico del empleado en formato string.</returns>
         public static string obtenerMail(int IdEmpleado)
         {
             string correo = "";
@@ -55,6 +60,11 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Obtiene de la BBDD el correo electrónico del empleado indicado.
+        /// </summary>
+        /// <param name="DNI">DNI del empleado del que se quiere obtener el correo.</param>
+        /// <returns>Correo electrónico del empleado en formato string.</returns>
         public static string obtenerMail(string DNI)
         {
             string correo = "";
@@ -87,16 +97,25 @@ namespace GestionPersonal.Utiles
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado informando de la resolución de
+        /// la ausencia especificada
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="razon">Motivo de la ausencia</param>
+        /// <param name="FechaInicioA">Fecha inicio de la ausencia.</param>
+        /// <param name="FechaFinA">FechaFin de la ausencia.</param>
+        /// <param name="EstadoA">Resolución de la ausencia.</param>
         public static async void altaAusencia(string mailTo, string razon, string FechaInicioA, string FechaFinA, string EstadoA)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -106,7 +125,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -115,21 +134,24 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado informando de que hay una nueva ausencia en el sistema.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
         public static async void solicitudAusencia(string mailTo)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
-
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -138,7 +160,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -147,21 +169,23 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado señalando su retiro  del proyecto indicado.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="proyecto">Nombre del proyecto.</param>
         public static async void retiroParticipacion(string mailTo, string proyecto)
         {
-            // Configuración del cliente SMTP
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
-
-            // Crear el mensaje de correo
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -170,7 +194,6 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -179,21 +202,25 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado señalando su adición al proyecto indicado.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="proyecto">Nombre del proyecto.</param>
         public static async void nuevaParticipacion(string mailTo, string proyecto)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -202,7 +229,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -211,21 +238,26 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado informando de su nuevo estatus de jefe del departamento indicado.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="departamento">Nombre del departamento.</param>
         public static async void nuevoJefe(string mailTo, string departamento)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -234,7 +266,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -243,22 +275,26 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
-
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado señalando su adición al departamento indicado.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="departamento">Nombre del departamento</param>
         public static async void nuevoDepartamento(string mailTo, string departamento)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -267,7 +303,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -276,21 +312,25 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado indicado señalando el alta de un nuevo contrato.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
         public static async void altaContrato(string mailTo)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -299,7 +339,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -308,30 +348,39 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
-        public static async void auditoriaContrato(string mailTo, string tipoAuditoria, string FechaInicioA, string FechaFinA)
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado informando de que se han producido cambios
+        /// en un contrato especificado.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="tipoAuditoria">Tipo de cambio realizado.</param>
+        /// <param name="FechaAlta">Fecha del alta del contrato</param>
+        /// <param name="FechaFin">Fecha de fin del contrato.</param>
+        public static async void auditoriaContrato(string mailTo, string tipoAuditoria, string FechaAlta, string FechaFin)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
             mailMessage.Subject = "Modificación/Borrado contrato";
-            mailMessage.Body = "Se ha producido un" + tipoAuditoria + " en su contrato con fechas " + FechaInicioA + " - " + FechaFinA +".";
+            mailMessage.Body = "Se ha producido un" + tipoAuditoria + " en su contrato con fechas " + FechaAlta 
+                + " - " + FechaFin +".";
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -340,21 +389,27 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado indicando sus credenciales de acceso al sistema.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="Usuario"></param>
+        /// <param name="Contrasenia"></param>
         public static async void nuevoEmpleado(string mailTo, string Usuario, string Contrasenia)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -364,7 +419,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -373,21 +428,27 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado señalando una actualización en su estado 
+        /// en el sistema.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="EstadoE">Nuevo estado del usuario.</param>
         public static async void altaEmpleado(string mailTo, string EstadoE)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -396,7 +457,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -405,21 +466,28 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }
 
+        /// <summary>
+        /// Envía un mensaje al usuario cuyo correo se ha especificado indicando las nuevas credenciales 
+        /// de acceso al sistema.
+        /// </summary>
+        /// <param name="mailTo">Correo destino.</param>
+        /// <param name="Usuario"></param>
+        /// <param name="Contrasenia"></param>
         public static async void recuperarContrasenia(string mailTo,string Usuario, string Contrasenia)
         {
-            // Configuración del cliente SMTP
+             
             SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
             smtpClient.EnableSsl = true;
             smtpClient.UseDefaultCredentials = false;
             smtpClient.Credentials = new NetworkCredential(mail, pass);
 
 
-            // Crear el mensaje de correo
+ 
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("tfg.demorob@gmail.com");
             mailMessage.To.Add(mailTo);
@@ -428,7 +496,7 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                // Enviar el correo
+                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
@@ -437,7 +505,7 @@ namespace GestionPersonal.Utiles
             }
             finally
             {
-                // Clean up.
+
                 mailMessage.Dispose();
             }
         }

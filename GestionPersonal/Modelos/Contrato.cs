@@ -51,12 +51,15 @@ namespace GestionPersonal
 
 
 
-
+        /// <summary>
+        /// Hace el insert del contrato que invoca al método a la BBDD, estableciéndolo como contrato Activo.
+        /// </summary>
+        /// <param name="IdModif"></param>
         public void insertContrato(int IdModif)
         {
             try
             {
-                //cambiarActivo();
+                cambiarActivo();
 
                 string consulta = "INSERT INTO Contrato (HorasTrabajo, HorasDescanso, HoraEntrada, HoraSalida, Salario, " +
                     "Puesto, VacacionesMes, FechaAlta, Duracion, Activo, DocumentoPDF, IdEmpleado, " +
@@ -85,6 +88,9 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Establece el contrato que invoca al método como Activo dentro de la BBDD.
+        /// </summary>
         private void cambiarActivo()
         {
             try
@@ -110,7 +116,11 @@ namespace GestionPersonal
                 conexionSQL.Close();
             }
         }
-
+        
+        /// <summary>
+        /// Realiza el Update del contrato que invoca al método en la BBDD. 
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que ha relizado la modificación.</param>
         public void updateContrato(int IdModif)
         {
             try
@@ -143,6 +153,10 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Realiza el borrado lógico del contrato que invoca al método en la BBDD.
+        /// </summary>
+        /// <param name="IdModif">Id del empleado que ha relizado el borrado.</param>
         public void deleteContrato(int IdModif)
         {
             try
@@ -172,7 +186,11 @@ namespace GestionPersonal
         }
 
 
-
+        /// <summary>
+        /// Devuelve el comando con los parámetros necesarios para insertar una Ausencia especificados.
+        /// </summary>
+        /// <param name="comando">Comando sql que se desea completar.</param>
+        /// <returns></returns>
         private SqlCommand introducirParametros(SqlCommand comando)
         {
             comando.Parameters.Add("@HorasTrabajo",SqlDbType.Float);

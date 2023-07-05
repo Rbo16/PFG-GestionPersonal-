@@ -17,6 +17,10 @@ namespace GestionPersonal.Controladores
             ventanaPerfil.Show();
         }
 
+        /// <summary>
+        /// Devuelve el nombre del departamento en el que trabaja el usuario actual.
+        /// </summary>
+        /// <returns></returns>
         public string nombreDepartamento()
         {
             DataTable dt = Listar.filtrarTabla(Listar.listarEmpleados(), $"IdEmpleado = {this.Usuario.IdEmpleado}");

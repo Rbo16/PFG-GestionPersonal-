@@ -34,6 +34,9 @@ namespace GestionPersonal.Vistas
             comprobarRol();
         }
 
+        /// <summary>
+        /// Comprueba el rol del usuario para rellenar el campo DNI con el suyo mismo en caso de que sea Básico.
+        /// </summary>
         private void comprobarRol()
         {
             if (this.controladorFiltroA.controladorAusencia.Usuario.rol == TipoEmpleado.Basico)
@@ -44,6 +47,11 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// carga el ComboBox de Estado Solicitud.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoS_Loaded(object sender, RoutedEventArgs e)
         {
             List<string> lEstadoS = new List<string>();
@@ -54,11 +62,21 @@ namespace GestionPersonal.Vistas
 
             cmbEstadoS.ItemsSource = lEstadoS;
         }
+
+        /// <summary>
+        /// Carga el ComboBox de Estado Ausencia
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoA_Loaded(object sender, RoutedEventArgs e)
         {
             cmbEstadoA.ItemsSource = Enum.GetValues(typeof(EstadoAusencia));
         }
 
+        /// <summary>
+        /// Carga como vacío el contenido de la lista que contendrá los filtros de cada elemento por el que se
+        /// puede filtrar.
+        /// </summary>
         private void cargarListas()
         {
             contenidoFiltro[0] = "";
@@ -68,6 +86,12 @@ namespace GestionPersonal.Vistas
             contenidoFiltro[4] = "";
         }
 
+        /// <summary>
+        /// Comprueba que se haya especificado al menos un campo, forma la cadena que servirá como filtro
+        /// y se la asigna al controlador. Después, cierra la ventana.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             string filtro = string.Empty;
@@ -113,31 +137,61 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// Al cerrar la ventana, invoca al controlador para que lo gestione.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             controladorFiltroA.volver();
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbDNI_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[0] = txbDNI.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoS_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[1] = (cmbEstadoS.SelectedIndex+1).ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbEstadoA_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[2] = (cmbEstadoA.SelectedIndex+1).ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del DatePicker en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFechaDesde_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[3] = dtpFechaDesde.SelectedDate.ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del DatePicker en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFechaHasta_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[4] = dtpFechaHasta.SelectedDate.ToString();

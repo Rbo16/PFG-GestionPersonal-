@@ -32,14 +32,11 @@ namespace GestionPersonal.Modelos
 
         }
 
-        public Auditoria(SqlDataReader registro)
-        {
-            //Hay que indicar la posición de la columna por tema version
-            //this.FechaUltModif = registro.GetBoolean("FechaUltModif");
-            //this.IdModif = registro.GetInt32("IdModif");
-            //this.Borrado = registro.GetDateTime("Borrado");
-        }
-
+        /// <summary>
+        /// Devuelve el comando proporcionado con los parámetros de la Auditoría completos.
+        /// </summary>
+        /// <param name="comando">comando sql al que se quieren añadir los parámetros</param>
+        /// <returns></returns>
         public SqlCommand introducirParametros(SqlCommand comando)
         {
             comando.Parameters.Add("@FechaUltModif", SqlDbType.DateTime);

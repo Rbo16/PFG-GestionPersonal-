@@ -34,6 +34,11 @@ namespace GestionPersonal.Vistas
             comprobarRol();
         }
 
+        /// <summary>
+        /// Carga el ComboBox de Tipo Contrato.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbTipoContrato_Loaded(object sender, RoutedEventArgs e)
         {
             List<string> lTipoContrato= new List<string>();
@@ -46,6 +51,9 @@ namespace GestionPersonal.Vistas
             cmbTipoContrato.ItemsSource= lTipoContrato;
         }
 
+        /// <summary>
+        /// Comprueba el rol del usuario para rellenar el campo DNI con el suyo mismo en caso de que sea Básico.
+        /// </summary>
         private void comprobarRol()
         {
             if (this.controladorFiltroC.controladorContrato.Usuario.rol == TipoEmpleado.Basico)
@@ -56,6 +64,10 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// Carga como vacío el contenido de la lista que contendrá los filtros de cada elemento por el que se
+        /// puede filtrar.
+        /// </summary>
         private void cargarListas()
         {
             contenidoFiltro[0] = "";
@@ -64,6 +76,12 @@ namespace GestionPersonal.Vistas
             contenidoFiltro[3] = "";
         }
 
+        /// <summary>
+        /// Comprueba que se haya especificado al menos un campo, forma la cadena que servirá como filtro
+        /// y se la asigna al controlador. Después, cierra la ventana.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnBuscar_Click(object sender, RoutedEventArgs e)
         {
             string filtro = string.Empty;
@@ -92,26 +110,52 @@ namespace GestionPersonal.Vistas
             }
         }
 
+        /// <summary>
+        /// Al cerrar la ventana, invoca al controlador para que lo gestione.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             controladorFiltroC.volver();
         }
 
+        /// <summary>
+        /// Guarda el contenido del TextBox en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void txbPoseedor_TextChanged(object sender, TextChangedEventArgs e)
         {
             contenidoFiltro[0] = txbPoseedor.Text;
         }
 
+        /// <summary>
+        /// Guarda el contenido del ComboBox en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbTipoContrato_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[1] = (cmbTipoContrato.SelectedIndex + 1).ToString();
         }
 
+        /// <summary>
+        /// Guarda el contenido del DatePicker en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFechaDesde_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[2] = dtpFechaDesde.SelectedDate.ToString();
         }
 
+
+        /// <summary>
+        /// Guarda el contenido del DatePicker en la lista de contenidos del filtro cada vez que se actualiza.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dtpFechaHasta_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             contenidoFiltro[3] = dtpFechaHasta.SelectedDate.ToString();

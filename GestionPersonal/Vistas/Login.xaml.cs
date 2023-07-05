@@ -28,11 +28,22 @@ namespace GestionPersonal.Vistas
             this.controladorLogin = controladorLogin;
         }
 
+        /// <summary>
+        /// Proporciona al controlado el contenido de los TextBox de usuario y contraseña para que inicie sesión
+        /// con ellos.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             controladorLogin.iniciarSesion(txbUsuario.Text, txbContraseña.Password);
         }
 
+        /// <summary>
+        /// Llama al controlador para que abra la ventana de recuperación de contraseña.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnCContra_Click(object sender, RoutedEventArgs e)
         {
             controladorLogin.abrirRecuperacion();

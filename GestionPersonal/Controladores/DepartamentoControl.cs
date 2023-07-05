@@ -22,13 +22,16 @@ namespace GestionPersonal
             ventanaActiva.Show();
         }
 
+        /// <summary>
+        /// Carga la lista de Contratos llamando a su método correspondiente de la clase Listar.
+        /// </summary>
         private void cargarDepartamentos()
         {
             dtDepas = Listar.listarDepartamentos();
         }
 
         /// <summary>
-        /// Devuelve el DataTable de Departamentos sin filtro
+        /// Devuelve el DataTable de Departamentos sin filtro.
         /// </summary>
         /// <returns></returns>
         public DataTable listaDepartamentos()
@@ -38,7 +41,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve un DataTable que filtra el DataTable principal de Departamentos
+        /// Devuelve un DataTable que filtra el DataTable principal de Departamentos a partir de la clase Listar.
         /// </summary>
         /// <param name="filtro">string con el filtro que se quiere aplicar</param>
         /// <returns></returns>
@@ -48,7 +51,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve un DataTable con los Empleados pertenecientes al Departamento indicado
+        /// Devuelve un DataTable con los Empleados pertenecientes al Departamento indicado.
         /// </summary>
         /// <param name="SIdDepartamento">Id del Departamento en formato string</param>
         /// <returns></returns>
@@ -60,6 +63,13 @@ namespace GestionPersonal
             return Listar.filtrarTabla(dtEmpleados, filtro);
         }
 
+        /// <summary>
+        /// Comprueba que los datos necesarios para crear un departamento estén completos y correctos para llamar 
+        /// al modelo Departamento y que este lo inserte en la BBDD.
+        /// </summary>
+        /// <param name="NombreD"></param>
+        /// <param name="DescripcionD"></param>
+        /// <returns></returns>
         public bool crearDepartamento(string NombreD, string DescripcionD)
         {
             bool creado = true;
@@ -71,6 +81,7 @@ namespace GestionPersonal
                     DescripcionD = DescripcionD
                 };
                 nuevoDepartamento.insertarDepartamento(this.Usuario.IdEmpleado);
+                MessageBox.Show("Departamento creado con éxito");
             }
             else
             {
@@ -81,27 +92,39 @@ namespace GestionPersonal
             return creado;
         }
 
+        /// <summary>
+        /// Comprueba que los datos del departamento indicado estén completos y correctos para llamar al modelo Departamento
+        /// y que este lo actualice.
+        /// </summary>
+        /// <param name="departamentoModif">DataRow con los datos del Departamento a modificar.</param>
         public void modificarDepartamento(DataRow departamentoModif)
         {
             int.TryParse(departamentoModif["IdDepartamento"].ToString(), out int IdDepartamento);
             string NombreD = departamentoModif["NombreD"].ToString();
             string DescripcionD = departamentoModif["DescripcionD"].ToString();
 
-            Departamento departamentoModificado = new Departamento()
+            if (NombreD != string.Empty && DescripcionD != string.Empty)
             {
-                IdDepartamento = IdDepartamento,
-                NombreD = NombreD,
-                DescripcionD = DescripcionD
-            };
+                Departamento departamentoModificado = new Departamento()
+                {
+                    IdDepartamento = IdDepartamento,
+                    NombreD = NombreD,
+                    DescripcionD = DescripcionD
+                };
 
-            departamentoModificado.updateDepartamento(this.Usuario.IdEmpleado);
-            
+                departamentoModificado.updateDepartamento(this.Usuario.IdEmpleado);
+                MessageBox.Show("Cambios guardados correctamente.");
+            }
+            else
+            {
+                MessageBox.Show("Rellene todos los campos necesarios.");
+            }
         }
 
         /// <summary>
-        /// Convierte el parámetro SIdDepartemento a int y llama al modelo de departamento para eliminar dicho departamento
+        /// Convierte el parámetro SIdDepartemento a int y llama al modelo de departamento para eliminar dicho departamento.
         /// </summary>
-        /// <param name="SIdDepartamento"></param>
+        /// <param name="SIdDepartamento">String del id del departamento a eliminar</param>
         public void eliminarDepartamento(string SIdDepartamento)
         {
             int.TryParse(SIdDepartamento, out int IdDepartamento);
@@ -110,8 +133,18 @@ namespace GestionPersonal
                 IdDepartamento = IdDepartamento
             };
             departamentoBorrado.deleteDepartamento(this.Usuario.IdEmpleado);
+            MessageBox.Show("Departamento eliminado con éxito");
         }
 
+        /// <summary>
+        /// Convierte los parámetros a su tipo adecuado y comprueba que el empleado indicado no es jefe de ningún
+        /// departamento. Si es así, llama al modelo para que actualice los datos correspondientes a la jefatura de
+        /// un departamento e invoca al método que informa al jefe de su nuevo estatus via mail.
+        /// </summary>
+        /// <param name="SIdEmpleado">Strig del id del empleado que se pretende asignar como jefe.</param>
+        /// <param name="SIdDepartamento">String del departamento al que se quiere asignar nuevo jefe.</param>
+        /// <param name="NombreD">Nombre del departamento.</param>
+        /// <returns></returns>
         public bool asignarJefe(string SIdEmpleado, string SIdDepartamento, string NombreD)
         {
             bool exito = false;
@@ -127,7 +160,8 @@ namespace GestionPersonal
             {
                 departamento.asignarJefe(IdEmpleado, this.Usuario.IdEmpleado);
                 exito = true;
-                MessageBox.Show("Jefe de Departamento asignado con éxito");
+                MessageBox.Show("Jefe de Departamento asignado con éxito.");
+
                 informarAsignacion(IdEmpleado, NombreD);
             }
             else
@@ -136,13 +170,23 @@ namespace GestionPersonal
             return exito;
         }
 
+        /// <summary>
+        /// Obtiene el correo de la persona a la que se quiere informar de su nuevo estatus como jefe y llama a la clase
+        /// EnviarMail para que realice dicha acción
+        /// </summary>
+        /// <param name="IdEmpleado">id del nuevo jefe</param>
+        /// <param name="NombreD">Nombre del departamento</param>
         private void informarAsignacion(int IdEmpleado, string NombreD)
         {
             string correo = EnviarMail.obtenerMail(IdEmpleado);
             EnviarMail.nuevoJefe(correo, NombreD);
         }
 
-        public void prepararFiltroEmpleado()
+        /// <summary>
+        ///Llama al controlador de ventanas para que bloquee la ventana activa, mientras que invoca un contructor del
+        /// controlador de la ventana BusquedaEmpleado para abrir una de estas.
+        /// </summary>
+        public void prepararBusquedaEmpleado()
         {
             ventanaControl.bloquearVActual();
             controladorBusqueda = new BusquedaEmpleadoControlador(this)
@@ -151,6 +195,12 @@ namespace GestionPersonal
             };
         }
         
+        /// <summary>
+        /// Añade el emlpeado indicado en la ventana de BusquedaEmpleado al departamento indicado e invoca al
+        /// método que informa de su adición.
+        /// </summary>
+        /// <param name="SIdDepartamento">String del id del departamento</param>
+        /// <param name="NombreD">Nombre del departamento</param>
         public void aniadirEmpleado(string SIdDepartamento, string NombreD)
         {
             if(controladorBusqueda.dniBusqueda != string.Empty)
@@ -170,6 +220,12 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Obtiene el mail del empleado añadido al departamento indicado y llama a la clase EnviarMail para que le 
+        /// informe de la adición via mail.
+        /// </summary>
+        /// <param name="DNI"></param>
+        /// <param name="NombreD"></param>
         private void informarAdicion(string DNI, string NombreD)
         {
             string correo = EnviarMail.obtenerMail(DNI);

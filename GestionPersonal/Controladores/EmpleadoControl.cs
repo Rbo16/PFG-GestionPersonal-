@@ -25,16 +25,19 @@ namespace GestionPersonal
             ventanaActiva.Show();
         }
 
+        /// <summary>
+        /// Llama a la clase Listar para obtener un DataTable con los empleados del sistema, lo asigna al DataTable
+        /// principal del controlador y le quita la contraseña.
+        /// </summary>
         private void cargarEmpleados()
         {
-            //Mostramos una tabla en la que no se muestren las contaseñas
             dtEmpleadosCif = Listar.listarEmpleados();
             dtEmpleadosCif.Columns.Remove("Contrasenia");
         }
 
 
         /// <summary>
-        /// Devuelve el DataTable de Empleados sin filtro
+        /// Devuelve el DataTable de Empleados sin filtro.
         /// </summary>
         /// <returns></returns>
         public DataTable listaEmpleados() 
@@ -44,7 +47,7 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve un DataTable que filtra el DataTable principal de Empleados
+        /// Devuelve un DataTable que filtra el DataTable principal de Empleados a partir de la clase Listar.
         /// </summary>
         /// <param name="filtro">string con el filtro que se quiere aplicar</param>
         /// <returns></returns>
@@ -54,19 +57,18 @@ namespace GestionPersonal
         }
 
         /// <summary>
-        /// Devuelve un array con los elementos del tipo enumerado de Empleado que se indique
+        /// Comprueba que los campos necesarios para la creación de un empleado estén completos y correctos, para
+        /// depués llamar al Modelo y que este lo inserte en la BBDD.Es aquí donde de crea la contraseña, se cifra,
+        /// y se llama a la clase EnviarMail para que se la envíe al nuevo empleado via mail.
         /// </summary>
-        /// <param name="NombreEnum">TipoEmpleado o EstadoEmpleado</param>
+        /// <param name="NombreE">Nombre del empleado.</param>
+        /// <param name="Apellido">Apellido del empleado.</param>
+        /// <param name="Usuario">Udsuario del empleado.</param>
+        /// <param name="DNI">DNI del empleado.</param>
+        /// <param name="NumSS">Número de la Seguridad Social del empleado.</param>
+        /// <param name="Tlf">Teléfono de contacto del empleado.</param>
+        /// <param name="CorreoE">Correo electrónico del empleado.</param>
         /// <returns></returns>
-        public Array devolverEnum(string NombreEnum)
-        {
-            Array array = Array.Empty<Array>();
-            if (NombreEnum == "TipoEmpleado")
-                array = Enum.GetValues(typeof(TipoEmpleado));
-            if (NombreEnum == "EstadoEmpleado")
-                array = Enum.GetValues(typeof(EstadoEmpleado));
-            return array;
-        }
         public bool crearEmpleado(string NombreE, string Apellido, string Usuario, string DNI, 
             string NumSS, string Tlf, string CorreoE)
         {
@@ -124,25 +126,37 @@ namespace GestionPersonal
                         nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
 
                         creado = true;
+
+                        MessageBox.Show("Empleado creado correctamente.");
                     }
                 }   
             }
             else
             {
-                MessageBox.Show("Rellene todos los campos necesarios");
+                MessageBox.Show("Rellene todos los campos necesarios.");
             }
 
             return creado;
         }
 
-
+        /// <summary>
+        /// Convierte el string SIdEmpleado a int para proposcionárselo al modelo Empleado y que este lo elimine del
+        /// sistema.
+        /// </summary>
+        /// <param name="SIdEmpleado"></param>
         public void eliminarEmpleado(string SIdEmpleado)
         {
             int.TryParse(SIdEmpleado, out int IdEmpelado);
             Empleado empleadoBorrado = new Empleado(IdEmpelado);
             empleadoBorrado.deleteEmpleado(this.Usuario.IdEmpleado);
+            MessageBox.Show("Empleado eliminado correctamente.");
         }
 
+        /// <summary>
+        /// Comprueba que los datos del empleado están completos y correctos para llamar al modelo Empleado y que este
+        /// actualice los cambios en la BBDD.
+        /// </summary>
+        /// <param name="empleadoModif">DataRow con los datos del empleado a modificar</param>
         public void modificarEmpleado(DataRow empleadoModif)
         {
             List<string> lCampos = new List<string>();
@@ -190,6 +204,13 @@ namespace GestionPersonal
             }
         }
 
+        /// <summary>
+        /// Convierte los parámetros a su tipo adecuado para proporcionárselos al modelo Empleado y que este realice
+        /// las acciones necesarias en la BBDD respecto al cambio de estado de un empleado. También invoca al método 
+        /// que informa de dicha actualización.
+        /// </summary>
+        /// <param name="SIdEmpleado">String del id del empleado cuyo estado ha sido modificado.</param>
+        /// <param name="SEstadoE">String del nuevo estado del empleado.</param>
         public void gestionarEmpleado(string SIdEmpleado, string SEstadoE)
         {
             int EstadoE = Convert.ToInt32(SEstadoE);
@@ -202,15 +223,27 @@ namespace GestionPersonal
 
             empleadoGestion.updateEstado(this.Usuario.IdEmpleado);
 
-            informarAutorizacion(IdEmpleado, empleadoGestion.EstadoE.ToString());
+            informarAutorizacion(IdEmpleado, SEstadoE);
         }
 
+        /// <summary>
+        /// Obtiene el mail del empleado cuyo estado ha sido actualizado y llama a la clase Enviarmail para informarle
+        /// de dicho cambio.
+        /// </summary>
+        /// <param name="IdEmpleado">id del empleado cuyo estado ha sido modificado </param>
+        /// <param name="EstadoE">Nuevo estado del usuario</param>
         private void informarAutorizacion(int IdEmpleado, string EstadoE)
         {
             string correo = EnviarMail.obtenerMail(IdEmpleado);
             EnviarMail.altaEmpleado(correo, EstadoE);
         }
 
+        /// <summary>
+        /// Comprueba que el DNI indicado tenga 9 caracteres y el NumSS tenga 12.
+        /// </summary>
+        /// <param name="DNI">DNI</param>
+        /// <param name="NumSS">Número de la Seguridad Social</param>
+        /// <returns></returns>
         private bool comprobarCaracteres(string DNI, string NumSS)
         {
             bool result = true;
@@ -229,6 +262,10 @@ namespace GestionPersonal
             return result;
         }
 
+        /// <summary>
+        /// Llama al controlador de ventanas para que bloquee la ventana activa, mientras que invoca un contructor del
+        /// controlador de la ventana FiltroEmpleado para abrir una de estas.
+        /// </summary>
         public void prepararFiltro()
         {
             this.filtro = string.Empty;
