@@ -14,10 +14,10 @@ namespace GestionPersonal
 {
     public class Ausencia
     {
-        private SqlConnection conexionSQL;
-        private string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
+        private static SqlConnection conexionSQL;
+        private static string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
-        private int IdAusencia { get; set; }
+        public int IdAusencia { get; set; }
         public string Razon { get; set; }
         public DateTime? FechaInicioA { get; set; }
         public DateTime? FechaFinA { get; set; }
@@ -178,6 +178,95 @@ namespace GestionPersonal
             catch (Exception e)
             {
                 ExceptionManager.Execute(e, " ERROR[Ausencia.Borrar]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve la ausencia cuyo Id se ha indicado. Utilizado para realizar las pruebas unitarias.
+        /// </summary>
+        /// <param name="IdAusencia">Id de la ausencia a obtener.</param>
+        /// <returns></returns>
+        public static Ausencia obtenerAusencia(int IdAusencia)
+        {
+            Ausencia ausencia = new Ausencia(IdAusencia);
+
+            try
+            {
+                string consulta = "SELECT * FROM Ausencia WHERE IdAusencia = @IdAusencia";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdAusencia", SqlDbType.Int);
+                comando.Parameters["@IdAusencia"].Value = IdAusencia;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    ausencia.IdSolicitante = reader.GetInt32(1);
+                    if (!reader.IsDBNull(2))
+                        ausencia.IdAutorizador = reader.GetInt32(2);
+                    ausencia.Razon = reader.GetString(3);
+                    ausencia.FechaInicioA = reader.GetDateTime(4);
+                    ausencia.FechaFinA = reader.GetDateTime(5);
+                    if(!reader.IsDBNull(6))
+                        ausencia.DescripcionAus = reader.GetString(6);
+                    if (!reader.IsDBNull(7))
+                        ausencia.JustificantePDF = reader.GetString(7);
+                    ausencia.EstadoA = (EstadoAusencia)reader.GetInt32(8);
+
+                    ausencia.Auditoria = new Auditoria(reader.GetInt32(10), reader.GetDateTime(9),
+                        reader.GetBoolean(11));
+                    
+                }
+
+                return ausencia;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Ausencia.Obtener]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve el IdAusencia más alto, es decir, el id de la última ausencia creada. Utilizado para realizar las pruebas unitarias.
+        /// </summary>
+        /// <returns></returns>
+        public static int maxIdAusencia()
+        {
+            int max = -1;
+            try
+            {
+                string consulta = "SELECT MAX(IdAusencia) FROM Ausencia";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    max= reader.GetInt32(0);
+                }
+
+                return max;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Ausencia.MaxId]:");
+                return max;
             }
             finally
             {

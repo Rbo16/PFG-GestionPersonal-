@@ -108,7 +108,6 @@
     <Compile Include="Controladores\DepartamentoControl.cs" />
     <Compile Include="Modelos\Empleado.cs" />
     <Compile Include="Controladores\EmpleadoControl.cs" />
-    <Compile Include="InteraccionBBDD.cs" />
     <Compile Include="masterDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

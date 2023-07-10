@@ -151,7 +151,7 @@ namespace GestionPersonal.Vistas
         /// <param name="e"></param>
         private void btnGuardar_Click(object sender, RoutedEventArgs e)
         {
-            if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)/
+            if (hayCambios && empleadoActual["IdEmpleado"].ToString() != string.Empty)
             {
                 controladorEmpleado.modificarEmpleado(empleadoActual);
                 hayCambios = false;

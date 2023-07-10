@@ -13,13 +13,14 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Xml.Linq;
 using System.Security.AccessControl;
 using System.Management.Instrumentation;
+using GestionPersonal.Vistas;
 
 namespace GestionPersonal
 {
     public class Empleado
     {
-        private SqlConnection conexionSQL;
-        private string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
+        private static SqlConnection conexionSQL;
+        private static string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
         public int IdEmpleado { get; set; }
         public string NombreE { get; set; }
@@ -82,7 +83,7 @@ namespace GestionPersonal
                         estado = reader.GetInt32(1);
                         if(contrasenia == this.Contrasenia && estado == 1)
                         {
-                            cargarUsuario(this.Usuario);
+                            obtenerEmpleado(this.Usuario);
                             inicio = true;
                         }
                     }
@@ -97,65 +98,7 @@ namespace GestionPersonal
             }
 
         }
-        
-        /// <summary>
-        /// Carga los datos del empleado cuyo usuario se ha proporcionado.
-        /// </summary>
-        /// <param name="Usuario">Usuario cuyos datos queremos.</param>
-        private void cargarUsuario(string Usuario)
-        {
-            DataTable dtEmpleado = obtenerEmpleado(Usuario);
 
-            if (dtEmpleado.Rows.Count != 0)
-            {
-                this.IdEmpleado = Convert.ToInt32(dtEmpleado.Rows[0]["IdEmpleado"].ToString());
-                this.NombreE = dtEmpleado.Rows[0]["NombreE"].ToString();
-                this.Apellido = dtEmpleado.Rows[0]["Apellido"].ToString();
-                this.Usuario = dtEmpleado.Rows[0]["Usuario"].ToString();
-                this.Contrasenia = dtEmpleado.Rows[0]["Contrasenia"].ToString();
-                this.rol = (TipoEmpleado)Convert.ToInt32(dtEmpleado.Rows[0]["Rol"].ToString());
-                this.EstadoE = (EstadoEmpleado)Convert.ToInt32(dtEmpleado.Rows[0]["EstadoE"].ToString());
-                this.DNI = dtEmpleado.Rows[0]["DNI"].ToString();
-                this.NumSS = dtEmpleado.Rows[0]["NumSS"].ToString();
-                this.Tlf = dtEmpleado.Rows[0]["Tlf"].ToString();
-                this.CorreoE = dtEmpleado.Rows[0]["CorreoE"].ToString();
-
-                if(dtEmpleado.Rows[0]["IdDepartamento"].ToString() != "")
-                    this.IdDepartamento = Convert.ToInt32(dtEmpleado.Rows[0]["IdDepartamento"].ToString());
-            }
-        }
-
-        /// <summary>
-        /// Obtiene los datos de la BBDD del empleado cuyo usuario se ha proporcionado.
-        /// </summary>
-        /// <param name="Usuario">Usuario del cual se desea obtener los datos.</param>
-        /// <returns></returns>
-        private DataTable obtenerEmpleado(string Usuario)//casi igual que el listado pero todavía no se me ocurre cómo hacer varias inserciones. creo que lo mejor será separar la clase
-        {
-            try
-            {
-                DataTable dtEmpleados = new DataTable();
-                string consulta = "SELECT * FROM Empleado WHERE Usuario = @Usuario";
-
-                conexionSQL = new SqlConnection(cadenaConexion);
-                conexionSQL.Open();
-
-                SqlDataAdapter miAdaptadorSql = new SqlDataAdapter(consulta, conexionSQL);
-                miAdaptadorSql.SelectCommand.Parameters.Add("@Usuario", SqlDbType.NVarChar);
-                miAdaptadorSql.SelectCommand.Parameters["@Usuario"].Value = Usuario;
-
-                using (miAdaptadorSql)
-                {
-                    miAdaptadorSql.Fill(dtEmpleados);
-                }
-                return dtEmpleados;
-            }
-            catch (Exception e)
-            {
-                ExceptionManager.Execute(e, "ERROR[Usuario.Obtener]:");
-                return null; 
-            }
-        }
 
         /// <summary>
         /// Hace el Insert del empleado que invoca al método en la BBDD.
@@ -237,7 +180,7 @@ namespace GestionPersonal
             try
             {
                 string consulta = "UPDATE Empleado SET NombreE = @NombreE, Apellido = @Apellido, Usuario = @Usuario," +
-                " Rol = @Rol, EstadoE = @EstadoE, DNI = @DNI, NumSS = @NumSS, Tlf = @Tlf, CorreoE = @CorreoE, " +
+                " Rol = @Rol, DNI = @DNI, NumSS = @NumSS, Tlf = @Tlf, CorreoE = @CorreoE, " +
                 " " + Auditoria.Update + "WHERE IdEmpleado = @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
@@ -269,7 +212,7 @@ namespace GestionPersonal
         /// realiza el Update relativo a la actualización del estado del empleado que invvoca al método en la BBDD.
         /// </summary>
         /// <param name="IdModif">Id de la persona que actualiza el estado</param>
-        internal void updateEstado(int IdModif)
+        public void updateEstado(int IdModif)
         {
             try
             {
@@ -306,7 +249,7 @@ namespace GestionPersonal
         /// Comprueba si existe en el sistema el Correo del objeto Empleado que llama al método
         /// </summary>
         /// <returns>True si existe, false si no.</returns>
-        internal bool existeCorreo()
+        public bool existeCorreo()
         {
             bool existe = false;
             try
@@ -343,7 +286,7 @@ namespace GestionPersonal
         /// Comprueba si existe en el sistema el DNI del objeto Empleado que llama al método
         /// </summary>
         /// <returns>True si existe, false si no.</returns>
-        internal bool existeDNI()
+        public bool existeDNI()
         {
             bool existe = false;
             try
@@ -380,7 +323,7 @@ namespace GestionPersonal
         /// Comprueba si existe en el sistema el Usuario del objeto Empleado que llama al método
         /// </summary>
         /// <returns>True si existe, false si no.</returns>
-        internal bool existeUsuario()
+        public bool existeUsuario()
         {
             bool existe = false;
             try
@@ -417,7 +360,7 @@ namespace GestionPersonal
         /// Comprueba si existe en el sistema el Número de seguridad social del objeto Empleado que llama al método
         /// </summary>
         /// <returns>True si existe, false si no.</returns>
-        internal bool existeNumSS()
+        public bool existeNumSS()
         {
             bool existe = false;
             try
@@ -453,7 +396,7 @@ namespace GestionPersonal
         /// <summary>
         /// Realiza el Update relativo al cambio de contraseña del usuario que invoca al método
         /// </summary>
-        internal void updateContrasenia()
+        public void updateContrasenia()
         {
             try
             {
@@ -476,6 +419,157 @@ namespace GestionPersonal
             catch (Exception e)
             {
                 ExceptionManager.Execute(e, " ERROR[Empleado.CambiarContrasenia]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Obtiene los datos de la BBDD del empleado cuyo usuario se ha proporcionado y los carga en un el propio objeto Empleado.
+        /// </summary>
+        /// <param name="Usuario">Usuario del cual se desea obtener los datos.</param>
+        /// <returns></returns>
+        public void obtenerEmpleado(string Usuario)
+        {
+            try
+            {
+                DataTable dtEmpleados = new DataTable();
+                string consulta = "SELECT * FROM Empleado WHERE Usuario = @Usuario";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
+                comando.Parameters["@Usuario"].Value = Usuario;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    this.IdEmpleado = reader.GetInt32(0);
+                    this.NombreE = reader.GetString(1);
+                    this.Apellido = reader.GetString(2);
+                    this.Usuario = reader.GetString(3);
+                    this.Contrasenia = reader.GetString(4);
+                    this.DNI = reader.GetString(5);
+                    this.NumSS = reader.GetString(6);
+                    this.rol = (TipoEmpleado)reader.GetInt32(7);
+                    if (!reader.IsDBNull(8))
+                        this.Tlf = reader.GetString(8);
+                    else
+                        this.Tlf = "";
+
+                    if (!reader.IsDBNull(9))
+                        this.CorreoE = reader.GetString(9);
+                    else
+                        this.CorreoE = "";
+
+                    if (!reader.IsDBNull(10))
+                        this.IdDepartamento = reader.GetInt32(10);
+                    else
+                        this.IdDepartamento = 0;
+
+                    this.EstadoE = (EstadoEmpleado)reader.GetInt32(11);
+                    this.Auditoria = new Auditoria(reader.GetInt32(13),
+                                reader.GetDateTime(12), reader.GetBoolean(14));
+                }
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Usuario.Obtener]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve el empleado cuyo Id se ha indicado. Utilizado para realizar las pruebas unitarias.
+        /// </summary>
+        /// <param name="IdEmpleado">Id del empleado a obtener.</param>
+        /// <returns></returns>
+        public static Empleado obtenerEmpleado(int IdEmpleado)
+        {
+            Empleado empleado = new Empleado(IdEmpleado);
+
+            try
+            {
+                string consulta = "SELECT * FROM Empleado WHERE IdEmpleado = @IdEmpleado";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = IdEmpleado;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    empleado.NombreE = reader.GetString(1);
+                    empleado.Apellido = reader.GetString(2);
+                    empleado.Usuario = reader.GetString(3);
+                    empleado.Contrasenia = reader.GetString(4);
+                    empleado.DNI = reader.GetString(5);
+                    empleado.NumSS = reader.GetString(6);
+                    empleado.rol = (TipoEmpleado)reader.GetInt32(7);
+                    if(!reader.IsDBNull(8))
+                        empleado.Tlf = reader.GetString(8);
+                    if (!reader.IsDBNull(9))
+                        empleado.CorreoE = reader.GetString(9);
+                    if (!reader.IsDBNull(10))
+                        empleado.IdDepartamento = reader.GetInt32(10);
+                    empleado.EstadoE = (EstadoEmpleado)reader.GetInt32(11);
+                    empleado.Auditoria = new Auditoria(reader.GetInt32(13),
+                                reader.GetDateTime(12), reader.GetBoolean(14));
+                }
+
+                return empleado;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Empleado.Obtener]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve el IdEmpleado más alto, es decir, el id del último empleado cread0. Utilizado para realizar las pruebas unitarias.
+        /// </summary>
+        /// <returns></returns>
+        public static int maxIdEmpleado()
+        {
+            int max = -1;
+            try
+            {
+                string consulta = "SELECT MAX(IdEmpleado) FROM Empleado";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    max = reader.GetInt32(0);
+                }
+
+                return max;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Empleado.MaxId]:");
+                return max;
             }
             finally
             {

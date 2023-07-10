@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
 namespace GestionPersonal.Modelos
 {
@@ -29,9 +30,30 @@ namespace GestionPersonal.Modelos
             this.FechaUltModif = DateTime.Now;
             this.IdModif = IdModif;
             this.Borrado = Borrado;
-
         }
 
+        public Auditoria(int IdModif, DateTime FechaUltModif , bool Borrado)
+        {
+            this.Borrado = Borrado;
+            this.IdModif = IdModif;
+            this.FechaUltModif = FechaUltModif;
+        }
+
+        public override bool Equals(object obj)
+        {
+            bool equals = true;
+            if (obj == null || GetType() != obj.GetType())
+                equals = false;
+            else
+            {
+                Auditoria other = obj as Auditoria;
+                if (other.IdModif != this.IdModif) equals = false;
+                else if (other.FechaUltModif != this.FechaUltModif) equals = false;
+                else if (other.Borrado != this.Borrado) equals = false;
+            }
+
+            return equals;
+        }
         /// <summary>
         /// Devuelve el comando proporcionado con los parámetros de la Auditoría completos.
         /// </summary>
