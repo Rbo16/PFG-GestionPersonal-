@@ -156,7 +156,7 @@ namespace GestionPersonal
                 IdDepartamento = IdDepartamento
             };
 
-            if (!departamento.comprobarJefe(IdEmpleado))
+            if (!Departamento.comprobarJefe(IdEmpleado))
             {
                 departamento.asignarJefe(IdEmpleado, this.Usuario.IdEmpleado);
                 exito = true;

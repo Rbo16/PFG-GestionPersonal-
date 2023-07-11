@@ -14,8 +14,8 @@ namespace GestionPersonal
 {
     public class Proyecto
     {
-        private SqlConnection conexionSQL;
-        private string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
+        private static SqlConnection conexionSQL;
+        private static string cadenaConexion = ConfigurationManager.ConnectionStrings["GestionPersonal.Properties.Settings.masterConnectionString"].ConnectionString;
 
         private int IdProyecto { get; set; }
         public string NombreP { get; set; }
@@ -92,7 +92,7 @@ namespace GestionPersonal
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
                 comando = introducirParametros(comando);
 
-                comando.Parameters.Add("@IdProyecto");
+                comando.Parameters.Add("@IdProyecto", SqlDbType.Int);
                 comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
 
                 this.Auditoria = new Auditoria(IdModif);
@@ -118,7 +118,7 @@ namespace GestionPersonal
         {
             try
             {
-                string consulta = "UPDATE Proyecto SET " + Auditoria.Update +
+                string consulta = "UPDATE Proyecto SET FechaFinP = @FechaFinP," + Auditoria.Update +
                     "WHERE IdProyecto = @IdProyecto";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
@@ -126,8 +126,11 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
 
-                comando.Parameters.Add("@IdProyecto");
+                comando.Parameters.Add("@IdProyecto", SqlDbType.Int);
                 comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
+                this.FechaFinP = DateTime.Now.Date;
+                comando.Parameters.Add("@FechaFinP", SqlDbType.DateTime);
+                comando.Parameters["@FechaFinP"].Value = this.FechaFinP;
 
                 this.Auditoria = new Auditoria(IdModif, true);
                 comando = this.Auditoria.introducirParametros(comando);
@@ -158,7 +161,7 @@ namespace GestionPersonal
 
                 SqlCommand comando = new SqlCommand(consulta, conexionSQL);
 
-                comando.Parameters.Add("@IdProyecto");
+                comando.Parameters.Add("@IdProyecto",SqlDbType.Int);
                 comando.Parameters["@IdProyecto"].Value = this.IdProyecto;
 
                 comando = this.Auditoria.introducirParametros(comando);
@@ -232,7 +235,7 @@ namespace GestionPersonal
                 comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
                 comando.Parameters["@IdEmpleado"].Value = IdEmpleado;
 
-                this.Auditoria = new Auditoria(IdModif);
+                this.Auditoria = new Auditoria(IdModif,true);
                 comando = Auditoria.introducirParametros(comando);
 
                 comando.ExecuteNonQuery();
@@ -260,7 +263,7 @@ namespace GestionPersonal
             {
                 string consulta = "SELECT * FROM ParticipacionProyecto LEFT JOIN Empleado " +
                     "ON ParticipacionProyecto.IdEmpleado = Empleado.IdEmpleado WHERE Empleado.DNI = @DNI AND " +
-                    "ParticipacionProyecto.IdProyecto = @IdProyecto";
+                    "ParticipacionProyecto.IdProyecto = @IdProyecto AND ParticipacionProyecto.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -272,7 +275,7 @@ namespace GestionPersonal
                 comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
                 comando.Parameters["@DNI"].Value = DNI;
                 
-                if(comando.ExecuteNonQuery() == -1)
+                if(!comando.ExecuteReader().HasRows)
                     existe = false;
 
                 return existe;
@@ -281,6 +284,91 @@ namespace GestionPersonal
             {
                 ExceptionManager.Execute(ex, "ERROR[Proyecto.Existe]:");
                 return true;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve el proyecto cuyo Id se ha indicado. Utilizado para realizar las pruebas unitarias.
+        /// </summary>
+        /// <param name="IdProyecto">Id del proyecto a obtener.</param>
+        /// <returns></returns>
+        public static Proyecto obtenerProyecto(int IdProyecto)
+        {
+            Proyecto proyecto = new Proyecto(IdProyecto);
+
+            try
+            {
+                string consulta = "SELECT * FROM Proyecto WHERE IdProyecto = @IdProyecto";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@IdProyecto", SqlDbType.Int);
+                comando.Parameters["@IdProyecto"].Value = IdProyecto;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    proyecto.NombreP = reader.GetString(1);
+                    proyecto.Cliente = reader.GetString(2);
+                    proyecto.FechaInicioP = reader.GetDateTime(3);
+                    if(!reader.IsDBNull(4))
+                        proyecto.FechaFinP = reader.GetDateTime(4);
+                    proyecto.Tiempo = reader.GetString(5);
+                    proyecto.Presupuesto = reader.GetInt32(6);
+                    proyecto.Prioridad = (TipoPrioridad)reader.GetInt32(7);
+                    proyecto.DescripcionP = reader.GetString(8);
+                    proyecto.Auditoria =new Auditoria(reader.GetInt32(10),
+                        reader.GetDateTime(9), reader.GetBoolean(11));
+                }
+
+                return proyecto;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Proyecto.Obtener]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Devuelve el IdProyecto más alto, es decir, el id del último empleado creado. Utilizado para realizar las pruebas unitarias.
+        /// </summary>
+        /// <returns></returns>
+        public static int maxIdProyecto()
+        {
+            int max = -1;
+            try
+            {
+                string consulta = "SELECT MAX(IdProyecto) FROM Proyecto";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    max = reader.GetInt32(0);
+                }
+
+                return max;
+            }
+            catch (Exception e)
+            {
+                ExceptionManager.Execute(e, "ERROR[Proyecto.MaxId]:");
+                return max;
             }
             finally
             {
