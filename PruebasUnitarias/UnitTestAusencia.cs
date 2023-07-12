@@ -39,7 +39,7 @@ namespace PruebasUnitarias
         }
 
         [TestMethod]
-        public void TestUpdateAus1()
+        public void TestUpdateAus()
         {
             int IdAusencia = Ausencia.maxIdAusencia();
             Ausencia ausencia = new Ausencia(IdAusencia)
@@ -90,7 +90,7 @@ namespace PruebasUnitarias
         }
 
         [TestMethod]
-        public void TestUpdateAutorizadorAus1()
+        public void TestUpdateAutorizadorAus()
         {
             int IdAusencia = Ausencia.maxIdAusencia();
             Ausencia ausencia = new Ausencia(IdAusencia)

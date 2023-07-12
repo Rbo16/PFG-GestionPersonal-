@@ -33,11 +33,11 @@ namespace PruebasUnitarias
                 DescripcionP = "Proyecto test insert"
             };
 
-            int IdProyecto = Proyecto.maxIdProyecto();
-
             int IdModif = 1;
 
             proyecto.insertarProyecto(IdModif);
+
+            int IdProyecto = Proyecto.maxIdProyecto();
 
             Proyecto proyectoBBDD = Proyecto.obtenerProyecto(IdProyecto);
 

@@ -24,7 +24,7 @@ namespace GestionPersonal.Utiles
             string usuario = string.Empty;
             try
             {
-                string consulta = "SELECT Usuario FROM Empleado Where CorreoE = @CorreoE";//+WHERE Borrado = 0";
+                string consulta = "SELECT Usuario FROM Empleado Where CorreoE = @CorreoE AND WHERE Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -45,6 +45,37 @@ namespace GestionPersonal.Utiles
             {
                 ExceptionManager.Execute(ex, "ERROR[Querys.ExisteCorreo]:");
                 return usuario;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        /// <summary>
+        /// Cambia el estado del empleado cuyo usuario se ha indicado a No Autorizado.
+        /// </summary>
+        /// <param name="usuario"></param>
+        public static void bloquearUsuario(string usuario)
+        {
+            try
+            {
+                string consulta = "UPDATE Empleado SET EstadoE = 3 WHERE Usuario = @Usuario";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
+                comando.Parameters["@Usuario"].Value = usuario;
+
+                comando.ExecuteReader();
+
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Querys.BloquearUsuario]:");
             }
             finally
             {

@@ -37,11 +37,15 @@ namespace GestionPersonal
         /// </summary>
         private void cargarRol()
         {
-            if (controladorMenu.Usuario.rol != TipoEmpleado.Basico)
+            if (controladorMenu.Usuario.rol == TipoEmpleado.Basico)
             {
-                btnAuditorias.Visibility = Visibility.Visible;
-                btnEmpleados.Visibility = Visibility.Visible;
-                btnDepartamentos.Visibility = Visibility.Visible;
+                btnAuditorias.Visibility = Visibility.Hidden;
+                btnEmpleados.Visibility = Visibility.Hidden;
+                btnDepartamentos.Visibility = Visibility.Hidden;
+            }
+            else if (controladorMenu.Usuario.rol == TipoEmpleado.Gestor)
+            {
+                btnAuditorias.Visibility = Visibility.Hidden;
             }
         }
 

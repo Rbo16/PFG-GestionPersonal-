@@ -48,7 +48,7 @@
             </Button.Effect>
         </Button>
         <Button Name="btnEmpleados" Content="Empleados" FontSize="22"  Width="150" Height="70" 
-                Margin="60,0,0,0" Grid.Column="1" Grid.Row="4" Click="btnEmpleados_Click" Visibility="Hidden">
+                Margin="60,0,0,0" Grid.Column="1" Grid.Row="4" Click="btnEmpleados_Click" >
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
@@ -72,15 +72,14 @@
             </Button.Effect>
         </Button>
         <Button Name="btnDepartamentos" Content="Departamentos" FontSize="20"  Width="150" Height="70" 
-                Margin="0,0,60,0" Grid.Column="3"  Grid.Row="4" Click="btnDepartamentos_Click"
-                Visibility="Hidden">
+                Margin="0,0,60,0" Grid.Column="3"  Grid.Row="4" Click="btnDepartamentos_Click">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
         <Button Name="btnAuditorias" Content="Auditorías" FontSize="20"  Width="150" Height="70" 
                  Grid.Column="2"  Grid.Row="3" Click="btnAuditorias_Click"
-                 Margin="30,30,30,30" Visibility="Hidden">
+                 Margin="30,30,30,30">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>

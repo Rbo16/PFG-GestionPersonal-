@@ -93,7 +93,7 @@ namespace PruebasUnitarias
         [TestMethod]
         public void TestComprobarJefeNo()
         {
-            int IdEmpleado = 1002;
+            int IdEmpleado = 1006;
 
             Assert.AreEqual(false, Departamento.comprobarJefe(IdEmpleado));
         }

@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -88,47 +89,54 @@ namespace GestionPersonal
             if (!camposVacios(listaCampos))
             {
                 if (comprobarCaracteres(DNI,NumSS))
-                { 
-                    Empleado nuevoEmpleado = new Empleado(0)
+                {
+                    if (ValidarCorreoElectronico(CorreoE))
                     {
-                        NombreE = NombreE,
-                        Apellido = Apellido,
-                        Usuario = Usuario,
-                        Contrasenia = Password.Generate(12, 4),
-                        DNI = DNI,
-                        NumSS = NumSS,
-                        Tlf = Tlf,
-                        CorreoE = CorreoE,
-                    };
+                        Empleado nuevoEmpleado = new Empleado(0)
+                        {
+                            NombreE = NombreE,
+                            Apellido = Apellido,
+                            Usuario = Usuario,
+                            Contrasenia = Password.Generate(12, 4),
+                            DNI = DNI,
+                            NumSS = NumSS,
+                            Tlf = Tlf,
+                            CorreoE = CorreoE,
+                        };
 
-                    if (nuevoEmpleado.existeDNI())
-                    {
-                        MessageBox.Show("Ya existe un empleado con ese DNI.");
-                    }
-                    else if (nuevoEmpleado.existeNumSS())
-                    {
-                        MessageBox.Show("Ya existe un empleado con ese Número de Seguridad Social.");
-                    }
-                    else if (nuevoEmpleado.existeUsuario())
-                    {
-                        MessageBox.Show("Ya existe un empleado con ese Usuario.");
-                    }
-                    else if (nuevoEmpleado.existeCorreo())
-                    {
-                        MessageBox.Show("Ya existe un empleado con ese Correo Electrónico.");
+                        if (nuevoEmpleado.existeDNI())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese DNI.");
+                        }
+                        else if (nuevoEmpleado.existeNumSS())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese Número de Seguridad Social.");
+                        }
+                        else if (nuevoEmpleado.existeUsuario())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese Usuario.");
+                        }
+                        else if (nuevoEmpleado.existeCorreo())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese Correo Electrónico.");
+                        }
+                        else
+                        {
+                            EnviarMail.nuevoEmpleado(CorreoE, Usuario, nuevoEmpleado.Contrasenia);
+
+                            nuevoEmpleado.Contrasenia = ConvertidorHASH.GetHashString(nuevoEmpleado.Contrasenia);
+
+                            nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
+
+                            creado = true;
+
+                            MessageBox.Show("Empleado creado correctamente.");
+                        }
                     }
                     else
                     {
-                        EnviarMail.nuevoEmpleado(CorreoE, Usuario, nuevoEmpleado.Contrasenia);
-
-                        nuevoEmpleado.Contrasenia = ConvertidorHASH.GetHashString(nuevoEmpleado.Contrasenia);
-
-                        nuevoEmpleado.insertEmpleado(this.Usuario.IdEmpleado);
-
-                        creado = true;
-
-                        MessageBox.Show("Empleado creado correctamente.");
-                    }
+                        MessageBox.Show("Introduzca un correo electrónico válido.");
+                    } 
                 }   
             }
             else
@@ -159,43 +167,74 @@ namespace GestionPersonal
         /// <param name="empleadoModif">DataRow con los datos del empleado a modificar</param>
         public void modificarEmpleado(DataRow empleadoModif)
         {
+            string NombreE = empleadoModif["NombreE"].ToString();
+            string Apellido = empleadoModif["Apellido"].ToString();
+            string Usuario = empleadoModif["Usuario"].ToString();
+            string DNI = empleadoModif["DNI"].ToString();
+            string NumSS = empleadoModif["NumSS"].ToString();
+            string Tlf = empleadoModif["Tlf"].ToString();
+            string CorreoE = empleadoModif["CorreoE"].ToString();
+
             List<string> lCampos = new List<string>();
 
-            for(int i = 1; i < empleadoModif.Table.Rows.Count; i++)
-            {
-                lCampos.Add(empleadoModif[i].ToString());
-            }
-            if(!camposVacios(lCampos)) 
-            {
-                int.TryParse(empleadoModif["IdEmpleado"].ToString(), out int IdEmpleado);
-                string NombreE = empleadoModif["NombreE"].ToString();
-                string Apellido = empleadoModif["Apellido"].ToString();
-                string Usuario = empleadoModif["Usuario"].ToString();
-                TipoEmpleado.TryParse(empleadoModif["Rol"].ToString(), out TipoEmpleado rol);
-                EstadoEmpleado.TryParse(empleadoModif["EstadoE"].ToString(), out EstadoEmpleado EstadoE);
-                string DNI = empleadoModif["DNI"].ToString();
-                string NumSS = empleadoModif["NumSS"].ToString();
-                string Tlf = empleadoModif["Tlf"].ToString();
-                string CorreoE = empleadoModif["CorreoE"].ToString();
+            lCampos.Add(NombreE);
+            lCampos.Add(Apellido);
+            lCampos.Add(Usuario);
+            lCampos.Add(DNI);
+            lCampos.Add(NumSS);
+            lCampos.Add(Tlf);
+            lCampos.Add(CorreoE);
 
+            if (!camposVacios(lCampos)) 
+            {
                 if (comprobarCaracteres(DNI, NumSS))
                 {
-                    Empleado empleadoModificado = new Empleado(IdEmpleado)
+                    if (ValidarCorreoElectronico(CorreoE))
                     {
-                        NombreE = NombreE,
-                        Apellido = Apellido,
-                        Usuario = Usuario,
-                        rol = rol,
-                        EstadoE = EstadoE,
-                        DNI = DNI,
-                        NumSS = NumSS,
-                        Tlf = Tlf,
-                        CorreoE = CorreoE
-                    };
+                        int.TryParse(empleadoModif["IdEmpleado"].ToString(), out int IdEmpleado);
+                        TipoEmpleado.TryParse(empleadoModif["Rol"].ToString(), out TipoEmpleado rol);
+                        EstadoEmpleado.TryParse(empleadoModif["EstadoE"].ToString(), out EstadoEmpleado EstadoE);
 
-                    empleadoModificado.updateEmpleado(this.Usuario.IdEmpleado);
+                        Empleado empleadoModificado = new Empleado(IdEmpleado)
+                        {
+                            NombreE = NombreE,
+                            Apellido = Apellido,
+                            Usuario = Usuario,
+                            rol = rol,
+                            EstadoE = EstadoE,
+                            DNI = DNI,
+                            NumSS = NumSS,
+                            Tlf = Tlf,
+                            CorreoE = CorreoE
+                        };
 
-                    MessageBox.Show("Cambios guardados correctamente.");
+                        if (empleadoModificado.existeDNI())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese DNI.");
+                        }
+                        else if (empleadoModificado.existeNumSS())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese Número de Seguridad Social.");
+                        }
+                        else if (empleadoModificado.existeUsuario())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese Usuario.");
+                        }
+                        else if (empleadoModificado.existeCorreo())
+                        {
+                            MessageBox.Show("Ya existe un empleado con ese Correo Electrónico.");
+                        }
+                        else
+                        {
+                            empleadoModificado.updateEmpleado(this.Usuario.IdEmpleado);
+
+                            MessageBox.Show("Cambios guardados correctamente.");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Introduzca un correo electrónico válido.");
+                    }
                 }
             }
             else
@@ -222,6 +261,8 @@ namespace GestionPersonal
             };
 
             empleadoGestion.updateEstado(this.Usuario.IdEmpleado);
+
+            MessageBox.Show("Cambios guardados correctamente.");
 
             informarAutorizacion(IdEmpleado, SEstadoE);
         }
@@ -251,7 +292,7 @@ namespace GestionPersonal
             if (DNI.Trim().Length != 9)
             {
                 result = false;
-                MessageBox.Show("El DNI ha de tener 9 caracteres.");//HAZ UN METODO PARA USARLO EN UPDATE
+                MessageBox.Show("El DNI ha de tener 9 caracteres.");
             }
             else if (NumSS.Trim().Length != 12)
             {
@@ -260,6 +301,18 @@ namespace GestionPersonal
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Comprueba que el correo electrónico introducido sea válido, es decir que contenga un "@" y un "." tras este.
+        /// </summary>
+        /// <param name="correo"></param>
+        /// <returns></returns>
+        private bool ValidarCorreoElectronico(string correo)
+        {
+            string patron = @"^[\w\.-]+@[\w\.-]+\.\w+$";
+            Regex regex = new Regex(patron);
+            return regex.IsMatch(correo);
         }
 
         /// <summary>

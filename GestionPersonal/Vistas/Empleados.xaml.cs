@@ -37,11 +37,22 @@ namespace GestionPersonal.Vistas
 
             InitializeComponent();
 
+            cargarRol();
+
             cargarDTG(string.Empty);
 
             empleadoActual = dtEmpleados.NewRow();
 
             cargarCombos();
+        }
+
+        /// <summary>
+        /// Carga los elementos de la vista según el rol del usuario manejando la aplicación.
+        /// </summary>
+        private void cargarRol()
+        {
+            if (controladorEmpleado.Usuario.rol == TipoEmpleado.Gestor)
+                cmbEstadoE.IsEnabled = true;
         }
 
         /// <summary>
@@ -161,7 +172,7 @@ namespace GestionPersonal.Vistas
 
             if (cambioEstado && empleadoActual["IdEmpleado"].ToString() != string.Empty)
             {
-                controladorEmpleado.gestionarEmpleado(empleadoActual["IdEmpeleado"].ToString(), empleadoActual["EstadoE"].ToString());
+                controladorEmpleado.gestionarEmpleado(empleadoActual["IdEmpleado"].ToString(), empleadoActual["EstadoE"].ToString());
                 cambioEstado= false;
                 cargarDTG(string.Empty);
                 empleadoActual = dtEmpleados.Copy().Rows[contEmpleado];

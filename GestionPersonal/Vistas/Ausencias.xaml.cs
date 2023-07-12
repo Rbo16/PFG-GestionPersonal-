@@ -355,7 +355,9 @@ namespace GestionPersonal
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();
-            cargarDTG(string.Empty);
+            if (controladorAusencia.Usuario.rol != TipoEmpleado.Basico)
+                controladorAusencia.filtro = string.Empty;
+            cargarDTG(controladorAusencia.filtro);
         }
     }
 }

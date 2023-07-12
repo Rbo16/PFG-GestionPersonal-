@@ -450,6 +450,8 @@ namespace GestionPersonal
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
             vaciarCampos();
+            if (controladorProyecto.Usuario.rol != TipoEmpleado.Basico)
+                controladorProyecto.filtro = string.Empty;
             cargarDTG(controladorProyecto.filtro);
         }
         

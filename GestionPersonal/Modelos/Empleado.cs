@@ -254,7 +254,7 @@ namespace GestionPersonal
             bool existe = false;
             try
             {
-                string consulta = "SELECT * FROM Empleado WHERE CorreoE = @CorreoE ";
+                string consulta = "SELECT * FROM Empleado WHERE CorreoE = @CorreoE AND IdEmpleado != @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -263,6 +263,9 @@ namespace GestionPersonal
 
                 comando.Parameters.Add("@CorreoE", SqlDbType.NVarChar);
                 comando.Parameters["@CorreoE"].Value = this.CorreoE;
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
 
                 SqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows)
@@ -291,7 +294,7 @@ namespace GestionPersonal
             bool existe = false;
             try
             {
-                string consulta = "SELECT * FROM Empleado WHERE DNI = @DNI ";
+                string consulta = "SELECT * FROM Empleado WHERE DNI = @DNI AND IdEmpleado != @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -300,6 +303,9 @@ namespace GestionPersonal
 
                 comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
                 comando.Parameters["@DNI"].Value = this.DNI;
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
 
                 SqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows)
@@ -328,7 +334,7 @@ namespace GestionPersonal
             bool existe = false;
             try
             {
-                string consulta = "SELECT * FROM Empleado WHERE Usuario = @Usuario ";
+                string consulta = "SELECT * FROM Empleado WHERE Usuario = @Usuario AND IdEmpleado != @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -337,6 +343,9 @@ namespace GestionPersonal
 
                 comando.Parameters.Add("@Usuario", SqlDbType.NVarChar);
                 comando.Parameters["@Usuario"].Value = this.Usuario;
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
 
                 SqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows)
@@ -365,7 +374,7 @@ namespace GestionPersonal
             bool existe = false;
             try
             {
-                string consulta = "SELECT * FROM Empleado WHERE NumSS = @NumSS ";
+                string consulta = "SELECT * FROM Empleado WHERE NumSS = @NumSS AND IdEmpleado != @IdEmpleado";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -374,6 +383,9 @@ namespace GestionPersonal
 
                 comando.Parameters.Add("@NumSS", SqlDbType.NVarChar);
                 comando.Parameters["@NumSS"].Value = this.NumSS;
+
+                comando.Parameters.Add("@IdEmpleado", SqlDbType.Int);
+                comando.Parameters["@IdEmpleado"].Value = this.IdEmpleado;
 
                 SqlDataReader reader = comando.ExecuteReader();
                 if (reader.HasRows)

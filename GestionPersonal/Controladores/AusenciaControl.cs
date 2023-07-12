@@ -96,7 +96,7 @@ namespace GestionPersonal
                 }
                 else
                 {
-                    MessageBox.Show("La fecha fin ha de ser mayor que la fecha incicio.");
+                    MessageBox.Show("La fecha fin ha de ser mayor o igual que la fecha incicio.");
                 }
             }
             else
@@ -132,7 +132,7 @@ namespace GestionPersonal
             if (!camposVacios(listaCampos))
             {
 
-                if (FechaInicioA < FechaFinA)
+                if (FechaInicioA <= FechaFinA)
                 {
 
                     Ausencia ausenciaMod = new Ausencia(IdAusencia)

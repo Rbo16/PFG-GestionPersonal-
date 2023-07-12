@@ -6,12 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace GestionPersonal.Controladores
 {
     public class LoginControlador : Controlador
     {
+        int intento = 0;
+        string usuarioIntento;
         public LoginControlador(VentanaControlador ventanaControl) : base(ventanaControl)
         {
             ventanaActiva = new Login(this);
@@ -37,6 +40,17 @@ namespace GestionPersonal.Controladores
             }
             else
             {
+                if(usuarioIntento != usuario)
+                {
+                    intento = 0;
+                }
+
+                if (intento == 0)
+                {
+                    usuarioIntento = usuario;
+                    intento++;
+                }
+
                 Usuario = new Empleado(0)
                 {
                     Usuario = usuario,
@@ -46,10 +60,22 @@ namespace GestionPersonal.Controladores
                 {
                     ventanaControl.Usuario = Usuario;
                     ventanaControl.ventanaMenu();
+                    intento = 0;
                 }
                 else
                 {
-                    MessageBox.Show("El usuario o la contraseña son erroneas.");//A lo mejor mételo en en makelogin y que indique cuál es incorrecto
+                    if(intento == 3)
+                    {
+                        Querys.bloquearUsuario(usuarioIntento);
+                        MessageBox.Show("El límite de intentos ha sido excedido, contacte a un administrador para que" +
+                            "le autorice de nuevo el acceso al sistema.");
+                    }
+                    else
+                    {
+                         intento++;
+                         MessageBox.Show("El usuario o la contraseña son erroneos.");
+                    }
+                    
                 }
             }
         }

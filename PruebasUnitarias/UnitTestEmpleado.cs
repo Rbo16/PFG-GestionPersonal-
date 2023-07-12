@@ -108,23 +108,6 @@ namespace PruebasUnitarias
             Assert.AreEqual(false, empleadoBBDD.Auditoria.Borrado);
         }
 
-        [TestMethod]
-        public void TestUpdateContraseniaEmp()
-        {
-            int IdEmpleado = Empleado.maxIdEmpleado();
-            Empleado empleado = new Empleado(IdEmpleado)
-            {
-                CorreoE = "testupda@testupda.com",
-                Contrasenia = "NuevaTest"
-            };
-
-            empleado.updateContrasenia();
-
-            Empleado empleadoBBDD = Empleado.obtenerEmpleado(IdEmpleado);
-
-            Assert.AreEqual(empleado.Contrasenia, empleadoBBDD.Contrasenia);
-
-        }
 
         [TestMethod]
         public void TestDeleteEmp()
@@ -165,6 +148,25 @@ namespace PruebasUnitarias
             Assert.AreEqual("0000", empleado.CorreoE);
             Assert.AreEqual(1002, empleado.IdDepartamento);
             Assert.AreEqual(EstadoEmpleado.Autorizado, empleado.EstadoE);
+
+        }
+
+
+        [TestMethod]
+        public void TestUpdateContraseniaEmp()
+        {
+            int IdEmpleado = Empleado.maxIdEmpleado();
+            Empleado empleado = new Empleado(IdEmpleado)
+            {
+                CorreoE = "test@test.com",
+                Contrasenia = "NuevaTest"
+            };
+
+            empleado.updateContrasenia();
+
+            Empleado empleadoBBDD = Empleado.obtenerEmpleado(IdEmpleado);
+
+            Assert.AreEqual(empleado.Contrasenia, empleadoBBDD.Contrasenia);
 
         }
 
@@ -221,7 +223,7 @@ namespace PruebasUnitarias
         {
             Empleado empleado = new Empleado(0)
             {
-                CorreoE = "test@test.com"
+                CorreoE = "testupda@testupda.com"
             };
 
             Assert.AreEqual(true, empleado.existeCorreo());
@@ -242,7 +244,7 @@ namespace PruebasUnitarias
         {
             Empleado empleado = new Empleado(0)
             {
-                DNI = "123456789"
+                DNI = "987654321"
             };
 
             Assert.AreEqual(true, empleado.existeDNI());
@@ -264,7 +266,7 @@ namespace PruebasUnitarias
         {
             Empleado empleado = new Empleado(0)
             {
-                Usuario = "Test"
+                Usuario = "testupdate"
             };
 
             Assert.AreEqual(true, empleado.existeUsuario());
@@ -286,7 +288,7 @@ namespace PruebasUnitarias
         {
             Empleado empleado = new Empleado(0)
             {
-                NumSS = "123456789012"
+                NumSS = "210987654321"
             };
 
             Assert.AreEqual(true, empleado.existeNumSS());

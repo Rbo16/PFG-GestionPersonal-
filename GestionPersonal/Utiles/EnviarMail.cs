@@ -125,7 +125,6 @@ namespace GestionPersonal.Utiles
 
             try
             {
-                
                 await smtpClient.SendMailAsync(mailMessage);
             }
             catch (Exception ex)
