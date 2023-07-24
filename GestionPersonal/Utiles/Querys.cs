@@ -24,7 +24,7 @@ namespace GestionPersonal.Utiles
             string usuario = string.Empty;
             try
             {
-                string consulta = "SELECT Usuario FROM Empleado Where CorreoE = @CorreoE AND WHERE Borrado = 0";
+                string consulta = "SELECT Usuario FROM Empleado WHERE CorreoE = @CorreoE AND Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -76,6 +76,72 @@ namespace GestionPersonal.Utiles
             catch (Exception ex)
             {
                 ExceptionManager.Execute(ex, "ERROR[Querys.BloquearUsuario]:");
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public static string obtenerIdEmpleado(string dni)
+        {
+            string IdEmpleado = "";
+            try
+            {
+                string consulta = "SELECT IdEmpleado From Empleado WHERE DNI = @DNI";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
+                comando.Parameters["@DNI"].Value = dni;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    IdEmpleado = reader.GetInt32(0).ToString();
+                }
+                return IdEmpleado;
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Querys.IdEmpleado]:");
+                return null;
+            }
+            finally
+            {
+                conexionSQL.Close();
+            }
+        }
+
+        public static string obtenerNombreCompleto(string dni)
+        {
+            string Nombrecompleto = "";
+            try
+            {
+                string consulta = "SELECT CONCAT(Apellido, ', ', NombreE) AS Nombrecompleto From Empleado WHERE DNI = @DNI";
+
+                conexionSQL = new SqlConnection(cadenaConexion);
+                conexionSQL.Open();
+
+                SqlCommand comando = new SqlCommand(consulta, conexionSQL);
+
+                comando.Parameters.Add("@DNI", SqlDbType.NVarChar);
+                comando.Parameters["@DNI"].Value = dni;
+
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    Nombrecompleto = reader.GetString(0);
+                }
+                return Nombrecompleto;
+            }
+            catch (Exception ex)
+            {
+                ExceptionManager.Execute(ex, "ERROR[Querys.NombreCompleto]:");
+                return null;
             }
             finally
             {

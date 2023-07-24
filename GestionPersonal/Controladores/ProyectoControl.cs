@@ -107,8 +107,11 @@ namespace GestionPersonal
             lCampos.Add(NombreP);
             lCampos.Add(Cliente);
             lCampos.Add(SFechaInicioP);
-            lCampos.Add(SNTiempo);
+            
             lCampos.Add(Tiempo);
+            if(Tiempo != "Indefinido")
+                lCampos.Add(SNTiempo);
+
             lCampos.Add(SPresupuesto);
             lCampos.Add(DescripcionP);
             lCampos.Add(SPrioridad);
@@ -117,7 +120,7 @@ namespace GestionPersonal
             {
                 if(!DateTime.TryParse(SFechaInicioP, out DateTime FechaInicioP))
                     creado= false;//DatePicker
-                else if(!int.TryParse(SNTiempo, out int NTiempo))
+                else if(Tiempo != "Indefinido" && !int.TryParse(SNTiempo, out int NTiempo))
                 {
                     creado = false;
                     MessageBox.Show("Introduzca el tiempo como un entero");
@@ -129,7 +132,10 @@ namespace GestionPersonal
                 }
                 else
                 {
-                    Tiempo = NTiempo + " " + Tiempo;
+                    if(Tiempo != "Indefinido")
+                    {
+                        Tiempo = SNTiempo + " " + Tiempo;
+                    }
                     TipoPrioridad.TryParse(SPrioridad, out TipoPrioridad Prioridad);
 
                     Proyecto nuevoProyecto = new Proyecto(0)

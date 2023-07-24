@@ -166,7 +166,14 @@ namespace GestionPersonal.Vistas
             contenidoFiltro[6] = cmbRol.SelectedValue.ToString();
         }
 
+        private void cmbRol_Loaded(object sender, RoutedEventArgs e)
+        {
+            cmbRol.ItemsSource = Enum.GetValues(typeof(TipoEmpleado));
+        }
 
-
+        private void cmbEstadoE_Loaded(object sender, RoutedEventArgs e)
+        {
+            cmbEstadoE.ItemsSource = Enum.GetValues(typeof(EstadoEmpleado));
+        }
     }
 }

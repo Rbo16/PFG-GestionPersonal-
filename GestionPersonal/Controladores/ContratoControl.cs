@@ -1,6 +1,7 @@
 ﻿using GestionPersonal.Controladores;
 using GestionPersonal.Controladores.Filtros;
 using GestionPersonal.Utiles;
+using GestionPersonal.Vistas;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,6 +16,7 @@ namespace GestionPersonal
     public class ContratoControl : Controlador
     {
         DataTable dtContratos = new DataTable();
+        public BusquedaEmpleadoControlador controladorBusqueda;
 
         public ContratoControl(VentanaControlador ventanaControl) : base(ventanaControl)
         {
@@ -101,7 +103,7 @@ namespace GestionPersonal
                     correcto = false;
                     MessageBox.Show("Introduzca el salario como un decimal.");
                 }
-                else if (Duracion.Split(' ')[0] != "Indefinido" && !float.TryParse(Duracion.Split(' ')[0], out float NDuracion))
+                else if (Duracion.Split(' ')[0].Trim() != "Indefinido" && !float.TryParse(Duracion.Split(' ')[0], out float NDuracion))
                 {
                     correcto = false;
                     MessageBox.Show("Introduzca la duración como un decimal.");
@@ -115,6 +117,10 @@ namespace GestionPersonal
                     float.TryParse(SVacacionesMes, out float VacacionesMes);
                     int.TryParse(SIdEmpleado, out int IdEmpleado);
                     TipoContrato.TryParse(STipoContrato, out TipoContrato tipoContrato);
+                    if (Duracion.Split(' ')[0].Trim() == "Indefinido")
+                    {
+                        Duracion = Duracion.Trim();
+                    }
                     Contrato nuevoContrato = new Contrato(0)
                     {
                         HorasTrabajo = HorasTrabajo,
@@ -255,6 +261,15 @@ namespace GestionPersonal
         {
             ventanaControl.bloquearVActual();
             FiltroContratoControl controladorFiltroC = new FiltroContratoControl(this);
+        }
+
+        public void prepararFiltroEmpleado()
+        {
+            ventanaControl.bloquearVActual();
+            controladorBusqueda = new BusquedaEmpleadoControlador(this)
+            {
+                dniBusqueda = string.Empty
+            };
         }
 
         /// <summary>

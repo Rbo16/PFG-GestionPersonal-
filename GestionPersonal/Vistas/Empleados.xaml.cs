@@ -240,7 +240,6 @@ namespace GestionPersonal.Vistas
                     controladorEmpleado.eliminarEmpleado(dtEmpleados.Rows[dtgEmpleados.SelectedIndex]["IdEmpleado"].ToString());
                     cargarDTG(string.Empty);
                     vaciarCampos();
-                    MessageBox.Show("Empleado eliminado correctamente.");
                 }
                 else
                     return;

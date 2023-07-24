@@ -103,6 +103,7 @@ namespace GestionPersonal
             dtShow.Columns.Remove("Tiempo");
             dtShow.Columns.Remove("Presupuesto");
             dtShow.Columns.Remove("DescripcionP");
+            dtShow.Columns.Remove("Prioridad");
             dtShow.Columns.Remove("FechaUltModif");
             dtShow.Columns.Remove("IdModif");
             dtShow.Columns.Remove("Borrado");
@@ -352,7 +353,7 @@ namespace GestionPersonal
             txbTiempo.Text = proyectoActual["Tiempo"].ToString().Split(' ')[0];
             cmbDuracion.Text = proyectoActual["Tiempo"].ToString().Split(' ')[1];
             txbPresupuesto.Text = proyectoActual["Presupuesto"].ToString();
-            cmbPrioridad.SelectedIndex = Convert.ToInt32(proyectoActual["Presupuesto"].ToString()) - 1;
+            cmbPrioridad.SelectedIndex = Convert.ToInt32(proyectoActual["Prioridad"].ToString()) - 1;
             txbDescripcionP.Text = proyectoActual["DescripcionP"].ToString();
 
             dblClic = false;
@@ -471,7 +472,7 @@ namespace GestionPersonal
                 if(dr == System.Windows.Forms.DialogResult.Yes)
                 {
                     controladorProyecto.eliminarEmpleado(dtEmpleadosProyecto.Rows[dtgEmpleadosPro.SelectedIndex]["IdEmpleado"].ToString(),
-                        dtProyectos.Rows[dtgPro.SelectedIndex]["IdProyecto"].ToString(), dtProyectos.Rows[dtgPro.SelectedIndex]["NombreP"].ToString());
+                        proyectoActual["IdProyecto"].ToString(), proyectoActual["NombreP"].ToString());
                     cargarEmpleadosProyecto();
                 }
             }

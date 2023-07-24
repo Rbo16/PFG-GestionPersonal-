@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestionPersonal.Utiles;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -338,7 +339,20 @@ namespace GestionPersonal
             if (this.IsEnabled)
             {
                 cargarDTG(controladorContrato.filtro);
+
                 vaciarCampos();
+
+                if (controladorContrato.controladorBusqueda != null)
+                {
+                    if (controladorContrato.controladorBusqueda.dniBusqueda != string.Empty)
+                    {
+                        txbIdEmpleado.Text = Querys.obtenerIdEmpleado(controladorContrato.controladorBusqueda.dniBusqueda);
+                        txbNombreE.Text = Querys.obtenerNombreCompleto(controladorContrato.controladorBusqueda.dniBusqueda);
+                        this.controladorContrato.filtro = $"IdEmpleado = {txbIdEmpleado.Text}";
+                        cargarDTG(controladorContrato.filtro);
+                    }
+                }
+
             }
         }
 
@@ -427,7 +441,7 @@ namespace GestionPersonal
             txbNombreE.Text = contratoActual["Apellido"].ToString() + ", " + contratoActual["NombreE"].ToString();
             txbPuesto.Text = contratoActual["Puesto"].ToString();
             txbSalario.Text = contratoActual["Salario"].ToString();
-            if (contratoActual["Puesto"].ToString() == "Indefinido")
+            if (contratoActual["Duracion"].ToString() == "Indefinido")
                 cmbDuracion.SelectedValue = "Indefinido";
             else
             {
@@ -459,6 +473,11 @@ namespace GestionPersonal
             if (controladorContrato.Usuario.rol != TipoEmpleado.Basico)
                 controladorContrato.filtro = string.Empty;
             cargarDTG(controladorContrato.filtro);
+        }
+
+        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        {
+            controladorContrato.prepararFiltroEmpleado();
         }
     }
 }

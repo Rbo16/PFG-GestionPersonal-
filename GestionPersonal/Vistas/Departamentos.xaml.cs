@@ -335,8 +335,8 @@ namespace GestionPersonal
         /// <param name="e"></param>
         private void btnVacio_Click(object sender, RoutedEventArgs e)
         {
-            cargarDTG(string.Empty);
             vaciarCampos();
+            cargarDTG(string.Empty);
         }
 
         /// <summary>

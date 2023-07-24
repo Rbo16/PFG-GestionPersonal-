@@ -43,8 +43,8 @@
             <TextBox x:Name="txbDNI" Margin="0,13,0,0" TextChanged="txbDNI_TextChanged"/>
             <TextBox x:Name="txbUsuario" Margin="0,13,0,0" TextChanged="txbUsuario_TextChanged"/>
             <ComboBox x:Name="cmbDepartamento" Margin="0,12,0,0" SelectionChanged="cmbDepartamento_SelectionChanged"/>
-            <ComboBox x:Name="cmbRol" Margin="0,12,0,0" SelectionChanged="cmbRol_SelectionChanged"/>
-            <ComboBox x:Name="cmbEstadoE" Margin="0,12,0,0" SelectionChanged="cmbEstadoE_SelectionChanged"/>
+            <ComboBox x:Name="cmbRol" Loaded="cmbRol_Loaded" Margin="0,12,0,0" SelectionChanged="cmbRol_SelectionChanged"/>
+            <ComboBox x:Name="cmbEstadoE" Loaded="cmbEstadoE_Loaded" Margin="0,12,0,0" SelectionChanged="cmbEstadoE_SelectionChanged"/>
         </StackPanel>
         <Button Name="btnBuscar" Grid.Column="4" Grid.Row="6" Click="btnBuscar_Click">
             <StackPanel>

@@ -156,16 +156,12 @@ namespace GestionPersonal
                 IdDepartamento = IdDepartamento
             };
 
-            if (!Departamento.comprobarJefe(IdEmpleado))
-            {
                 departamento.asignarJefe(IdEmpleado, this.Usuario.IdEmpleado);
                 exito = true;
                 MessageBox.Show("Jefe de Departamento asignado con éxito.");
 
                 informarAsignacion(IdEmpleado, NombreD);
-            }
-            else
-                MessageBox.Show("El empleado seleccionado ya ejerce como jefe de otro departamento.");
+
 
             return exito;
         }
@@ -211,12 +207,17 @@ namespace GestionPersonal
                 {
                     IdDepartamento = IdDepartamento
                 };
+                if (!Departamento.comprobarJefe(int.Parse(Querys.obtenerIdEmpleado(controladorBusqueda.dniBusqueda))))
+                {
+                    departamento.addEmpleado(controladorBusqueda.dniBusqueda, this.Usuario.IdEmpleado);
 
-                departamento.addEmpleado(controladorBusqueda.dniBusqueda, this.Usuario.IdEmpleado);
+                    MessageBox.Show("Empleado añadido correctamente.");
 
-                MessageBox.Show("Empleado añadido correctamente.");
+                    informarAdicion(controladorBusqueda.dniBusqueda, NombreD);
+                }
+                else
+                    MessageBox.Show("El empleado seleccionado ejerce como jefe de otro departamento.");
 
-                informarAdicion(controladorBusqueda.dniBusqueda, NombreD);
             }
         }
 

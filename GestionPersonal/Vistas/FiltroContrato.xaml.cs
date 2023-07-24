@@ -62,6 +62,11 @@ namespace GestionPersonal.Vistas
                 txbPoseedor.IsEnabled = false;
                 contenidoFiltro[0] = txbPoseedor.Text;
             }
+            else if(this.controladorFiltroC.controladorContrato.controladorBusqueda != null)
+            {
+                txbPoseedor.Text = this.controladorFiltroC.controladorContrato.controladorBusqueda.dniBusqueda;
+                contenidoFiltro[0] = txbPoseedor.Text;
+            }
         }
 
         /// <summary>

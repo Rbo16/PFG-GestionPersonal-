@@ -66,7 +66,7 @@ namespace GestionPersonal.Utiles
                     "CONCAT(Empleado1.NombreE,' ',Empleado1.Apellido) AS Autorizador, EnumEstadoAusencia.EstadoA as Estado " +
                     "FROM Ausencia LEFT JOIN Empleado ON Ausencia.IdSolicitante = Empleado.IdEmpleado " +
                     "LEFT JOIN Empleado as Empleado1 ON Ausencia.IdAutorizador = Empleado1.IdEmpleado " +
-                    "LEFT JOIN EnumEstadoAusencia ON Ausencia.EstadoA = EnumEstadoAusencia.IdEstadoA ";//WHERE Borrado = 0";
+                    "LEFT JOIN EnumEstadoAusencia ON Ausencia.EstadoA = EnumEstadoAusencia.IdEstadoA WHERE Ausencia.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -101,7 +101,7 @@ namespace GestionPersonal.Utiles
             {
                 DataTable dtContratos = new DataTable();
                 string consulta = "SELECT Contrato.*,  Empleado.DNI, Empleado.NombreE, Empleado.Apellido " +
-                    "FROM Contrato LEFT JOIN Empleado ON Contrato.IdEmpleado = Empleado.IdEmpleado";//WHERE Borrado = 0";
+                    "FROM Contrato LEFT JOIN Empleado ON Contrato.IdEmpleado = Empleado.IdEmpleado WHERE Contrato.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -137,7 +137,8 @@ namespace GestionPersonal.Utiles
             {
                 DataTable dtProyectos = new DataTable();
 
-                string consulta = "SELECT Proyecto.* FROM Proyecto";//+WHERE Borrado = 0";
+                string consulta = "SELECT Proyecto.*, EnumPrioridad.Prioridad FROM Proyecto INNER JOIN EnumPrioridad ON Proyecto.Prioridad = EnumPrioridad.IdPrioridad " +
+                    "WHERE Proyecto.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -176,7 +177,7 @@ namespace GestionPersonal.Utiles
                 DataTable dtProyectos = new DataTable();
 
                 string consulta = "SELECT Proyecto.*, ParticipacionProyecto.IdEmpleado FROM Proyecto " +
-                    "LEFt JOIN ParticipacionProyecto on Proyecto.IdProyecto = ParticipacionProyecto.IdProyecto";//+WHERE Borrado = 0";
+                    "LEFt JOIN ParticipacionProyecto on Proyecto.IdProyecto = ParticipacionProyecto.IdProyecto WHERE ParticipacionProyecto.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -214,7 +215,7 @@ namespace GestionPersonal.Utiles
                 DataTable dtParticipacion = new DataTable();
 
                 string consulta = "SELECT ParticipacionProyecto.IdProyecto, Empleado.* FROM ParticipacionProyecto " +
-                    "LEFT JOIN Empleado ON ParticipacionProyecto.IdEmpleado = Empleado.IdEmpleado";//+WHERE Borrado = 0";
+                    "LEFT JOIN Empleado ON ParticipacionProyecto.IdEmpleado = Empleado.IdEmpleado WHERE ParticipacionProyecto.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
@@ -252,7 +253,7 @@ namespace GestionPersonal.Utiles
                 DataTable dtDepas = new DataTable();
 
                 string consulta = "SELECT Departamento.*, Empleado.IdEmpleado, Empleado.NombreE, Empleado.Apellido " +
-                    "FROM Departamento LEFT JOIN Empleado ON Departamento.IdJefeDep = Empleado.IdEmpleado";//WHERE Borrado = 0";
+                    "FROM Departamento LEFT JOIN Empleado ON Departamento.IdJefeDep = Empleado.IdEmpleado WHERE Departamento.Borrado = 0";
 
                 conexionSQL = new SqlConnection(cadenaConexion);
                 conexionSQL.Open();
